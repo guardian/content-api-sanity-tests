@@ -8,7 +8,7 @@ In the `resources` folder edit the `application.conf` file with your own values.
 
 
 
-__canary in a coal mine__ (plural __canaries in a coal mine__)
+> __canary in a coal mine__ (plural __canaries in a coal mine__)
 
-> *(idiomatic)* Something whose sensitivity to adverse conditions makes it a useful early indicator of such conditions; something which warns of the coming of greater danger or trouble by a deterioration in its health or welfare.
+>> *(idiomatic)* Something whose sensitivity to adverse conditions makes it a useful early indicator of such conditions; something which warns of the coming of greater danger or trouble by a deterioration in its health or welfare.
 
