@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import com.typesafe.config.ConfigFactory
 
 
-class ContentApiSanityTest extends FlatSpec with ShouldMatchers with Http {
+class ContentApiSanityTest extends FlatSpec with ShouldMatchers with HttpHandler {
 
   val CacheControl = """public, max-age=(\d+)""".r
 

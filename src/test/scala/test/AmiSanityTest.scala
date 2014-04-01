@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import System._
 
 
-class AmiSanityTest extends FlatSpec with ShouldMatchers with Http {
+class AmiSanityTest extends FlatSpec with ShouldMatchers with HttpHandler {
 
   "www.theguardian.com" should "be on the latest version of the AMI" in {
 

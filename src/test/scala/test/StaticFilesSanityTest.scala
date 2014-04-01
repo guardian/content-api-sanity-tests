@@ -23,7 +23,7 @@ class Response(val connection: HttpURLConnection) {
   def disconnect() { connection.disconnect() }
 }
 
-trait Http {
+trait HttpHandler {
 
   val proxy: Option[Proxy] = (Option(System.getProperty("http.proxyHost")), Option(System.getProperty("http.proxyPort"))) match {
     case (Some(host), Some(port)) => Some(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, port.toInt)))
