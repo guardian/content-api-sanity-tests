@@ -16,4 +16,3 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
   }
 
 }
-                           git s
