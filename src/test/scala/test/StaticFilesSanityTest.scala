@@ -1,4 +1,4 @@
-package test
+package com.gu.contentapi.sanity
 
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
