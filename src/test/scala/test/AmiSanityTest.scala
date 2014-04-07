@@ -7,15 +7,11 @@ import System._
 
 class AmiSanityTest extends FlatSpec with ShouldMatchers with HttpHandler {
 
+  import scala.concurrent.ExecutionContext.Implicits.global
+
   "www.theguardian.com" should "be on the latest version of the AMI" in {
-
-    // if this test fails you probably need to update the stack to the latest AMI (and update this test)
-
-    val connection = GET(
-      "http://aws.amazon.com/amazon-linux-ami/",
-      compress = false
-    )
-
-    connection.body should include("ami-a921dfde")
+    request("http://aws.amazon.com/amazon-linux-ami/").get() map { response =>
+      response.body should include("ami-a921dfde")
+    }
   }
 }
