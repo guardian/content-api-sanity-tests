@@ -4,7 +4,7 @@ Simple set of sanity test for things like the AMI version.
 In the `resources` folder edit the `application.conf.sample` file with your own values and rename to `application.conf`.
 
 ## Running
-``./sbt clean test``
+``sbt clean test``
 
 
 
