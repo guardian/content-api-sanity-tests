@@ -12,7 +12,7 @@ import org.scalatest.concurrent.Eventually._
 
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
-  implicit val defaultPatience = PatienceConfig(timeout = Span(60, Seconds), interval = Span(1, Second))
+  implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(1, Second))
    val now = new DateTime();
    val CAPIDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
 
