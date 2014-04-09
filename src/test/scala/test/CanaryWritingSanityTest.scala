@@ -4,14 +4,18 @@ import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import org.scalatest.concurrent.ScalaFutures
 import com.typesafe.config.ConfigFactory
-import org.scalatest.time.{Second, Span}
+import org.scalatest.time.{Millis, Seconds, Second, Span}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
 import org.joda.time.format.{ISODateTimeFormat}
+import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.fromNow
+import org.scalatest.concurrent.Eventually._
+
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
-
-  implicit val defaultPatience = PatienceConfig(timeout = Span(1, Second), interval = Span(1, Second))
+  implicit val defaultPatience = PatienceConfig(timeout = Span(60, Seconds), interval = Span(1, Second))
    val now = new DateTime();
    val CAPIDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
 
@@ -69,6 +73,16 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
     }
   }
 
-
-
+  "GETting the collection" should "show the updated timestamp" in {
+        eventually(timeout(Span(60, Seconds)), interval(Span(1, Second))) {
+          val httpRequest = request(sanityConfig.getString("host")+"collections/canary").get()
+          whenReady(httpRequest) { result =>
+          result.body should include (CAPIDateStamp) }
+    }
+  }
 }
+
+
+
+
+
