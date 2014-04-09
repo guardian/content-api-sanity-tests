@@ -7,18 +7,16 @@ import com.typesafe.config.ConfigFactory
 import org.scalatest.time.{Second, Seconds, Millis, Span}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, ISODateTimeFormat}
 import java.util.Calendar
 import java.text.SimpleDateFormat
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
 
   implicit val defaultPatience = PatienceConfig(timeout = Span(1, Second), interval = Span(1, Second))
-  val today = Calendar.getInstance().getTime()
-  // create the date/time formatters
-  val CAPIDateFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-  val CAPIDateStampNowString = CAPIDateFormat.format(today)
-  val CAPIDateStampWithoutBSTorGMT= CAPIDateStampNowString.replace("BST|GMT","")
+   val now = new DateTime();
+   val CAPIDateStamp = now.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z"));
+
   val collectionJSON=s"""  |{
                        |               "type": "features",
                        |               "title": "Canary in the coalmine",
@@ -55,7 +53,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
                        |                   }
                        |               ],
                        |               "backfill": "world",
-                       |               "lastModified": "$CAPIDateStampWithoutBSTorGMT"
+                       |               "lastModified": "$CAPIDateStamp"
                        |               ,"modifiedBy": "Gideon Goldberg"
           }""".stripMargin
   val conf = ConfigFactory.load()
