@@ -2,7 +2,7 @@ scalaVersion := "2.10.0"
 
 resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test"
 
 libraryDependencies += "org.scalaj" % "scalaj-http_2.10" % "0.3.14"
 
