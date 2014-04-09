@@ -4,13 +4,10 @@ import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import org.scalatest.concurrent.ScalaFutures
 import com.typesafe.config.ConfigFactory
-import org.scalatest.time.{Millis, Seconds, Second, Span}
+import org.scalatest.time.{Seconds, Second, Span}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
 import org.joda.time.format.{ISODateTimeFormat}
-import scala.concurrent._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.fromNow
 import org.scalatest.concurrent.Eventually._
 
 
