@@ -7,15 +7,16 @@ import com.typesafe.config.ConfigFactory
 import org.scalatest.time.{Second, Seconds, Millis, Span}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, ISODateTimeFormat}
+import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
 import java.util.Calendar
 import java.text.SimpleDateFormat
+import org.joda.time.DateTimeZone
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
 
   implicit val defaultPatience = PatienceConfig(timeout = Span(1, Second), interval = Span(1, Second))
    val now = new DateTime();
-   val CAPIDateStamp = now.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z"));
+   val CAPIDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC());
 
   val collectionJSON=s"""  |{
                        |               "type": "features",
@@ -70,4 +71,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
     result.status should equal(202)
     }
   }
+
+
+
 }
