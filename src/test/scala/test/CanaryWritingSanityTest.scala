@@ -74,7 +74,8 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
     eventually(timeout(Span(60, Seconds)), interval(Span(1, Second))) {
       val httpRequest = request(sanityConfig.getString("host")+"collections/canary").get()
       whenReady(httpRequest) { result =>
-      result.body should include (capiDateStamp) }
+      result.body should include (capiDateStamp)
+      }
     }
   }
 }
