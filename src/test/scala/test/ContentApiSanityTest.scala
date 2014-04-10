@@ -1,11 +1,11 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.FlatSpec
+import org.scalatest.{Matchers, FlatSpec, matchers}
 import org.scalatest.matchers.ShouldMatchers
 import com.typesafe.config.ConfigFactory
 
 
-class ContentApiSanityTest extends FlatSpec with ShouldMatchers with HttpHandler {
+class ContentApiSanityTest extends FlatSpec with Matchers with HttpHandler {
 
   val CacheControl = """public, max-age=(\d+)""".r
 
