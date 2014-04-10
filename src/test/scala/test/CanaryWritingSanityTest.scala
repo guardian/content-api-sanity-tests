@@ -14,7 +14,7 @@ import org.scalatest.concurrent.Eventually._
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
   implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(1, Second))
    val now = new DateTime();
-   val CAPIDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
+   val capiDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
 
   val collectionJSON=s"""  |{
                        |               "type": "features",
@@ -52,7 +52,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
                        |                   }
                        |               ],
                        |               "backfill": "world",
-                       |               "lastModified": "$CAPIDateStamp"
+                       |               "lastModified": "$capiDateStamp"
                        |               ,"modifiedBy": "Gideon Goldberg"
           }""".stripMargin
   val conf = ConfigFactory.load()
@@ -74,7 +74,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
         eventually(timeout(Span(60, Seconds)), interval(Span(1, Second))) {
           val httpRequest = request(sanityConfig.getString("host")+"collections/canary").get()
           whenReady(httpRequest) { result =>
-          result.body should include (CAPIDateStamp) }
+          result.body should include (capiDateStamp) }
     }
   }
 }
