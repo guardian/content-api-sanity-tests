@@ -16,7 +16,7 @@ class ContentApiSanityTest extends FlatSpec with Matchers with HttpHandler {
     conf.checkValid(ConfigFactory.defaultReference(), "content-api-sanity-tests")
 
     val connection = GET(
-      conf.getString("content-api-sanity-tests.host")+"/search?format=json&api-key="+conf.getString("content-api-sanity-tests.api-key"),
+      conf.getString("content-api-sanity-tests.host")+"search?format=json&api-key="+conf.getString("content-api-sanity-tests.api-key"),
       compress = true
     )
 
