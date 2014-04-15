@@ -1,9 +1,6 @@
 package com.gu.contentapi.sanity
 
 import org.scalatest.{Matchers, FlatSpec, matchers}
-import org.scalatest.matchers.ShouldMatchers
-import com.typesafe.config.ConfigFactory
-
 
 class ContentApiSanityTest extends FlatSpec with Matchers with HttpHandler {
 
@@ -12,11 +9,9 @@ class ContentApiSanityTest extends FlatSpec with Matchers with HttpHandler {
   "Content api" should "serve gzipped" in {
 
 
-    val conf = ConfigFactory.load()
-    conf.checkValid(ConfigFactory.defaultReference(), "content-api-sanity-tests")
 
     val connection = GET(
-      conf.getString("content-api-sanity-tests.host")+"search?format=json&api-key="+conf.getString("content-api-sanity-tests.api-key"),
+      Config.host+"search?format=json&api-key="+Config.apiKey,
       compress = true
     )
 
