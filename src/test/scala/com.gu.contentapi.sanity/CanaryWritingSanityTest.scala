@@ -9,12 +9,13 @@ import org.joda.time.DateTime
 import org.joda.time.format.{ISODateTimeFormat}
 import org.scalatest.concurrent.Eventually._
 import scala.io.Source
+import scala.io.Source
 
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
   implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(1, Second))
   val now = new DateTime()
-  val collectionJSON = Source.fromFile("src/test/resources/CanaryCollection.json").getLines.mkString
+  val collectionJSON = Source.fromURL(getClass.getResource("/CanaryCollection.json")).getLines.mkString
   val capiDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
   val collectionJSONWithNowTimestamp = collectionJSON.replace("2013-10-15T11:42:17Z",capiDateStamp)
 
