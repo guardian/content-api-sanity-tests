@@ -1,5 +1,4 @@
-.idea
-.idea_modules
-resources/application.conf
-
+.*
+!.gitignore
+*.conf
 target

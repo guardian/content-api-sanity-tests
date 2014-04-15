@@ -1,0 +1,9 @@
+# these are our own config values defined by the app
+# rename this to application.conf with real values
+content-api-sanity-tests {
+    host="http://your-capi-host"
+    api-key=your-capi-key
+    write-host="your-write-host"
+    write-username=your-write-username
+    write-password=your-write-password
+}

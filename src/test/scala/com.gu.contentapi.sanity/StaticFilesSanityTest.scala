@@ -1,7 +1,5 @@
-package test
+package com.gu.contentapi.sanity
 
-import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
 import java.net._
 import io.Source
 import java.util.zip.GZIPInputStream
@@ -23,7 +21,7 @@ class Response(val connection: HttpURLConnection) {
   def disconnect() { connection.disconnect() }
 }
 
-trait Http {
+trait HttpHandler {
 
   val proxy: Option[Proxy] = (Option(System.getProperty("http.proxyHost")), Option(System.getProperty("http.proxyPort"))) match {
     case (Some(host), Some(port)) => Some(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, port.toInt)))
