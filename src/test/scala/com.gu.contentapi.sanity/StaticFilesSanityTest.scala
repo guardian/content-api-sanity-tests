@@ -1,7 +1,5 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
 import java.net._
 import io.Source
 import java.util.zip.GZIPInputStream

@@ -1,4 +1,5 @@
-package test
+package com.gu.contentapi.sanity
+
 
 import org.scalatest.{Matchers, FlatSpec}
 import com.gu.contentapi.sanity.HttpHandler
