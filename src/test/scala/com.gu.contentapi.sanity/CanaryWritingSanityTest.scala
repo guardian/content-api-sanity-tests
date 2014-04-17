@@ -20,7 +20,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
   val collectionJSONWithNowTimestamp = collectionJSON.replace("2013-10-15T11:42:17Z",capiDateStamp)
 
   "PUTting a Collection" should "return a 202" in {
-    val httpRequest = request(Config.writeHost+"collections/canary")
+    val httpRequest = request(Config.writeHost + "collections/canary")
       .withAuth(Config.writeUsername,Config.writePassword,AuthScheme.BASIC)
       .withHeaders("Content-Type" -> "application/json")
       .put(collectionJSONWithNowTimestamp)
@@ -32,7 +32,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
 
   "GETting the collection" should "show the updated timestamp" in {
     eventually(timeout(Span(5, Seconds)), interval(Span(1, Second))) {
-      val httpRequest = request(Config.host+"collections/canary").get()
+      val httpRequest = request(Config.host + "collections/canary").get()
       whenReady(httpRequest) { result =>
           result.body should include (capiDateStamp)
       }
