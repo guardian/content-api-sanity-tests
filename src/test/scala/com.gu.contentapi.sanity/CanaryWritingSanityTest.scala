@@ -32,7 +32,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures {
 
   "GETting the collection" should "show the updated timestamp" in {
     eventually(timeout(Span(5, Seconds)), interval(Span(1, Second))) {
-      val httpRequest = request(Config.host + "collections/canary").get()
+      val httpRequest = request(Config.host + "collections/canary").get
       whenReady(httpRequest) { result =>
           result.body should include (capiDateStamp)
       }
