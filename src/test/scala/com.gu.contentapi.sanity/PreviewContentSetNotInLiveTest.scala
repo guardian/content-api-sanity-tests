@@ -2,10 +2,10 @@ package com.gu.contentapi.sanity
 
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 
 
-class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFutures {
+class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
   "GETting the preview content set" should "show no results on live" in {
       val httpRequest = request(Config.host + "search?content-set=preview").get()
       whenReady(httpRequest) { result =>
