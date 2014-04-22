@@ -15,7 +15,7 @@ class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFu
       val total = (json \ "response" \ "total").as[Long]
       val results = Json.stringify(json \ "response" \ "results")
       total should equal (0)
-      results.toString() should equal ("[]")
+      results should equal ("[]")
     }
   }
 
