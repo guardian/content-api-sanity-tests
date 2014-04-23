@@ -13,7 +13,7 @@ class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with Integr
 
     val httpRequest = request("http://aws.amazon.com/amazon-linux-ami/").get
     whenReady(httpRequest) { result =>
-      result.body should include ("ami-a921dfde")
+      result.body should include ("ami-2918e35e")
         }
       }
 
