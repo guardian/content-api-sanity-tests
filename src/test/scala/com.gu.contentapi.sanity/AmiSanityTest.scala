@@ -28,6 +28,7 @@ class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with Integr
     } catch {
       case e: TestFailedException =>  {
         println(s"##teamcity[testFailed name='$testName' message='$testErrorMessage']")
+        println(s"##teamcity[buildStatus status='FAILURE' text='{build.status.text} $testName $testErrorMessage']")
         throw e
       }
     }
