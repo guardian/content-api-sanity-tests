@@ -1,10 +1,8 @@
 package com.gu.contentapi.sanity
 
 
-import org.scalatest.{Failed, Matchers, FlatSpec}
+import org.scalatest.{Matchers, FlatSpec}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.time.{Second, Seconds, Span}
-import org.scalatest.exceptions.TestFailedException
 
 class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
