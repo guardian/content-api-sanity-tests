@@ -9,7 +9,6 @@ import org.scalatest.exceptions.TestFailedException
 class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
   "www.theguardian.com" should "be on the latest version of the AMI" in {
-    println("##teamcity[message text='AMI Test Failed' errorDetails='Check amazon for the latest AMI.' status='ERROR']")
     // this test looks on the page for the unique ID of the EU Ireland PV EBS-Backed 64-bit image
     // if this test fails you probably need to update the stack to the latest AMI (and update this test)
 
@@ -17,19 +16,7 @@ class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with Integr
 
     teamCityNotifier("Check amazon for the latest AMI","AMI in test did not match latest AMI on Amazon website") {
       whenReady(httpRequest) { result =>
-        result.body should include ("ami-FAIL")
-      }
-    }
-  }
-
-  def teamCityNotifier(testName: String,testErrorMessage: String)(test: =>Unit){
-    try{
-      test
-    } catch {
-      case e: TestFailedException =>  {
-        println(s"##teamcity[testFailed name='$testName' message='$testErrorMessage']")
-        println(s"##teamcity[buildStatus status='FAILURE' text='{build.status.text} $testName $testErrorMessage']")
-        throw e
+        result.body should include ("ami-2918e35e")
       }
     }
   }
