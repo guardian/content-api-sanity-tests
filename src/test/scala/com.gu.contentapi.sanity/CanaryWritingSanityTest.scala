@@ -39,9 +39,11 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
   }
 
   "GETting the collection" should "show the updated timestamp" taggedAs(Retryable) in {
-      val httpRequest = request(Config.host + "collections/canary").get
+    val httpRequest = request(Config.host + "collections/canary").get
+    teamCityNotifier("GETting the collection should show updated timestamp","Collection did not show updated timestamp") {
       whenReady(httpRequest) { result =>
-          result.body should include (capiDateStamp)
+        result.body should include (capiDateStamp)
+      }
     }
   }
 }
