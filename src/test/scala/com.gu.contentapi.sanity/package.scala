@@ -13,7 +13,7 @@ package object sanity {
     } catch {
       case e: TestFailedException =>  {
         println(s"##teamcity[testFailed name='$testName' message='$testErrorMessage']")
-        println(s"##teamcity[buildStatus status='FAILURE' text='{build.status.text} $testName $testErrorMessage']")
+        println(s"##teamcity[buildStatus status='FAILURE' text='{build.status.text} $testName | $testErrorMessage']")
         throw e
       }
     }
