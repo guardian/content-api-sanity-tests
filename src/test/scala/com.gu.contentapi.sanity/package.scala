@@ -19,15 +19,15 @@ package object sanity {
     }
   }
 
-  def retryNTimes(n: Int, attemptInterval: Int)(test: => Boolean): Boolean = {
-    if (n == 0)
+  def retryNTimes(numberOfAttempts: Int, attemptInterval: Int)(test: => Boolean): Boolean = {
+    if (numberOfAttempts == 0)
       false
     else if (test)
       true
     else {
-      println(s"attempt $n")
+      println(s"attempt $numberOfAttempts")
       Thread.sleep(attemptInterval)
-      retryNTimes(n - 1, attemptInterval)(test)
+      retryNTimes(numberOfAttempts - 1, attemptInterval)(test)
     }
   }
 
