@@ -26,7 +26,7 @@ package object sanity {
       true
     else {
       println(s"attempt $n")
-      Thread.sleep(100)
+      Thread.sleep(attemptInterval)
       retryNTimes(n - 1, attemptInterval)(test)
     }
   }
