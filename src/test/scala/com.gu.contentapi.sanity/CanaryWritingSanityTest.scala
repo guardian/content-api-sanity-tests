@@ -6,8 +6,7 @@ import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
 import org.joda.time.format.{ISODateTimeFormat}
 import scala.io.Source
-import scala.util.control.Breaks._
-import scala.util.{Failure, Try, Success}
+import scala.util.Try
 import org.scalatest.exceptions.TestFailedException
 
 
@@ -33,13 +32,12 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
   "GETting the collection" should "show the updated timestamp" in {
 
     teamCityNotifier("GETting the collection should show updated timestamp", "Collection did not show updated timestamp") {
-
-      val result = retryNTimes(10, 100) {
+      val numOfAttempts=10
+      val result = retryNTimes(numOfAttempts, 100) {
         val httpRequest = request(Config.host + "collections/canary").get
         whenReady(httpRequest) { result => result.body.contains(capiDateStamp) }
       }
-
-      result should be(true)
+      assert(result === true, "failed after "+numOfAttempts+" attempts to show updated timestamp")
     }
   }
 }

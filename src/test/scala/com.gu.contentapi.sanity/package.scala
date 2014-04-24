@@ -21,7 +21,7 @@ package object sanity {
 
   def retryNTimes(n: Int, attemptInterval: Int)(test: => Boolean): Boolean = {
     if (n == 0)
-      throw new TestFailedException("Gave up...", 1)
+      false
     else if (test)
       true
     else {
