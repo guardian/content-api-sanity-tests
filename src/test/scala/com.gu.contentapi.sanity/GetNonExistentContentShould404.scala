@@ -7,7 +7,7 @@ class GetNonExistentContentShould404 extends FlatSpec with Matchers with ScalaFu
 
     "GETting non existent content" should "404" in {
 
-        val httpRequest = request(Config.host + "foo/should-not-exist" + Config.apiKey).get
+       val httpRequest = requestHost("foo/should-not-exist").get
         whenReady(httpRequest) { result =>
             result.status should be (404)
         }

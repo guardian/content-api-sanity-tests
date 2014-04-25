@@ -19,6 +19,8 @@ package object sanity {
     }
   }
 
+  def requestHost(path: String) = request(Config.host + path + "&api-key=" + Config.apiKey)
+
   def retryNTimes(numberOfAttempts: Int, attemptInterval: Int)(test: => Boolean): Boolean = {
     if (numberOfAttempts == 0)
       false

@@ -32,7 +32,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
     teamCityNotifier("GETting the collection should show updated timestamp", "Collection did not show updated timestamp") {
       val numOfAttempts=10
       val doesCanaryHaveUpdatedTimestamp = retryNTimes(numOfAttempts, 100) {
-        val httpRequest = request(Config.host + "collections/canary").get
+        val httpRequest = requestHost("collections/canary?").get
         whenReady(httpRequest) { result => result.body.contains(capiDateStamp) }
       }
       withClue(s"Collection did not show updated date stamp after $numOfAttempts attempts") { doesCanaryHaveUpdatedTimestamp should be (true) }
