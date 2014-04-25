@@ -8,7 +8,7 @@ import org.joda.time.format.{ISODateTimeFormat}
 import scala.io.Source
 
 
-class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Retries {
+class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
   val now = new DateTime()
   val collectionJSON = Source.fromURL(getClass.getResource("/CanaryCollection.json")).getLines.mkString
