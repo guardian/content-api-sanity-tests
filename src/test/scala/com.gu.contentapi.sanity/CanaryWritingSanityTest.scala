@@ -37,7 +37,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
         val httpRequest = request(Config.host + "collections/canary").get
         whenReady(httpRequest) { result => result.body.contains(capiDateStamp) }
       }
-      withClue("Collection did not show updated date stamp after 10 attempts") { doesCanaryHaveUpdatedTimestamp should be (true) }
+      withClue(s"Collection did not show updated date stamp after $numOfAttempts attempts") { doesCanaryHaveUpdatedTimestamp should be (true) }
     }
   }
 }
