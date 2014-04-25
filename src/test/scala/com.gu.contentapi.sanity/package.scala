@@ -24,7 +24,7 @@ package object sanity {
     if(path.contains("?"))
     request(Config.host + path + "&api-key=" + Config.apiKey)
     else
-    request(Config.host + path + "?&api-key=" + Config.apiKey)
+    request(Config.host + path + "?api-key=" + Config.apiKey)
 
   def retryNTimes(numberOfAttempts: Int, attemptInterval: Int)(test: => Boolean): Boolean = {
     if (numberOfAttempts == 0)
