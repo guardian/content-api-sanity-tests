@@ -1,13 +1,11 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{Ignore, Retries, FlatSpec, Matchers}
+import org.scalatest.{Retries, FlatSpec, Matchers}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
 import org.joda.time.format.{ISODateTimeFormat}
 import scala.io.Source
-import scala.util.Try
-import org.scalatest.exceptions.TestFailedException
 
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Retries {
