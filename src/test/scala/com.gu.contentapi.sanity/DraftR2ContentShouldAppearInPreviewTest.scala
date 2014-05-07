@@ -13,7 +13,6 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
   "With crendentials I" should "be able to login to R2" in {
     go to (Config.r2AdminHost)
     pageTitle should be ("Login")
-    click on "j_username"
     textField("j_username").value = Config.r2AdminUsername
     pwdField("j_password").value = Config.r2AdminPassword
     submit
