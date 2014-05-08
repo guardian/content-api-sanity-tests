@@ -25,7 +25,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
     textArea("bodyText").value = "Content API Sanity Test Draft " + java.util.UUID.randomUUID.toString
     submit
     eventually {
-      pageTitle should be ("Sanity Test")
+      pageTitle should include ("Sanity Test")
     }
   }
 }
