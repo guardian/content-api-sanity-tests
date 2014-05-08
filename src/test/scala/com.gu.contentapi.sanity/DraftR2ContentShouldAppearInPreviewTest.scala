@@ -22,7 +22,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
     textField("content.headline").value = "Content API Sanity Test Draft "+java.util.UUID.randomUUID.toString
     textField("content.page.linkText").value = "Content API Sanity Test Draft "+java.util.UUID.randomUUID.toString
     textArea("bodyText").value = "Content API Sanity Test Draft "+java.util.UUID.randomUUID.toString
-    click on ("save-content-bottom")
+    submit
     eventually{
       pageTitle should include ("Sanity Test")
     }
