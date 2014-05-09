@@ -9,6 +9,7 @@ object Config {
 
   val host = sanityConfig.getString("host")
   val apiKey = sanityConfig.getString("api-key")
+  val previewHost = sanityConfig.getString("preview-host")
   val writeHost = sanityConfig.getString("write-host")
   val writeUsername = sanityConfig.getString("write-username")
   val writePassword = sanityConfig.getString("write-password")
