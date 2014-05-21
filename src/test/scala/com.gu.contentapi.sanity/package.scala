@@ -5,7 +5,7 @@ import org.scalatest.exceptions.TestFailedException
 
 package object sanity {
 
-  def request(uri: String) = WS.url(uri).withRequestTimeout(7500)
+  def request(uri: String) = WS.url(uri).withRequestTimeout(10000)
 
   def requestHost(path: String) =
   // make sure query string is included
