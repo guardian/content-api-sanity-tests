@@ -22,7 +22,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
       .withHeaders("Content-Type" -> "application/json")
       .put(collectionJSONWithNowTimestamp)
     whenReady(httpRequest) { result =>
-      withClue(s"Response code was " + result.status + " expected 202") {
+      withClue("Response code was " + result.status + " expected 202") {
         result.status should equal (202)
       }
       if (result.status == 202) {
