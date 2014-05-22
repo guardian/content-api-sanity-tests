@@ -23,5 +23,5 @@ content-api-sanity-code {
     preview-username=your-preview-code-username
     preview-password=your-preview-code-password
     composer-email=example@example.com
-    composer-password=your-composer-password
+    composer-password=your-password
 }
