@@ -1,13 +1,27 @@
-# WS configuration, see http://www.playframework.com/documentation/2.2.x/ScalaWS
+#WS configuration, see http://www.playframework.com/documentation/2.2.x/ScalaWS
+
 ws.compressionEnable=true
 
 # these are our own config values defined by the app
 # rename this to application.conf with real values
+# PROD
+
 content-api-sanity-tests {
     host="http://your-capi-host"
-    api-key=your-capi-key
-    preview-host="http://your-preview-host"
-    write-host="your-write-host"
+    preview-host:"http://your-preview-host"
+    api-key=your-capi-api-key
+    write-host="http://your-write-host"
     write-username=your-write-username
     write-password=your-write-password
+}
+
+content-api-sanity-code {
+    host="your-capi-code-host"
+    preview-host:"http://your-capi-preview-host"
+    composer-host:"http://your-composer-host/"
+    api-key=your-code-api-key
+    preview-username=your-preview-code-username
+    preview-password=your-preview-code-password
+    composer-email=example@example.com
+    composer-password=your-composer-password
 }
