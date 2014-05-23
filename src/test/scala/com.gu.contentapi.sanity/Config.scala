@@ -16,6 +16,5 @@ object Config {
   val writeUsername = sanityConfig.getString("write-username")
   val writePassword = sanityConfig.getString("write-password")
   val previewCodeHost = sanityCodeConfig.getString("preview-host")
-  val composerEmail = sanityCodeConfig.getString("composer-email")
-  val composerPassword = sanityCodeConfig.getString("composer-password")
+  val composerHost = sanityCodeConfig.getString("composer-host")
 }
