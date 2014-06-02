@@ -1,12 +1,14 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{Tag, FlatSpec, Matchers}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import scala.io.Source
 import org.scalatest.exceptions.TestFailedException
+
+
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
 
@@ -21,7 +23,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
     whenReady(httpRequest) { result => result.body.contains(capiDateStamp)}
   }
 
-  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest) in {
+  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest)  in {
     val putSuccessResponseCode = 202
     val httpRequest = request(Config.writeHost + "collections/canary")
       .withAuth(Config.writeUsername, Config.writePassword, AuthScheme.BASIC)
