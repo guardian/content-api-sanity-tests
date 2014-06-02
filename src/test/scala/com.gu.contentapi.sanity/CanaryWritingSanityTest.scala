@@ -1,6 +1,6 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{Tag, FlatSpec, Matchers}
+import org.scalatest.{FlatSpec, Matchers}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
