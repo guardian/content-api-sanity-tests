@@ -9,7 +9,9 @@ import scala.io.Source
 import org.scalatest.exceptions.TestFailedException
 
 
+
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
+
 
   val now = new DateTime()
   val collectionJSON = Source.fromURL(getClass.getResource("/CanaryCollection.json")).getLines.mkString
@@ -21,7 +23,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
     whenReady(httpRequest) { result => result.body.contains(capiDateStamp)}
   }
 
-  "PUTting and GETting a collection" should "show an updated timestamp" in {
+  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest)  in {
     val putSuccessResponseCode = 202
     val httpRequest = request(Config.writeHost + "collections/canary")
       .withAuth(Config.writeUsername, Config.writePassword, AuthScheme.BASIC)
