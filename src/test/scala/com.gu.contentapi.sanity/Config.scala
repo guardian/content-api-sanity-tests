@@ -14,6 +14,7 @@ object Config {
   val r2AdminUsername = sanityCodeConfig.getString("r2-admin-username")
   val r2AdminPassword = sanityCodeConfig.getString("r2-admin-password")
   val apiKey = sanityConfig.getString("api-key")
+  val previewHost = sanityConfig.getString("preview-host")
   val writeHost = sanityConfig.getString("write-host")
   val writeUsername = sanityConfig.getString("write-username")
   val writePassword = sanityConfig.getString("write-password")

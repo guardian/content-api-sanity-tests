@@ -1,41 +1,46 @@
 package com.gu.contentapi.sanity
 
 import org.scalatest.{FlatSpec, Matchers}
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
-import org.joda.time.format.{ISODateTimeFormat}
+import org.joda.time.format.ISODateTimeFormat
 import scala.io.Source
+import org.scalatest.exceptions.TestFailedException
 
 
-class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
+class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
 
   val now = new DateTime()
   val collectionJSON = Source.fromURL(getClass.getResource("/CanaryCollection.json")).getLines.mkString
   val capiDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
-  val collectionJSONWithNowTimestamp = collectionJSON.replace("2013-10-15T11:42:17Z",capiDateStamp)
+  val collectionJSONWithNowTimestamp = collectionJSON.replace("2013-10-15T11:42:17Z", capiDateStamp)
 
-  "PUTting a Collection" should "return a 202" in {
-    val httpRequest = request(Config.writeHost + "collections/canary")
-      .withAuth(Config.writeUsername,Config.writePassword,AuthScheme.BASIC)
-      .withHeaders("Content-Type" -> "application/json")
-      .put(collectionJSONWithNowTimestamp)
-      teamCityNotifier("PUTting a collection should return a 202","Did not return expected response code of 202, see build log for full details") {
-    whenReady(httpRequest) { result =>
-        result.status should equal(202)
-      }
-    }
+  def doesCanaryHaveUpdatedTimestamp = {
+    val httpRequest = requestHost("collections/canary").get
+    whenReady(httpRequest) { result => result.body.contains(capiDateStamp)}
   }
 
-  "GETting the collection" should "show the updated timestamp" in {
-
-    teamCityNotifier("GETting the collection should show updated timestamp", "Collection did not show updated timestamp") {
-      val numOfAttempts=10
-      val doesCanaryHaveUpdatedTimestamp = retryNTimes(numOfAttempts, 1000) {
-        val httpRequest = requestHost("collections/canary").get
-        whenReady(httpRequest) { result => result.body.contains(capiDateStamp) }
+  "PUTting and GETting a collection" should "show an updated timestamp" in {
+    val putSuccessResponseCode = 202
+    val httpRequest = request(Config.writeHost + "collections/canary")
+      .withAuth(Config.writeUsername, Config.writePassword, AuthScheme.BASIC)
+      .withHeaders("Content-Type" -> "application/json")
+      .put(collectionJSONWithNowTimestamp)
+    whenReady(httpRequest) { result =>
+      withClue("Response code was " + result.status + " expected " + putSuccessResponseCode) {
+        result.status should equal(putSuccessResponseCode)
       }
-      withClue(s"Collection did not show updated date stamp after $numOfAttempts attempts") { doesCanaryHaveUpdatedTimestamp should be (true) }
+      if (result.status == putSuccessResponseCode) {
+        eventually {
+          withClue("Collection did not show updated date stamp") {
+            doesCanaryHaveUpdatedTimestamp should be (true)
+          }
+        }
+      }
+      else {
+        throw new TestFailedException("Collection did not post successfully", 1)
+      }
     }
   }
 }

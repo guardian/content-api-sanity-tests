@@ -7,11 +7,8 @@ class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with Integr
 
   "The Content API" should "be using the latest AMI" in {
     val httpRequest = request("https://cloud-images.ubuntu.com/locator/ec2/releasesTable").get
-    teamCityNotifier("Check for the latest AMI", "AMI in test did not match latest AMI listed by Ubuntu") {
-      whenReady(httpRequest) { result =>
-        result.body should include ("ami-896c96fe")
-      }
+    whenReady(httpRequest) { result =>
+      result.body should include("ami-896c96fe")
     }
   }
-
 }
