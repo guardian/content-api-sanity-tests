@@ -6,9 +6,8 @@ import scala.io.Source
 import java.io.File
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import com.ning.http.multipart.FilePart
-import com.ning.http.multipart.MultipartRequestEntity
-import com.ning.http.multipart.Part
+import com.ning.http.multipart.{StringPart, FilePart, MultipartRequestEntity, Part}
+import com.ning.http.client.{Realm, AsyncHttpClientConfig, AsyncHttpClient}
 
 
 class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
@@ -18,25 +17,22 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     whenReady(httpRequest) { result => result.body should equal("incopy Integration...")
     }
 
-      val bos = new ByteArrayOutputStream
-    val filename = getClass.getResource("/composer_article.xml").toURI
-    filename should equal ("foo")
-    println(filename)
-      // Build up the Multiparts
-      val parts: Array[Part] = Array(new FilePart("file", new File(filename)))
 
-      // Add it to the MultipartRequestEntity
-      val reqE = new MultipartRequestEntity(parts, null)
-      reqE.writeRequest(bos)
-      val reqIS = new ByteArrayInputStream(bos.toByteArray)
+    //val filename = getClass.getResource("/composer_article.xml").toURI
 
-      val data:Array[Byte] = Array()
-      reqIS.read(data)
+    var realm = new Realm.RealmBuilder().build()
+    var cfg = new AsyncHttpClientConfig.Builder().build()
+    val asyncHttpClient = new AsyncHttpClient(cfg)
+   val url = Config.composerHost + "incopyintegration/article/import"
+   val ahc = asyncHttpClient.preparePost( url)
 
-      val postArticle = request(Config.composerHost + "incopyintegration/article/import").withHeaders("User-Agent" -> "curl").post(data)
-      whenReady(postArticle) { result =>
-        result.body should equal(200 )
-      }
-    }
+    ahc.setRealm(realm)
+    ahc.setHeader("User-Agent", "curl")
+    ahc.setHeader("Content-Type", "multipart/form-data")
+
+    ahc.addBodyPart( new com.ning.http.client.FilePart("composer_article.xml", new File(getClass.getResource("/composer_article.xml").toURI), "application/xml", "UTF-8"))
+
+    ahc.execute.get.getResponseBody should be ("foo")
+  }
 
 }
