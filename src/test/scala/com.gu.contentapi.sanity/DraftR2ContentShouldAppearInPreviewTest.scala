@@ -4,15 +4,14 @@ import org.scalatest.{Matchers, FlatSpec}
 import org.scalatest.selenium.{WebBrowser}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.WebDriver
-import org.scalatest.concurrent.{IntegrationPatience, Eventually}
-import org.openqa.selenium.firefox.FirefoxDriver
-import scala.io.Source
+import org.scalatest.concurrent.{ScalaFutures, IntegrationPatience, Eventually}
+import com.ning.http.client.Realm.AuthScheme
 
-class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser {
+class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser with ScalaFutures {
 
-  implicit val webDriver: WebDriver = new FirefoxDriver
+  implicit val webDriver: WebDriver = new HtmlUnitDriver
 
-  "With crendentials I" should "be able to create a draft article in R2" in {
+  "Updating a draft in R2" should "show an update in the Preview API" in {
     val assetPath = getClass.getResource("/TestR2IntegrationArticle.xml").toString
     go to (Config.r2AdminHost + "/tools/newspaperintegration/index")
     pageTitle should be ("Login")
@@ -31,4 +30,10 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
     pageId should be ("435627291")
     close
   }
+
+  val httpRequest = request(Config.previewHostCode+"internal-code/content/435627291").withAuth(Config.previewUsernameCode, Config.previewPasswordCode, AuthScheme.BASIC).get
+  whenReady(httpRequest) { result =>
+    result.body should include ("Facebook messaging article")
+  }
+
 }
