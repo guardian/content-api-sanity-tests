@@ -15,7 +15,9 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val pageId = "435627291"
-
+  val tempFilePathString = "/tmp/TestR2IntegrationArticleModified-" + java.util.UUID.randomUUID().toString + ".xml"
+  val tempFilePath: Path = Path.fromString(tempFilePathString)
+  
   def doesCAPIHaveModifiedDraftData(capiURI: String) = {
     val httpRequest = request(Config.previewHostCode + capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, AuthScheme.BASIC).get
     whenReady(httpRequest) { result => result.body.contains(modifiedHeadline)}
@@ -24,17 +26,16 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
   "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest) in {
-    val tempFilePath = "/tmp/TestR2IntegrationArticleModified-" + java.util.UUID.randomUUID().toString + ".xml"
+    
     def cleanup {
-    val pathToTempFile: Path = Path.fromString(tempFilePath)
-    pathToTempFile.deleteIfExists()
+    
+    tempFilePath.deleteIfExists()
     }
     cleanup
-    def createModifiedR2Article{
-
+    def createModifiedR2Article {
       val r2ArticleXML = Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString
       val modifiedR2ArticleXML = r2ArticleXML.replace("Facebook messaging article", modifiedHeadline)
-      val output: Output = Resource.fromFile(tempFilePath)
+      val output: Output = Resource.fromFile(tempFilePathString)
       output.write(modifiedR2ArticleXML)
     }
     createModifiedR2Article
@@ -45,7 +46,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
       textField("j_username").value = Config.r2AdminUsername
       pwdField("j_password").value = Config.r2AdminPassword
       submit
-      xpath("//form[@action='article/import']/input[@type='file']").webElement.sendKeys(tempFilePath)
+      xpath("//form[@action='article/import']/input[@type='file']").webElement.sendKeys(tempFilePathString)
       click on xpath("//form[@action='article/import']/input[@type='submit']")
       //check import is successful
       val result = cssSelector("body").webElement.getText
