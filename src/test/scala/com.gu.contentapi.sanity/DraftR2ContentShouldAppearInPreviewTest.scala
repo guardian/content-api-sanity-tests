@@ -22,7 +22,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
-  "Updating a draft in R2" should "show an update in the Preview API" in {
+  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest) in {
     val tempFilePath = "/tmp/TestR2IntegrationArticleModified-" + java.util.UUID.randomUUID().toString + ".xml"
     val path: Path = Path.fromString(tempFilePath)
 
