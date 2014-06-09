@@ -31,7 +31,6 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
     
     tempFilePath.deleteIfExists()
     }
-    cleanup
     def createModifiedR2Article {
       val r2ArticleXML = Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString
       val modifiedR2ArticleXML = r2ArticleXML.replace("Facebook messaging article", modifiedHeadline)
@@ -58,6 +57,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
       close
     }
     postModifiedR2ArticleToNewspaperIntegrationEndpoint
+    cleanup
 
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on item endpoint") {
@@ -67,7 +67,6 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
         withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
           doesCAPIHaveModifiedDraftData("search?use-date=last-modified") should be(true)
         }
-        cleanup
       }
     }
   }
