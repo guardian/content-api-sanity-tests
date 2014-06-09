@@ -8,7 +8,7 @@ import play.api.libs.json.Json
 
 class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "GETting the preview content set JSON" should "show no results on live" in {
+  "GETting the preview content set JSON" should "show no results on live" taggedAs(FrequentTest) in {
     val httpRequest = requestHost("search?content-set=preview").get
     whenReady(httpRequest) { result =>
       val json = Json.parse(result.body)
