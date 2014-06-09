@@ -53,7 +53,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
       val importStatus = items(0)
       val importedPageId = (items(1))
       importStatus should be("OK")
-      importedPageId should be ("435627291")
+      importedPageId should be (pageId)
       close
     }
     postModifiedR2ArticleToNewspaperIntegrationEndpoint
