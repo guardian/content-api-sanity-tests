@@ -15,7 +15,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
 
-  def doesR2HaveModifiedDraftData(capiURI: String) = {
+  def doesCAPIHaveModifiedDraftData(capiURI: String) = {
     val httpRequest = request(Config.previewHostCode + capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, AuthScheme.BASIC).get
     whenReady(httpRequest) { result => result.body.contains(modifiedHeadline)}
   }
@@ -48,11 +48,11 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
     close
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on item endpoint") {
-        doesR2HaveModifiedDraftData("internal-code/content/435627291") should be(true)
+        doesCAPIHaveModifiedDraftData("internal-code/content/"+pageId) should be(true)
       }
       eventually(timeout(Span(60, Seconds))) {
         withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
-          doesR2HaveModifiedDraftData("search?use-date=last-modified") should be(true)
+          doesCAPIHaveModifiedDraftData("search?use-date=last-modified") should be(true)
         }
       }
     }
