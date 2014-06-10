@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import com.ning.http.multipart.{StringPart, FilePart, MultipartRequestEntity, Part}
 import com.ning.http.client.{Realm, AsyncHttpClientConfig, AsyncHttpClient}
+import java.nio.file.Paths
 
 
 class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
@@ -17,22 +18,13 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     whenReady(httpRequest) { result => result.body should equal("incopy Integration...")
     }
 
+    val file  = getClass.getResource("/composer_article.xml").getFile
 
-    //val filename = getClass.getResource("/composer_article.xml").toURI
 
-    var realm = new Realm.RealmBuilder().build()
-    var cfg = new AsyncHttpClientConfig.Builder().build()
-    val asyncHttpClient = new AsyncHttpClient(cfg)
-   val url = Config.composerHost + "incopyintegration/article/import"
-   val ahc = asyncHttpClient.preparePost( url)
 
-    ahc.setRealm(realm)
-    ahc.setHeader("User-Agent", "curl")
-    ahc.setHeader("Content-Type", "multipart/form-data")
 
-    ahc.addBodyPart( new com.ning.http.client.FilePart("composer_article.xml", new File(getClass.getResource("/composer_article.xml").toURI), "application/xml", "UTF-8"))
 
-    ahc.execute.get.getResponseBody should be ("foo")
+
+
   }
-
 }
