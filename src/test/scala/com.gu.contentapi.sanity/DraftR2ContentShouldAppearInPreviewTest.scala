@@ -16,7 +16,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val pageId = "435627291"
   val tempFile = java.io.File.createTempFile("TestR2IntegrationArticleModified-", ".xml")
-  val tempFilePathString = tempFile.toString
+  val tempFilePathString = tempFile.getAbsolutePath
   val tempFilePath: Path = Path(tempFile)
 
   implicit val webDriver: WebDriver = new HtmlUnitDriver
