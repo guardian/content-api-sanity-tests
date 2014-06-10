@@ -23,29 +23,36 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
     whenReady(httpRequest) { result => result.body.contains(modifiedHeadline)}
   }
 
+  def login {
+    textField("j_username").value = Config.r2AdminUsername
+    pwdField("j_password").value = Config.r2AdminPassword
+    submit
+  }
+
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
   "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest) in {
     
     def cleanup {
-    
     tempFilePath.deleteIfExists()
     }
-    def createModifiedR2Article {
-      val r2ArticleXML = Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString
+    def createModifiedR2Article(originalR2XML: String, modifiedR2XMLPath: String) {
+      val r2ArticleXML = originalR2XML
       val modifiedR2ArticleXML = r2ArticleXML.replace("Facebook messaging article", modifiedHeadline)
       val output: Output = Resource.fromFile(tempFilePathString)
       output.write(modifiedR2ArticleXML)
     }
-    createModifiedR2Article
+    createModifiedR2Article(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, tempFilePathString)
 
-    def postModifiedR2ArticleToNewspaperIntegrationEndpoint{
+
+    login
+
+    def postModifiedR2ArticleToNewspaperIntegrationEndpoint(r2XMLPath: String)
+    {
       go to (Config.r2AdminHost + "/tools/newspaperintegration/index")
       pageTitle should be("Login")
-      textField("j_username").value = Config.r2AdminUsername
-      pwdField("j_password").value = Config.r2AdminPassword
-      submit
-      xpath("//form[@action='article/import']/input[@type='file']").webElement.sendKeys(tempFilePathString)
+
+      xpath("//form[@action='article/import']/input[@type='file']").webElement.sendKeys(r2XMLPath)
       click on xpath("//form[@action='article/import']/input[@type='submit']")
       //check import is successful
       val result = cssSelector("body").webElement.getText
@@ -56,7 +63,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
       importedPageId should be (pageId)
       close
     }
-    postModifiedR2ArticleToNewspaperIntegrationEndpoint
+    postModifiedR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
     cleanup
 
     eventually(timeout(Span(60, Seconds))) {
