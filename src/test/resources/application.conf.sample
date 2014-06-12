@@ -11,3 +11,13 @@ content-api-sanity-tests {
     write-username=your-write-username
     write-password=your-write-password
 }
+
+
+content-api-sanity-code {
+    host="http://your-capi-host"
+    preview-host:"http://your-preview-host"
+    r2-admin-host:"http://your-r2-admin-host"
+    api-key=your-capi-key
+    r2-admin-username=your-r2-username
+    r2-admin-password=your-r2-password
+}
