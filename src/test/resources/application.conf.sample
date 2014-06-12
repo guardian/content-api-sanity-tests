@@ -15,11 +15,14 @@ content-api-sanity-tests {
     write-password=your-write-password
 }
 
+
+
 content-api-sanity-code {
-    host="your-capi-code-host"
-    preview-host:"http://your-capi-preview-host"
+    host="http://your-capi-host"
+    preview-host:"http://your-preview-host"
+    r2-admin-host:"http://your-r2-admin-host"
+    api-key=your-capi-key
+    r2-admin-username=your-r2-username
+    r2-admin-password=your-r2-password
     composer-host:"http://your-composer-host/"
-    api-key=your-code-api-key
-    preview-username=your-preview-code-username
-    preview-password=your-preview-code-password
 }
