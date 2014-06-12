@@ -5,9 +5,7 @@ import org.scalatest.selenium.{WebBrowser}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.WebDriver
 import org.scalatest.concurrent.{ScalaFutures, IntegrationPatience, Eventually}
-import com.ning.http.client.Realm.AuthScheme
 import scala.io.Source
-import scalax.io._
 import scalax.file.Path
 import org.scalatest.time.{Seconds, Span}
 

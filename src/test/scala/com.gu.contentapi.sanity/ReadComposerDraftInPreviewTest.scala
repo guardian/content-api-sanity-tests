@@ -3,7 +3,6 @@ package com.gu.contentapi.sanity
 import org.scalatest.{Matchers, FlatSpec}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import scala.sys.process._
-import scalax.io.{Resource, Output}
 import scala.util.Random
 import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
@@ -22,8 +21,8 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
 
   "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" taggedAs (FrequentTest) in {
     val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
-    val importEndoint = Config.composerHost + "incopyintegration/article/import"
-    val result = importComposerArticle(importEndoint, fileToImport)
+    val importEndpoint = Config.composerHost + "incopyintegration/article/import"
+    val result = importComposerArticle(importEndpoint, fileToImport)
     val results = result.split(":|;")
     val status = results(0)
     val articleID = results(1)
@@ -49,6 +48,4 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     val cmd = Seq("curl", "-sS", "-F", "fileData=@" + pathToFileToImport, importEndpoint)
     cmd.!!
   }
-
-
 }
