@@ -1,13 +1,14 @@
 package com.gu.contentapi.sanity
 
 import org.scalatest.{Matchers, FlatSpec}
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import scala.sys.process._
 import scalax.io.{Resource, Output}
 import scala.util.Random
 import scala.io.Source
+import org.scalatest.time.{Seconds, Span}
 
-class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
+class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val uniquePageId = new Random().nextInt.toString
@@ -26,9 +27,22 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     val results = result.split(":|;")
     val status = results(0)
     val articleID = results(1)
+    val composerItemEndpointURI = Config.previewHostCode + "internal-code/composer/" + articleID
+    val lastModifiedSearchURI = Config.previewHostCode + "search?use-date=last-modified"
    withClue(s"Import was not successful, the endpoint said: $result") {
      status should be("OK")
    }
+    eventually (timeout(Span(60, Seconds))) {
+      withClue(s"Composer article was not found at: $composerItemEndpointURI") {
+        isCAPIShowingChange(composerItemEndpointURI, uniquePageId, Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
+      }
+    }
+
+    eventually (timeout(Span(60, Seconds))) {
+      withClue(s"Composer article was not $articleID was not found at: $lastModifiedSearchURI") {
+        isCAPIShowingChange(lastModifiedSearchURI, uniquePageId, Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
+      }
+    }
   }
 
   def createModifiedXMLTempFile(originalXML: String, originalString: String, replacedString: String): String = {

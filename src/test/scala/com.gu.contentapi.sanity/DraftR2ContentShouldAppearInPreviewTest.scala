@@ -30,11 +30,11 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on item endpoint") {
-        doesCAPIHaveModifiedDraftData("internal-code/content/"+pageId) should be(true)
+        isCAPIShowingChange(Config.previewHostCode + "internal-code/content/"+pageId, modifiedHeadline, Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
       }
       eventually(timeout(Span(60, Seconds))) {
         withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
-          doesCAPIHaveModifiedDraftData("search?use-date=last-modified") should be(true)
+          isCAPIShowingChange(Config.previewHostCode + "search?use-date=last-modified", modifiedHeadline,  Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
         }
       }
     }
@@ -73,9 +73,6 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
       tempFilePath.deleteIfExists()
     }
 
-    def doesCAPIHaveModifiedDraftData(capiURI: String) = {
-      val httpRequest = request(Config.previewHostCode + capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, AuthScheme.BASIC).get
-      whenReady(httpRequest) { result => result.body.contains(modifiedHeadline)}
-    }
+
   }
 }
