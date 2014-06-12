@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <article automatic-linking="true" book-code="gdn" created-user="Saptarshi Ray" enable-comments="false"
          issue-date="20130314" notes="copy legalled but must get furn legalled" premoderation="false" section-code="adv"
-         section-id="389" section-name="Advance (G1)" slug-word="british-gunmakers-arms-sri-lanka"
-         story-bundle="7348690" story-group="bqguns" web-publication-date="201303121639">
+         section-id="389" section-name="Advance (G1)" slug-word="slugword-placeholder"
+         story-bundle="story-bundle-placeholder" story-group="bqguns" web-publication-date="201303121639">
     <geolocation latitude="" longitude=""/>
     <tags>
         <tag category="keyword" id="18327" important="true" name="Arms trade (News)"/>
@@ -14,11 +14,11 @@
     <externalReferences/>
     <linktext attached-to="0" editions="" filename="bqguns.whd01" id="7353203" issue-date="20130314"
               last-modified="201303121639" last-user="Saptarshi Ray" lawyered="P" on-pages="" revision="2" status="Subs"
-              stickyversion="0" words="12">Content API Sanity Test placeholder new edit
+              stickyversion="0" words="12">Content API Sanity Test linktext-placeholder
     </linktext>
     <headline attached-to="0" editions="" filename="bqguns.whd01" id="7353203" issue-date="20130314"
               last-modified="201303121639" last-user="Saptarshi Ray" lawyered="P" on-pages="" revision="2" status="Subs"
-              stickyversion="0" words="12">Content API Sanity Test placeholder new edit
+              stickyversion="0" words="12">Content API Sanity Test headline-placeholder
     </headline>
     <standfirst attached-to="0" editions="" filename="bqguns.wsf01" id="7353204" issue-date="20130314"
                 last-modified="201303121639" last-user="Saptarshi Ray" lawyered="P" on-pages="" revision="2"

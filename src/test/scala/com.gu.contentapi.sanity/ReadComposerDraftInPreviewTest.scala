@@ -20,21 +20,29 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
   }
 
   "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" in {
-    val fileToImport = createModifiedXML(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "7348690|british-gunmakers-arms-sri-lanka|placeholder", uniquePageId)
+    val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
     val importEndoint = Config.composerHost + "incopyintegration/article/import"
-    val cmd = Seq("curl", "-sS", "-F", "fileData=@" + fileToImport, importEndoint)
-    val res = cmd.!!
-    val results = res.split(":|;")
+    val result = importComposerArticle(importEndoint, fileToImport)
+    val results = result.split(":|;")
     val status = results(0)
     val articleID = results(1)
-    status should be("OK")
+   withClue(s"Import was not successful, the endpoint said: $result") {
+     status should be("OK")
+   }
   }
 
-  def createModifiedXML(originalXML: String, originalString: String, replacedString: String): String = {
+  def createModifiedXMLTempFile(originalXML: String, originalString: String, replacedString: String): String = {
     val tempFile = java.io.File.createTempFile("TestIntegrationArticleModified-", ".xml")
     val modifiedArticleXML = originalXML.replaceAll(originalString, replacedString)
     val output: Output = Resource.fromFile(tempFile)
     output.write(modifiedArticleXML)
     tempFile.getAbsolutePath
   }
+
+  def importComposerArticle (importEndpoint: String, pathToFileToImport: String): String = {
+    val cmd = Seq("curl", "-sS", "-F", "fileData=@" + pathToFileToImport, importEndpoint)
+    cmd.!!
+  }
+
+
 }
