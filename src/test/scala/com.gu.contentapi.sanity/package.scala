@@ -4,6 +4,7 @@ import play.api.libs.ws.WS
 import org.scalatest.exceptions.TestFailedException
 import com.ning.http.client.Realm.AuthScheme
 import org.scalatest.concurrent.ScalaFutures
+import scalax.io.{Resource, Output}
 
 package object sanity extends ScalaFutures {
 
@@ -19,6 +20,14 @@ package object sanity extends ScalaFutures {
         }
     }
     whenReady(httpRequest.get) { result => result.body.contains(modifiedString)}
+  }
+
+  def createModifiedXMLTempFile(originalXML: String, originalString: String, replacedString: String): String = {
+    val tempFile = java.io.File.createTempFile("TestIntegrationArticleModified-", ".xml")
+    val modifiedArticleXML = originalXML.replaceAll(originalString, replacedString)
+    val output: Output = Resource.fromFile(tempFile)
+    output.write(modifiedArticleXML)
+    tempFile.getAbsolutePath
   }
 
   def requestHost(path: String) =

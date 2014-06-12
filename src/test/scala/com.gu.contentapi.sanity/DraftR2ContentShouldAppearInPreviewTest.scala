@@ -15,15 +15,12 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val pageId = "435627291"
-  val tempFile = java.io.File.createTempFile("TestR2IntegrationArticleModified-", ".xml")
-  val tempFilePathString = tempFile.getAbsolutePath
-  val tempFilePath: Path = Path(tempFile)
+  val tempFilePathString = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, "Facebook messaging article", modifiedHeadline )
+  val tempFilePath: Path = Path.fromString(tempFilePathString)
 
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
   "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest) in {
-
-    createModifiedR2Article(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, tempFilePathString)
     login(Config.r2AdminHost + "/tools/newspaperintegration/index")
     postR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
     cleanup
@@ -37,14 +34,6 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
           isCAPIShowingChange(Config.previewHostCode + "search?use-date=last-modified", modifiedHeadline,  Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
         }
       }
-    }
-
-    def createModifiedR2Article(originalR2XML: String, modifiedR2XMLPath: String) {
-      val r2ArticleXML = originalR2XML
-      val modifiedR2ArticleXML = r2ArticleXML.replace("Facebook messaging article", modifiedHeadline)
-      val output: Output = Resource.fromFile(tempFilePathString)
-      output.write(modifiedR2ArticleXML)
-
     }
 
     def login(toolPath: String) {

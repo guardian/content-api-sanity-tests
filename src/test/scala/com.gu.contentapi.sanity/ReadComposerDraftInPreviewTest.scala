@@ -14,13 +14,13 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
   val uniquePageId = new Random().nextInt.toString
 
 
-  "GETting the InCopy integration homepage" should "respond with a welcome message" in {
+  "GETting the InCopy integration homepage" should "respond with a welcome message" taggedAs (FrequentTest) in {
     val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
     whenReady(httpRequest) { result => result.body should equal("incopy Integration...")
     }
   }
 
-  "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" in {
+  "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" taggedAs (FrequentTest) in {
     val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
     val importEndoint = Config.composerHost + "incopyintegration/article/import"
     val result = importComposerArticle(importEndoint, fileToImport)
@@ -43,14 +43,6 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
         isCAPIShowingChange(lastModifiedSearchURI, uniquePageId, Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
       }
     }
-  }
-
-  def createModifiedXMLTempFile(originalXML: String, originalString: String, replacedString: String): String = {
-    val tempFile = java.io.File.createTempFile("TestIntegrationArticleModified-", ".xml")
-    val modifiedArticleXML = originalXML.replaceAll(originalString, replacedString)
-    val output: Output = Resource.fromFile(tempFile)
-    output.write(modifiedArticleXML)
-    tempFile.getAbsolutePath
   }
 
   def importComposerArticle (importEndpoint: String, pathToFileToImport: String): String = {
