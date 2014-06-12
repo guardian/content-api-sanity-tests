@@ -5,6 +5,7 @@ import org.scalatest.exceptions.TestFailedException
 import com.ning.http.client.Realm.AuthScheme
 import org.scalatest.concurrent.ScalaFutures
 import scalax.io.{Resource, Output}
+import scalax.file.Path
 
 package object sanity extends ScalaFutures {
 
@@ -28,6 +29,11 @@ package object sanity extends ScalaFutures {
     val output: Output = Resource.fromFile(tempFile)
     output.write(modifiedArticleXML)
     tempFile.getAbsolutePath
+  }
+
+  def deleteFileIfExists(filePath: String) {
+    val tempFilePath: Path = Path.fromString(filePath)
+    tempFilePath.deleteIfExists()
   }
 
   def requestHost(path: String) =

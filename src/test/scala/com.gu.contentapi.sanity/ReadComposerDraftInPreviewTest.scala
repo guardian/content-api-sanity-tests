@@ -23,6 +23,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
     val importEndpoint = Config.composerHost + "incopyintegration/article/import"
     val result = importComposerArticle(importEndpoint, fileToImport)
+    deleteFileIfExists(fileToImport)
     val results = result.split(":|;")
     val status = results(0)
     val articleID = results(1)
