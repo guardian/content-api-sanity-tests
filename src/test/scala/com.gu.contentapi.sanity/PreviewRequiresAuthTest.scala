@@ -5,7 +5,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 
 class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "GETting preview content" should "require authentication" taggedAs(FrequentTest) in {
+  "GETting preview content" should "require authentication" taggedAs(FrequentTest, PRODTest) in {
 
     val httpRequest = request(Config.previewHost).get
     whenReady(httpRequest) { result =>

@@ -21,7 +21,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
-  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest) in {
+  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest, CODETest) in {
 
     createModifiedR2Article(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, tempFilePathString)
     login(Config.r2AdminHost + "/tools/newspaperintegration/index")

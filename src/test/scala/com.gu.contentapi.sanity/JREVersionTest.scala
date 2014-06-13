@@ -7,7 +7,7 @@ import org.scalatest.exceptions.TestFailedException
 class JREVersionTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
   {
-    "The Content API" should "be using the latest JRE" taggedAs(InfrequentTest) in {
+    "The Content API" should "be using the latest JRE" taggedAs(InfrequentTest, PRODTest) in {
       val httpRequest = request("http://java.com/applet/JreCurrentVersion2.txt").get
       whenReady(httpRequest) { result =>
         if (result.status == 200) {
