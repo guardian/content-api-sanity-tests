@@ -18,11 +18,6 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
   val capiDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
   val collectionJSONWithNowTimestamp = collectionJSON.replace("2013-10-15T11:42:17Z", capiDateStamp)
 
-  def doesCanaryHaveUpdatedTimestamp = {
-    val httpRequest = requestHost("collections/canary").get
-    whenReady(httpRequest) { result => result.body.contains(capiDateStamp)}
-  }
-
   "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest)  in {
     val putSuccessResponseCode = 202
     val httpRequest = request(Config.writeHost + "collections/canary")
@@ -36,7 +31,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
       if (result.status == putSuccessResponseCode) {
         eventually {
           withClue("Collection did not show updated date stamp") {
-            doesCanaryHaveUpdatedTimestamp should be (true)
+            isCAPIShowingChange(Config.host + "collections/canary" + "?api-key=" + Config.apiKey, capiDateStamp) should be (true)
           }
         }
       }
