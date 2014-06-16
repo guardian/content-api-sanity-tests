@@ -4,13 +4,17 @@ resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases"
 
 resolvers += "theatr.us" at "http://repo.theatr.us"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.4" % "test"
+resolvers += "Mariot Chauvin" at "http://mchv.me/repository"
 
-libraryDependencies += "com.typesafe.play" %% "play" % "2.2.2"
+libraryDependencies += "mchv" % "play2-quartz_2.10" % "1.1" exclude("org.scala-stm", "scala-stm_2.10.0") exclude("com.jsuereth", "scala-arm_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-core_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-file_2.10.0-RC1")
 
-libraryDependencies += "com.typesafe" % "config" % "1.2.0"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.4" % "test" exclude("org.scala-stm", "scala-stm_2.10.0") exclude("com.jsuereth", "scala-arm_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-core_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-file_2.10.0-RC1")
 
-libraryDependencies += "org.seleniumhq.selenium" % "selenium-java" % "2.41.0" % "test"
+libraryDependencies += "com.typesafe.play" %% "play" % "2.2.2" exclude("org.scala-stm", "scala-stm_2.10.0") exclude("com.jsuereth", "scala-arm_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-core_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-file_2.10.0-RC1")
+
+libraryDependencies += "com.typesafe" % "config" % "1.2.0" exclude("org.scala-stm", "scala-stm_2.10.0") exclude("com.jsuereth", "scala-arm_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-core_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-file_2.10.0-RC1")
+
+libraryDependencies += "org.seleniumhq.selenium" % "selenium-java" % "2.41.0" % "test" exclude("org.scala-stm", "scala-stm_2.10.0") exclude("com.jsuereth", "scala-arm_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-core_2.10.0-RC1") exclude ("com.github.scala-incubator.io", "scala-io-file_2.10.0-RC1")
 
 parallelExecution in ThisBuild := false
 
