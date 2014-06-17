@@ -21,4 +21,6 @@ object Config {
   val writeHost = sanityConfig.getString("write-host")
   val writeUsername = sanityConfig.getString("write-username")
   val writePassword = sanityConfig.getString("write-password")
+  val previewCodeHost = sanityCodeConfig.getString("preview-host")
+  val composerHost = sanityCodeConfig.getString("composer-host")
 }
