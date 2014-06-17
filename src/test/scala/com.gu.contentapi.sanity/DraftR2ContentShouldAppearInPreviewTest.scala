@@ -8,7 +8,7 @@ import org.scalatest.concurrent.{ScalaFutures, IntegrationPatience, Eventually}
 import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
-@Ignore
+
 class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser with ScalaFutures {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
