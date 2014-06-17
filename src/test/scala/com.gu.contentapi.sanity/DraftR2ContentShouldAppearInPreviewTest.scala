@@ -1,6 +1,6 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{Matchers, FlatSpec}
+import org.scalatest.{Ignore, Matchers, FlatSpec}
 import org.scalatest.selenium.{WebBrowser}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.WebDriver
@@ -8,6 +8,7 @@ import org.scalatest.concurrent.{ScalaFutures, IntegrationPatience, Eventually}
 import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
+@Ignore
 class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser with ScalaFutures {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
