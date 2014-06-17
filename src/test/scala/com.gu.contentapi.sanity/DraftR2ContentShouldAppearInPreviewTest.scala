@@ -9,7 +9,7 @@ import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
 
-@Ignore
+
 class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser with ScalaFutures {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
@@ -24,7 +24,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on item endpoint") {
-        isCAPIShowingChange(Config.previewHostCode + "internal-code/content/" + pageId, modifiedHeadline, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
+        isCAPIShowingChangeDebug(Config.previewHostCode + "internal-code/content/" + pageId, modifiedHeadline, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
       }
       eventually(timeout(Span(60, Seconds))) {
         withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
