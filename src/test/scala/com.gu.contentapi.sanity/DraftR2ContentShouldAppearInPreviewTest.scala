@@ -14,7 +14,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
   val pageId = "435627291"
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
-  "Updating a draft in R2" should "show an update in the Preview API" taggedAs (FrequentTest) in {
+  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest, CODETest) in {
     lazy val tempFilePathString = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, "Facebook messaging article", modifiedHeadline)
     login(Config.r2AdminHost + "/tools/newspaperintegration/index")
     postR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
