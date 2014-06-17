@@ -12,22 +12,21 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val pageId = "435627291"
-  val tempFilePathString = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, "Facebook messaging article", modifiedHeadline )
-
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
   "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest) in {
+    lazy val tempFilePathString = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, "Facebook messaging article", modifiedHeadline )
     login(Config.r2AdminHost + "/tools/newspaperintegration/index")
     postR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
     deleteFileIfExists(tempFilePathString)
 
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on item endpoint") {
-        isCAPIShowingChange(Config.previewHostCode + "internal-code/content/"+pageId, modifiedHeadline, Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
+        isCAPIShowingChange(Config.previewHostCode + "internal-code/content/"+pageId, modifiedHeadline, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
       }
       eventually(timeout(Span(60, Seconds))) {
         withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
-          isCAPIShowingChange(Config.previewHostCode + "search?use-date=last-modified", modifiedHeadline,  Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
+          isCAPIShowingChange(Config.previewHostCode + "search?use-date=last-modified", modifiedHeadline,  Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
         }
       }
     }

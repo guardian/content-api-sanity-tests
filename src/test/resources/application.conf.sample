@@ -8,7 +8,7 @@ ws.compressionEnable=true
 
 content-api-sanity-tests {
     host="http://your-capi-host"
-    preview-host:"http://your-preview-host"
+    preview-host="http://your-preview-host"
     api-key=your-capi-api-key
     write-host="http://your-write-host"
     write-username=your-write-username
@@ -19,10 +19,10 @@ content-api-sanity-tests {
 
 content-api-sanity-code {
     host="http://your-capi-host"
-    preview-host:"http://your-preview-host"
-    r2-admin-host:"http://your-r2-admin-host"
+    preview-host="http://your-preview-host"
+    r2-admin-host="http://your-r2-admin-host"
     api-key=your-capi-key
     r2-admin-username=your-r2-username
     r2-admin-password=your-r2-password
-    composer-host:"http://your-composer-host/"
+    composer-host="http://your-composer-host/"
 }
