@@ -31,6 +31,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
         }
       }
     }
+  }
 
     def login(toolPath: String) {
       go to (toolPath)
@@ -52,5 +53,5 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
       importedPageId should be(pageId)
       close
     }
-  }
+
 }
