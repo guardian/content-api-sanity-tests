@@ -23,32 +23,11 @@ package object sanity extends ScalaFutures {
     whenReady(httpRequest.get) { result => result.body.contains(modifiedString)}
   }
 
-  def isCAPIShowingChangeDebug(capiURI: String, modifiedString: String, credentials: Option[(String, String)] = None) = {
-
-    val httpRequest = credentials match {
-      case Some((username, password)) =>
-        request(capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, AuthScheme.BASIC)
-      case None => {
-        request(capiURI)
-      }
-    }
-    whenReady(httpRequest.get) { result => {
-      println("DEBUG FOR TC")
-      println(result.status + "-"+  result.body)
-      result.body.contains(modifiedString)
-    }
-
-    }
-  }
-
-
-
   def createModifiedXMLTempFile(originalXML: String, originalString: String, replacedString: String): String = {
     val tempFile = File.createTempFile("TestIntegrationArticleModified-", ".xml")
     val modifiedArticleXML = originalXML.replaceAll(originalString, replacedString)
     val output: Output = Resource.fromFile(tempFile)
     output.write(modifiedArticleXML)
-    println("Temp file created at: " + tempFile.getAbsolutePath)
     tempFile.getAbsolutePath
   }
 
