@@ -47,7 +47,6 @@ package object sanity extends ScalaFutures {
     val tempFile = File.createTempFile("TestIntegrationArticleModified-", ".xml")
     val modifiedArticleXML = originalXML.replaceAll(originalString, replacedString)
     val output: Output = Resource.fromFile(tempFile)
-    println("Modified Article XML is: " + modifiedArticleXML)
     output.write(modifiedArticleXML)
     println("Temp file created at: " + tempFile.getAbsolutePath)
     tempFile.getAbsolutePath
