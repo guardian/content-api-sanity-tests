@@ -9,3 +9,5 @@ libraryDependencies += "com.typesafe.play" %% "play" % "2.2.2"
 libraryDependencies += "com.typesafe" % "config" % "1.2.0"
 
 libraryDependencies += "org.seleniumhq.selenium" % "selenium-java" % "2.41.0" % "test"
+
+parallelExecution in ThisBuild := false
