@@ -48,6 +48,7 @@ package object sanity extends ScalaFutures {
     val modifiedArticleXML = originalXML.replaceAll(originalString, replacedString)
     val output: Output = Resource.fromFile(tempFile)
     output.write(modifiedArticleXML)
+    println("Temp file created at: " + tempFile.getAbsolutePath)
     tempFile.getAbsolutePath
   }
 
