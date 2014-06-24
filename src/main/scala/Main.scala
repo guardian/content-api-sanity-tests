@@ -12,7 +12,7 @@ object StartScheduledRunner {
 
   def onStart() {
     QuartzScheduler.start()
-    QuartzScheduler schedule("Frequent Tests", runFreqeuntTests) every (5 seconds)
+    QuartzScheduler schedule("Frequent Tests", runFreqeuntTests) every (30 seconds)
     QuartzScheduler schedule("job 2 ", bar) at "0 0 3 * * ? *"
   }
 
@@ -22,7 +22,6 @@ object StartScheduledRunner {
 
 
   def runFreqeuntTests {
-    println("foo")
     (new AmiSanityTest).execute()
     }
 
