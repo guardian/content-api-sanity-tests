@@ -10,7 +10,9 @@ class ContentApiSanityTest extends FlatSpec with Matchers with ScalaFutures with
 
     val httpRequest = requestHost("search?format=json&api-key=").get
     whenReady(httpRequest) { result =>
-      result.body should include ("results")
+      withClue("Status code was: " + result.status + ", result body was: " + result.body) {
+        result.body should include("results")
+      }
     }
   }
 }
