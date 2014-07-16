@@ -1,8 +1,8 @@
 package com.gu.contentapi
 
+import com.gu.contentapi.sanity.AmiSanityTest
 import utils.QuartzScheduler
 import scala.concurrent.duration._
-import org.scalatest.exceptions.TestFailedException
 
 object StartScheduledRunner {
   def main(args: Array[String]) {
@@ -23,7 +23,7 @@ object StartScheduledRunner {
 
   def runFreqeuntTests {
     (new AmiSanityTest).execute()
-    }
+  }
 
 
 
