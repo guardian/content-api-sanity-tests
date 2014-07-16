@@ -1,6 +1,6 @@
 package com.gu.contentapi
 
-import com.gu.contentapi.sanity.AmiSanityTest
+import com.gu.contentapi.sanity.{JREVersionTest, AmiSanityTest}
 import utils.QuartzScheduler
 import scala.concurrent.duration._
 
@@ -22,7 +22,8 @@ object StartScheduledRunner {
 
 
   def runFreqeuntTests {
-    (new AmiSanityTest).execute()
+    (new AmiSanityTest).execute
+    (new JREVersionTest).execute
   }
 
 

@@ -1,7 +1,6 @@
 Done
 ====
-* Integrated Mariot's scheduler
-<https://github.com/guardian/content-api-sanity-tests/blob/quartz-scheduler/src/main/scala/Main.scala>
+* Integrated Mariot's scheduler directly
 * Moved a test into Main so it is accessible to the scheduler
 * Written a custom Test Failed handler that will send a trigger to
 PagerDuty
