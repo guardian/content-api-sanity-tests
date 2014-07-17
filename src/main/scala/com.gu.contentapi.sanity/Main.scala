@@ -6,15 +6,14 @@ import scala.concurrent.duration._
 
 object StartScheduledRunner {
   def main(args: Array[String]) {
-    println("Hello, world!")
     onStart()
   }
 
   def onStart() {
     QuartzScheduler.start()
     QuartzScheduler schedule("Frequent Tests", runFreqeuntTests) every (30 seconds)
-    QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) every (24 hours)
-    QuartzScheduler schedule("CODE environment Tests ", runCodeTests) every (6 hours)
+    QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 12 1/1 * ? *"
+    QuartzScheduler schedule("CODE environment Tests ", runCodeTests) at "0 0 12 ? * MON-FRI *"
   }
 
   def onStop {
@@ -39,5 +38,6 @@ object StartScheduledRunner {
 
   def runCodeTests {
     (new DraftR2ContentShouldAppearInPreviewTest).execute
+    (new ReadComposerDraftInPreviewTest).execute
   }
 }

@@ -22,4 +22,5 @@ object Config {
   val writeUsername = sanityConfig.getString("write-username")
   val writePassword = sanityConfig.getString("write-password")
   val pagerDutyServiceKey=sanityConfig.getString("pager-duty-service-key")
+  val composerHost = sanityCodeConfig.getString("composer-host")
 }
