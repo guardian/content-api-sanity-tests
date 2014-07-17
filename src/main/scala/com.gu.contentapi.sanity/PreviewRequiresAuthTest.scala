@@ -7,9 +7,11 @@ class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures w
 
   "GETting preview content" should "require authentication" taggedAs(FrequentTest, PRODTest) in {
 
-    val httpRequest = request(Config.previewHost).get
-    whenReady(httpRequest) { result =>
-      result.status should be(401)
-    }
+    handleException {
+      val httpRequest = request(Config.previewHost).get
+      whenReady(httpRequest) { result =>
+        result.status should be(401)
+      }
+    }(fail,"GETting preview content should require authentication" )
   }
 }

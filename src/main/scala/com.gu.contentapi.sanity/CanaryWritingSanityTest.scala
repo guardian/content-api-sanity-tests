@@ -23,26 +23,29 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
     whenReady(httpRequest) { result => result.body.contains(capiDateStamp)}
   }
 
-  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest, PRODTest)  in {
-    val putSuccessResponseCode = 202
-    val httpRequest = request(Config.writeHost + "collections/canary")
-      .withAuth(Config.writeUsername, Config.writePassword, AuthScheme.BASIC)
-      .withHeaders("Content-Type" -> "application/json")
-      .put(collectionJSONWithNowTimestamp)
-    whenReady(httpRequest) { result =>
-      withClue("Response code was " + result.status + " expected " + putSuccessResponseCode) {
-        result.status should equal(putSuccessResponseCode)
-      }
-      if (result.status == putSuccessResponseCode) {
-        eventually {
-          withClue("Collection did not show updated date stamp") {
-            doesCanaryHaveUpdatedTimestamp should be (true)
+
+    "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest, PRODTest) in {
+      handleException {
+      val putSuccessResponseCode = 202
+      val httpRequest = request(Config.writeHost + "collections/canary")
+        .withAuth(Config.writeUsername, Config.writePassword, AuthScheme.BASIC)
+        .withHeaders("Content-Type" -> "application/json")
+        .put(collectionJSONWithNowTimestamp)
+      whenReady(httpRequest) { result =>
+        withClue("Response code was " + result.status + " expected " + putSuccessResponseCode) {
+          result.status should equal(putSuccessResponseCode)
+        }
+        if (result.status == putSuccessResponseCode) {
+          eventually {
+            withClue("Collection did not show updated date stamp") {
+              doesCanaryHaveUpdatedTimestamp should be(true)
+            }
           }
         }
+        else {
+          throw new TestFailedException("Collection did not post successfully", 1)
+        }
       }
-      else {
-        throw new TestFailedException("Collection did not post successfully", 1)
-      }
-    }
+    }(fail,"PUTting and GETting a collection should show an updated timestamp")
   }
 }

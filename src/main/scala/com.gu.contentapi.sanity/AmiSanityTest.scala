@@ -15,7 +15,7 @@ class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with Integr
       handleException {
         val httpRequest = WS.url("https://cloud-images.ubuntu.com/locator/ec2/releasesTable").get
         whenReady(httpRequest) { result =>
-          result.body should include("FAIL")
+          result.body should include("20140607.1")
         }
       }(fail,"The Content API should be using the latest AMI")
   }

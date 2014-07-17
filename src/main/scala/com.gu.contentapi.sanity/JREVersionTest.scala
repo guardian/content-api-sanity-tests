@@ -8,15 +8,17 @@ class JREVersionTest extends FlatSpec with Matchers with ScalaFutures with Integ
 
   {
     "The Content API" should "be using the latest JRE" taggedAs(InfrequentTest, PRODTest) in {
+      handleException {
       val httpRequest = request("http://java.com/applet/JreCurrentVersion2.txt").get
       whenReady(httpRequest) { result =>
         if (result.status == 200) {
-          result.body should include("1.7.0_60")
+          result.body should include("1.7.0_65")
         }
         else {
           throw new TestFailedException("Java.com did not return a 200 status code", 1)
         }
       }
+      }(fail, "The Content API should be using the latest JRE")
     }
   }
 }

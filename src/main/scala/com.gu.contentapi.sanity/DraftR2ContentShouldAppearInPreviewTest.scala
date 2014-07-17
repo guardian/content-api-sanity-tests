@@ -22,22 +22,24 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
   "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest, CODETest) in {
+    handleException {
 
-    createModifiedR2Article(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, tempFilePathString)
-    login(Config.r2AdminHost + "/tools/newspaperintegration/index")
-    postR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
-    cleanup
+      createModifiedR2Article(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, tempFilePathString)
+      login(Config.r2AdminHost + "/tools/newspaperintegration/index")
+      postR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
+      cleanup
 
-    eventually(timeout(Span(60, Seconds))) {
-      withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on item endpoint") {
-        doesCAPIHaveModifiedDraftData("internal-code/content/"+pageId) should be(true)
-      }
       eventually(timeout(Span(60, Seconds))) {
-        withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
-          doesCAPIHaveModifiedDraftData("search?use-date=last-modified") should be(true)
+        withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on item endpoint") {
+          doesCAPIHaveModifiedDraftData("internal-code/content/" + pageId) should be(true)
+        }
+        eventually(timeout(Span(60, Seconds))) {
+          withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
+            doesCAPIHaveModifiedDraftData("search?use-date=last-modified") should be(true)
+          }
         }
       }
-    }
+    }(fail, "Updating a draft in R2 should show an update in the Preview API")
 
     def createModifiedR2Article(originalR2XML: String, modifiedR2XMLPath: String) {
       val r2ArticleXML = originalR2XML
