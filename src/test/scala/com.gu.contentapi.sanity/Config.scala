@@ -1,4 +1,4 @@
-package com.gu.contentapi.sanity
+package com.gu.contentapi.sanity2
 
 import com.typesafe.config.ConfigFactory
 

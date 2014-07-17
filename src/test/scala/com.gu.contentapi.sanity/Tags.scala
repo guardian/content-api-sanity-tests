@@ -1,4 +1,4 @@
-package com.gu.contentapi.sanity
+package com.gu.contentapi.sanity2
 
 import org.scalatest.Tag
 

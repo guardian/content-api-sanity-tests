@@ -10,7 +10,7 @@ import java.io.File
 import scala.concurrent.duration._
 
 
-package object sanity extends ScalaFutures {
+package object sanity2 extends ScalaFutures {
 
   def request(uri: String):WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
 
