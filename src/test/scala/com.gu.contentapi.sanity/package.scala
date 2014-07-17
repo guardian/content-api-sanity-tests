@@ -7,7 +7,6 @@ import org.scalatest.concurrent.ScalaFutures
 import scalax.io.{Resource, Output}
 import scalax.file.Path
 import java.io.File
-import utils.QuartzScheduler
 import scala.concurrent.duration._
 
 

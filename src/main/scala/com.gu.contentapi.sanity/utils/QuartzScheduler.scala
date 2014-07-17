@@ -1,4 +1,4 @@
-package utils
+package com.gu.sanity.utils
 
 import org.quartz.JobBuilder.newJob
 import org.quartz.SimpleScheduleBuilder.simpleSchedule

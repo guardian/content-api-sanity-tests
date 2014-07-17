@@ -1,7 +1,7 @@
 package com.gu.contentapi
 
 import com.gu.contentapi.sanity._
-import utils.QuartzScheduler
+import com.gu.sanity.utils.QuartzScheduler
 import scala.concurrent.duration._
 
 object StartScheduledRunner {

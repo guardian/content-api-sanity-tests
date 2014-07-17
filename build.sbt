@@ -10,7 +10,7 @@ libraryDependencies += "org.quartz-scheduler" % "quartz" % "2.1.6"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.4"
 
-libraryDependencies += "com.typesafe.play" %% "play" % "2.2.3"
+libraryDependencies += "com.typesafe.play" %% "play" % "2.2.2"
 
 libraryDependencies += "com.typesafe" % "config" % "1.2.1"
 
