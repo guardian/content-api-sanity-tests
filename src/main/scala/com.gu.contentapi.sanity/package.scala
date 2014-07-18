@@ -2,40 +2,43 @@ package com.gu.contentapi
 
 import java.io.File
 import com.ning.http.client.Realm.AuthScheme
+import org.scalatest.Matchers
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.exceptions.TestFailedException
+import play.api.libs.json.Json
 import play.api.libs.ws.WS
 import play.api.libs.ws.WS.WSRequestHolder
 
 import scalax.file.Path
 import scalax.io.{Resource, Output}
 
-package object sanity extends ScalaFutures {
+package object sanity extends ScalaFutures with Matchers {
 
   def handleException(test: =>Unit)(fail: =>Unit, testName: String)= {
-  try {
-    test
-  } catch {
-    case tfe: TestFailedException =>
-      println(testName)
-      pagerDutyAlerter(testName, tfe)
-      fail
+    try {
+      test
+    } catch {
+      case tfe: TestFailedException =>
+        println(testName)
+        pagerDutyAlerter(testName, tfe)
+        fail
+    }
   }
-  }
-def pagerDutyAlerter(testName: String, tfe: TestFailedException){
-       val description = testName + tfe.getMessage()
-  //        val data = Json.obj(
-  //        "service_key" -> Config.pagerDutyServiceKey,
-  //        "event_type" -> "trigger",
-  //        "description" -> description,
-  //        "client" -> "Content API Sanity Tests",
-  //        "client_url" -> "https://github.com/guardian/content-api-sanity-tests"
-  //      )
-  //        val httpRequest = WS.url("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
-  //        whenReady(httpRequest) { result =>
-  //        result.body should include("success")}
+  def pagerDutyAlerter(testName: String, tfe: TestFailedException){
+    val description = (testName + " failed, the error reported was: " + tfe.getMessage())
 
-}
+    val data = Json.obj(
+      "service_key" -> Config.pagerDutyServiceKey,
+      "event_type" -> "trigger",
+      "description" -> description,
+      "client" -> "Content API Sanity Tests",
+      "client_url" -> "https://github.com/guardian/content-api-sanity-tests"
+    )
+    val httpRequest = WS.url("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
+    whenReady(httpRequest) { result =>
+      result.body should include("success")}
+
+  }
   def request(uri: String):WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
 
   def isCAPIShowingChange(capiURI: String, modifiedString: String, credentials: Option[(String, String)] = None) = {
