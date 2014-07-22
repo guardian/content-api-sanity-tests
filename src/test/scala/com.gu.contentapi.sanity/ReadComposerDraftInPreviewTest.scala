@@ -38,7 +38,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     val composerItemEndpointURI = Config.previewHostCode + "internal-code/composer/" + articleID
     val lastModifiedSearchURI = Config.previewHostCode + "search?use-date=last-modified"
     withClue(s"Import was not successful, the endpoint said: $result") {
-      status should be("FAIL")
+      status should be("OK")
     }
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"Composer article was not found at: $composerItemEndpointURI within 60 seconds") {
