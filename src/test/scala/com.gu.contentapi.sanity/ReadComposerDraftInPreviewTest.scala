@@ -1,7 +1,7 @@
 package com.gu.contentapi.sanity
 
 import org.scalatest.tagobjects.Retryable
-import org.scalatest.{time, Retries, Matchers, FlatSpec}
+import org.scalatest.{Retries, Matchers, FlatSpec}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import scala.sys.process._
 import scala.util.Random
