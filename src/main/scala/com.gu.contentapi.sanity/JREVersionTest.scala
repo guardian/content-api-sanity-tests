@@ -18,7 +18,7 @@ class JREVersionTest extends FlatSpec with Matchers with ScalaFutures with Integ
           throw new TestFailedException("Java.com did not return a 200 status code", 1)
         }
       }
-      }(fail, "The Content API should be using the latest JRE")
+      }(fail, "The Content API should be using the latest JRE", isLowPriority = true)
     }
   }
 }

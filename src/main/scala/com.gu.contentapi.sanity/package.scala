@@ -3,38 +3,40 @@ package com.gu.contentapi
 import java.io.File
 import com.ning.http.client.Realm.AuthScheme
 import org.scalatest.Matchers
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.exceptions.TestFailedException
 import play.api.libs.json.Json
 import play.api.libs.ws.WS
 import play.api.libs.ws.WS.WSRequestHolder
-
 import scalax.file.Path
 import scalax.io.{Resource, Output}
 
-package object sanity extends ScalaFutures with Matchers {
+package object sanity extends ScalaFutures with Matchers with IntegrationPatience {
 
-  def handleException(test: =>Unit)(fail: =>Unit, testName: String)= {
+  def handleException(test: =>Unit)(fail: =>Unit, testName: String, isLowPriority: Boolean = false)= {
     try {
       test
     } catch {
       case tfe: TestFailedException =>
         println(testName)
-        pagerDutyAlerter(testName, tfe)
+        pagerDutyAlerter(testName, tfe, isLowPriority)
         fail
     }
   }
-  def pagerDutyAlerter(testName: String, tfe: TestFailedException){
-    val description = (testName + " failed, the error reported was: " + tfe.getMessage())
+  def pagerDutyAlerter(testName: String, tfe: TestFailedException, isLowPriority: Boolean){
+    val serviceKey = if(isLowPriority) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
+
+
+    val description = (testName + " failed, the error reported was: " + tfe.getMessage().take(250) + "...")
 
     val data = Json.obj(
-      "service_key" -> Config.pagerDutyServiceKey,
+      "service_key" -> serviceKey,
       "event_type" -> "trigger",
       "description" -> description,
       "client" -> "Content API Sanity Tests",
       "client_url" -> "https://github.com/guardian/content-api-sanity-tests"
     )
-    val httpRequest = WS.url("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
+    val httpRequest = request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
     whenReady(httpRequest) { result =>
       result.body should include("success")}
 
