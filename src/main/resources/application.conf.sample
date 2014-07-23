@@ -10,6 +10,8 @@ content-api-sanity-tests {
     write-host="your-write-host"
     write-username=your-write-username
     write-password=your-write-password
+    pager-duty-service-key=your-pager-duty-service-key
+    pager-duty-service-key-low-priority=your-pager-duty-key-low-priority
 }
 
 
