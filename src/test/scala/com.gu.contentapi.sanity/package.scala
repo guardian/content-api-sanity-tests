@@ -9,7 +9,7 @@ import scalax.file.Path
 import java.io.File
 
 
-package object sanity2 extends ScalaFutures {
+package object sanity extends ScalaFutures {
 
   def request(uri: String):WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
 

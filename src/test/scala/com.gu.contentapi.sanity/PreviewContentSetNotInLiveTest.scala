@@ -1,4 +1,4 @@
-package com.gu.contentapi.sanity2
+package com.gu.contentapi.sanity
 
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers

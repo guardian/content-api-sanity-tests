@@ -1,4 +1,4 @@
-package com.gu.contentapi.sanity2
+package com.gu.contentapi.sanity
 
 import org.scalatest.{Ignore, Matchers, FlatSpec}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
