@@ -20,6 +20,6 @@ class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with Integr
             result.body should include (currentAMI)
           }
         }
-      }(fail,"The Content API should be using the latest AMI")
+      }(fail,testNames.mkString)
   }
 }

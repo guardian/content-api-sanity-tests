@@ -14,14 +14,17 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
   val uniquePageId = new Random().nextInt.toString
 
 
-  "GETting the InCopy integration homepage" should "respond with a welcome message" taggedAs(FrequentTest, CODETest) in {
-    val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
-    whenReady(httpRequest) { result => result.body should equal("incopy Integration...")
-    }
-  }
-
   "An article POSTed to the Composer integration Endpoint" should "appear in the Preview API" taggedAs(FrequentTest, CODETest) in {
     handleException {
+
+      val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
+      whenReady(httpRequest)
+      {
+           result =>
+            withClue("Composer healthcheck failed, endpoint said " + result.body) {
+            result.body should equal("incopy Integration...")
+            }
+       }
       lazy val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
       val importEndpoint = Config.composerHost + "incopyintegration/article/import"
       val result = importComposerArticle(importEndpoint, fileToImport)
@@ -32,7 +35,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
       val composerItemEndpointURI = Config.previewHostCode + "internal-code/composer/" + articleID
       val lastModifiedSearchURI = Config.previewHostCode + "search?use-date=last-modified"
       withClue(s"Import was not successful, the endpoint said: $result") {
-        status should be("OK")
+        status should be("OKFAIL")
       }
       eventually(timeout(Span(60, Seconds))) {
         withClue(s"Composer article was not found at: $composerItemEndpointURI within 60 seconds") {
@@ -45,7 +48,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
           isCAPIShowingChange(lastModifiedSearchURI, uniquePageId, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
         }
       }
-    }(fail, "An article POSTed to the Composer integration Endpoint should appear in the Preview API", isLowPriority = true)
+    }(fail, testNames.mkString, isLowPriority = true)
   }
 
   def importComposerArticle(importEndpoint: String, pathToFileToImport: String): String = {

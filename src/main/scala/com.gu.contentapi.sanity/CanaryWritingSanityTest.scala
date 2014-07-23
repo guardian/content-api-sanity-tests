@@ -46,6 +46,6 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
           throw new TestFailedException("Collection did not post successfully", 1)
         }
       }
-    }(fail,"PUTting and GETting a collection should show an updated timestamp")
+    }(fail, testNames.mkString)
   }
 }

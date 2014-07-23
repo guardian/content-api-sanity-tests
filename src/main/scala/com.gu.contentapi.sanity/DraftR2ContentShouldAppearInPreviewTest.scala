@@ -39,7 +39,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
           }
         }
       }
-    }(fail, "Updating a draft in R2 should show an update in the Preview API", isLowPriority = true)
+    }(fail, testNames.mkString, isLowPriority = true)
 
     def createModifiedR2Article(originalR2XML: String, modifiedR2XMLPath: String) {
       val r2ArticleXML = originalR2XML

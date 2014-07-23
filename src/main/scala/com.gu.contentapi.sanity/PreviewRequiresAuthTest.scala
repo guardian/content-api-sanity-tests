@@ -12,6 +12,6 @@ class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures w
       whenReady(httpRequest) { result =>
         result.status should be(401)
       }
-    }(fail,"GETting preview content should require authentication" )
+    }(fail,testNames.mkString)
   }
 }

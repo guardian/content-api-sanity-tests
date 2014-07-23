@@ -12,7 +12,7 @@ object StartScheduledRunner {
   def onStart() {
     QuartzScheduler.start()
     QuartzScheduler schedule("Frequent Tests", runFreqeuntTests) every (30 seconds)
-    QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 12 1/1 * ? *"
+    QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 12 ? * MON-FRI *"
     QuartzScheduler schedule("CODE environment Tests ", runCodeTests) at "0 0 12 ? * MON-FRI *"
   }
 

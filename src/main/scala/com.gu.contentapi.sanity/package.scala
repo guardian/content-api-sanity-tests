@@ -18,7 +18,6 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       test
     } catch {
       case tfe: TestFailedException =>
-        println(testName)
         pagerDutyAlerter(testName, tfe, isLowPriority)
         fail
     }

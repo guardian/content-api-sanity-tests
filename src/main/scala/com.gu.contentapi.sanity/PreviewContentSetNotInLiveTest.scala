@@ -17,7 +17,7 @@ class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFu
       total should equal(0)
       results should equal("[]")
       }
-    }(fail, "GETting the preview content set JSON should show no results on live")
+    }(fail, testNames.mkString)
   }
 
 

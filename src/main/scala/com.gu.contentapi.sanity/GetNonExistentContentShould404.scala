@@ -11,7 +11,7 @@ class GetNonExistentContentShould404 extends FlatSpec with Matchers with ScalaFu
         whenReady(httpRequest) { result =>
           result.status should be(404)
         }
-      }(fail,"GETting non existent content should 404")
+      }(fail,testNames.mkString)
     }
 }
 
