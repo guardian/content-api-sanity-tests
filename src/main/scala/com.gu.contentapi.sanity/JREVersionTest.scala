@@ -18,7 +18,7 @@ class JREVersionTest extends FlatSpec with Matchers with ScalaFutures with Integ
           throw new TestFailedException("Java.com did not return a 200 status code", 1)
         }
       }
-      }(fail, testNames.mkString, isLowPriority = true)
+      }(fail, testNames.head, tags)
     }
   }
 }

@@ -13,7 +13,7 @@ class ContentApiSanityTest extends FlatSpec with Matchers with ScalaFutures with
     whenReady(httpRequest) { result =>
       result.body should include("results")
       }
-    }(fail, testNames.mkString)
+    }(fail, testNames.head, tags)
   }
 }
 

@@ -14,7 +14,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
   val uniquePageId = new Random().nextInt.toString
 
 
-  "An article POSTed to the Composer integration Endpoint" should "appear in the Preview API" taggedAs(FrequentTest, CODETest) in {
+  "An article POSTed to the Composer integration Endpoint" should "appear in the Preview API" taggedAs(FrequentTest, CODETest, LowPriorityTest) in {
     handleException {
 
       val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
@@ -35,7 +35,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
       val composerItemEndpointURI = Config.previewHostCode + "internal-code/composer/" + articleID
       val lastModifiedSearchURI = Config.previewHostCode + "search?use-date=last-modified"
       withClue(s"Import was not successful, the endpoint said: $result") {
-        status should be("OKFAIL")
+        status should be("OK")
       }
       eventually(timeout(Span(60, Seconds))) {
         withClue(s"Composer article was not found at: $composerItemEndpointURI within 60 seconds") {
@@ -48,7 +48,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
           isCAPIShowingChange(lastModifiedSearchURI, uniquePageId, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
         }
       }
-    }(fail, testNames.mkString, isLowPriority = true)
+    }(fail, testNames.head, tags)
   }
 
   def importComposerArticle(importEndpoint: String, pathToFileToImport: String): String = {

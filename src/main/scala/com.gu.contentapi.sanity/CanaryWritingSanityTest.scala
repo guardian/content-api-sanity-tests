@@ -46,6 +46,6 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
           throw new TestFailedException("Collection did not post successfully", 1)
         }
       }
-    }(fail, testNames.mkString)
+    }(fail, testNames.head, tags)
   }
 }

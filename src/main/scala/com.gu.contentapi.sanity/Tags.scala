@@ -6,4 +6,5 @@ import org.scalatest.Tag
   object InfrequentTest extends Tag("InfrequentTest")
   object PRODTest extends Tag("PRODTest")
   object CODETest extends Tag("CODETest")
+  object LowPriorityTest extends Tag("LowPriorityTest")
 

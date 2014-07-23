@@ -21,7 +21,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
-  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest, CODETest) in {
+  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest, CODETest, LowPriorityTest) in {
     handleException {
 
       createModifiedR2Article(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, tempFilePathString)
@@ -39,7 +39,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
           }
         }
       }
-    }(fail, testNames.mkString, isLowPriority = true)
+    }(fail, testNames.head, tags)
 
     def createModifiedR2Article(originalR2XML: String, modifiedR2XMLPath: String) {
       val r2ArticleXML = originalR2XML

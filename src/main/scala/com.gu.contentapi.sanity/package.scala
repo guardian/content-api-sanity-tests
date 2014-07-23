@@ -13,21 +13,25 @@ import scalax.io.{Resource, Output}
 
 package object sanity extends ScalaFutures with Matchers with IntegrationPatience {
 
-  def handleException(test: =>Unit)(fail: =>Unit, testName: String, isLowPriority: Boolean = false)= {
+  def handleException(test: =>Unit)(fail: =>Unit, testName: String, tags: Map[String, Set[String]])= {
     try {
       test
     } catch {
       case tfe: TestFailedException =>
-        pagerDutyAlerter(testName, tfe, isLowPriority)
+        pagerDutyAlerter(testName, tfe, tags)
         fail
     }
   }
-  def pagerDutyAlerter(testName: String, tfe: TestFailedException, isLowPriority: Boolean){
-    val serviceKey = if(isLowPriority) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
+  def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]]) {
+    val isLowPriority = tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false)
+    val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
 
+    val serviceKey = if (isLowPriority) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
 
-    val description = (testName + " failed, the error reported was: " + tfe.getMessage().take(250) + "...")
+    val environmentInfo = if (isCODETest) "on environment CODE" else ""
 
+    val description = (testName + " failed " + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "...")
+  println(description)
     val data = Json.obj(
       "service_key" -> serviceKey,
       "event_type" -> "trigger",
