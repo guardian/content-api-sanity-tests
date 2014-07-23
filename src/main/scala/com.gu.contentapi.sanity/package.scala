@@ -22,6 +22,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
         fail
     }
   }
+
   def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]]) {
     val isLowPriority = tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false)
     val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
