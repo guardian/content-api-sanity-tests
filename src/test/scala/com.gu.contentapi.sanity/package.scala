@@ -1,15 +1,17 @@
 package com.gu.contentapi
 
 import play.api.libs.ws.WS
+import play.api.libs.ws.WS.WSRequestHolder
 import com.ning.http.client.Realm.AuthScheme
 import org.scalatest.concurrent.ScalaFutures
 import scalax.io.{Resource, Output}
 import scalax.file.Path
 import java.io.File
 
+
 package object sanity extends ScalaFutures {
 
-  def request(uri: String) = WS.url(uri).withRequestTimeout(10000)
+  def request(uri: String):WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
 
   def isCAPIShowingChange(capiURI: String, modifiedString: String, credentials: Option[(String, String)] = None) = {
 

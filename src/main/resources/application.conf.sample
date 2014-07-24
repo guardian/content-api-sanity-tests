@@ -1,0 +1,25 @@
+# WS configuration, see http://www.playframework.com/documentation/2.2.x/ScalaWS
+ws.compressionEnable=true
+
+# these are our own config values defined by the app
+# rename this to application.conf with real values
+content-api-sanity-tests {
+    host="http://your-capi-host"
+    api-key=your-capi-key
+    preview-host="http://your-preview-host"
+    write-host="your-write-host"
+    write-username=your-write-username
+    write-password=your-write-password
+    pager-duty-service-key=your-pager-duty-service-key
+    pager-duty-service-key-low-priority=your-pager-duty-key-low-priority
+}
+
+
+content-api-sanity-code {
+    host="http://your-capi-host"
+    preview-host:"http://your-preview-host"
+    r2-admin-host:"http://your-r2-admin-host"
+    api-key=your-capi-key
+    r2-admin-username=your-r2-username
+    r2-admin-password=your-r2-password
+}
