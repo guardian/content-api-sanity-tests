@@ -7,11 +7,11 @@ class ContentApiSanityTest extends FlatSpec with Matchers with ScalaFutures with
 
   "Content api" should "serve gzipped" taggedAs(FrequentTest) in {
     handleException{
-    // GZip Compression is enabled in application.conf
+      // GZip Compression is enabled in application.conf
 
-    val httpRequest = requestHost("search?format=json&api-key=").get
-    whenReady(httpRequest) { result =>
-      result.body should include("results")
+      val httpRequest = requestHost("search?format=json&api-key=").get
+      whenReady(httpRequest) { result =>
+        result.body should include("results")
       }
     }(fail, testNames.head, tags)
   }

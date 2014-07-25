@@ -11,7 +11,8 @@ class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with Integr
 
   "The Content API" should "be using the latest AMI" taggedAs(InfrequentTest, PRODTest, LowPriorityTest)  in {
     val currentAMI= "20140607.1"
-      handleException {
+
+    handleException {
         val httpRequest = WS.url("https://cloud-images.ubuntu.com/locator/ec2/releasesTable").get
         whenReady(httpRequest) { result =>
           withClue (s"EC2 release table did not include $currentAMI, check https://cloud-images.ubuntu.com/locator/ec2/ for latest AMI.") {

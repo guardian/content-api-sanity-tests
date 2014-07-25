@@ -20,12 +20,13 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
       val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
       whenReady(httpRequest)
       {
-           result =>
-            withClue("Composer healthcheck failed, endpoint said " + result.body) {
+        result =>
+          withClue("Composer healthcheck failed, endpoint said " + result.body) {
             result.body should equal("incopy Integration...")
-            }
-       }
+          }
+      }
       lazy val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
+
       val importEndpoint = Config.composerHost + "incopyintegration/article/import"
       val result = importComposerArticle(importEndpoint, fileToImport)
       deleteFileIfExists(fileToImport)

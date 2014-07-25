@@ -9,6 +9,7 @@ class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures w
 
     handleException {
       val httpRequest = request(Config.previewHost).get
+
       whenReady(httpRequest) { result =>
         result.status should be(401)
       }

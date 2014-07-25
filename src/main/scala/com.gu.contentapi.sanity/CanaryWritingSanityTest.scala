@@ -24,8 +24,8 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
   }
 
 
-    "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest, PRODTest) in {
-      handleException {
+  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest, PRODTest) in {
+    handleException {
       val putSuccessResponseCode = 202
       val httpRequest = request(Config.writeHost + "collections/canary")
         .withAuth(Config.writeUsername, Config.writePassword, AuthScheme.BASIC)

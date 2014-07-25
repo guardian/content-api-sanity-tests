@@ -9,13 +9,14 @@ class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFu
 
   "GETting the preview content set JSON" should "show no results on live" taggedAs(FrequentTest, PRODTest) in {
     handleException{
-    val httpRequest = requestHost("search?content-set=preview").get
-    whenReady(httpRequest) { result =>
-      val json = Json.parse(result.body)
-      val total = (json \ "response" \ "total").as[Long]
-      val results = Json.stringify(json \ "response" \ "results")
-      total should equal(0)
-      results should equal("[]")
+      val httpRequest = requestHost("search?content-set=preview").get
+
+      whenReady(httpRequest) { result =>
+        val json = Json.parse(result.body)
+        val total = (json \ "response" \ "total").as[Long]
+        val results = Json.stringify(json \ "response" \ "results")
+        total should equal(0)
+        results should equal("[]")
       }
     }(fail, testNames.head, tags)
   }
