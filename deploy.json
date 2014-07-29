@@ -1,0 +1,22 @@
+{
+    "defaultStacks": [ "content-api-" ],
+    "packages": {
+        "preflow": {
+            "type": "autoscaling",
+            "data": {
+                "bucket": "content-api-dist"
+            }
+        }
+    },
+    "recipes": {
+        "default": {
+            "depends": [ "artifactUploadOnly", "deployOnly" ]
+        },
+        "artifactUploadOnly": {
+            "actions": [ "sanity-tests.uploadArtifacts" ]
+        },
+        "deployOnly": {
+            "actions": [ "sanity-tests.deploy" ]
+        }
+    }
+}
