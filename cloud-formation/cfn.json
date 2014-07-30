@@ -1,0 +1,202 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Content API - Sanity Tests",
+
+    "Parameters": {
+        "Stage": {
+            "Description": "Environment name",
+            "Type": "String",
+            "Default": "PROD"
+        }
+    },
+
+    "Resources": {
+        "Role": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Path": "/",
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": "sts:AssumeRole",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [ "ec2.amazonaws.com" ]
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "DescribeInstancesPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "ec2-describeinstances",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": "ec2:DescribeInstances",
+                            "Effect": "Allow",
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Roles": [ { "Ref": "Role" } ]
+            }
+        },
+        "S3Policy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "s3-get",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::content-api-sanity-tests-dist",
+                                "arn:aws:s3:::content-api-sanity-tests-dist/*"
+                            ]
+                        }
+                    ]
+                },
+                "Roles": [ { "Ref": "Role" } ]
+            }
+        },
+        "InstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [ { "Ref": "Role" } ]
+            }
+        },
+
+        "LoadBalancer": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "LoadBalancerName": { "Fn::Join": [ "", ["content-api-sanity-tests-", { "Ref": "Stage" }] ] },
+                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "CrossZone": true,
+                "Listeners": [
+                    {
+                        "Protocol": "HTTP",
+                        "LoadBalancerPort": "80",
+                        "InstancePort": "80"
+                    }
+                ],
+                "HealthCheck": {
+                    "Target" : "HTTP:9000/healthcheck",
+                    "HealthyThreshold" : "2",
+                    "UnhealthyThreshold" : "2",
+                    "Interval" : "10",
+                    "Timeout" : "5"
+                }
+            }
+        },
+
+        "AutoscalingGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
+                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "LaunchConfigurationName": { "Ref": "LaunchConfig" },
+                "MinSize": "1",
+                "MaxSize": "2",
+                "DesiredCapacity": "1",
+                "HealthCheckType": "ELB",
+                "HealthCheckGracePeriod": 300,
+                "LoadBalancerNames": [ { "Ref": "LoadBalancer" } ],
+                "Tags": [
+                    {
+                        "Key": "Stage",
+                        "Value": { "Ref": "Stage" },
+                        "PropagateAtLaunch": "true"
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": "content-api",
+                        "PropagateAtLaunch": "true"
+                    },
+                    {
+                        "Key": "App",
+                        "Value": "content-api-sanity-tests",
+                        "PropagateAtLaunch": "true"
+                    }
+                ]
+            }
+        },
+        "LaunchConfig": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+            "Properties": {
+                "ImageId": "ami-896c96fe",
+                "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
+                "InstanceType": "t1.micro",
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [ "\n", [
+                        "#!/bin/bash -ev",
+                        "apt-get -y update",
+                        "apt-get -y install language-pack-en openjdk-7-jre-headless unzip",
+
+                        "adduser --disabled-password content-api",
+                        "wget -NP /home/ubuntu/.ssh https://s3-eu-west-1.amazonaws.com/content-api-dist/authorized_keys",
+                        "cd /home/content-api",
+                        "mkdir logs",
+                        "mkdir -p /etc/gu",
+                        "mkdir -p /var/run/ports",
+
+
+                        { "Fn::Join": [ "", [ "wget https://s3-eu-west-1.amazonaws.com/content-api-dist/",{ "Ref": "Stage" }, "/sanity-tests/sanity-tests.zip" ] ] },
+
+                        "unzip /sanity-tests/sanity-tests.zip",
+
+                        "mv sanity-tests.conf /etc/init",
+
+                        "chown -R content-api /home/content-api /etc/gu",
+                        "chgrp -R content-api /home/content-api /etc/gu",
+
+                        "mv sanity-tests.conf /etc/init",
+
+                        "start sanity-tests"
+                        ] ]
+                    }
+                }
+            }
+        },
+
+        "SecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "SSH and HTTP",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "77.91.248.0/21"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "SourceSecurityGroupName": "amazon-elb-sg",
+                        "SourceSecurityGroupOwnerId": "amazon-elb"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "77.91.248.0/21"
+                    }
+                ]
+            }
+        }
+    },
+
+    "Outputs": {
+        "LoadBalancer": {
+            "Value": { "Fn::GetAtt": [ "LoadBalancer", "DNSName" ] }
+        }
+    }
+}
