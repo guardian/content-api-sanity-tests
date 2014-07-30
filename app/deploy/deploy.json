@@ -1,10 +1,10 @@
 {
-    "defaultStacks": [ "content-api" ],
+    "defaultStacks": [ "content-api-sanity-tests" ],
     "packages": {
         "sanity-tests": {
             "type": "autoscaling",
             "data": {
-                "bucket": "content-api-dist"
+                "bucket": "content-api-sanity-tests-dist"
             }
         }
     },
