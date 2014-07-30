@@ -1,6 +1,6 @@
-name := "content-api-sanity-tests"
+name := "sanity-tests"
 
-version := "1.0-SNAPSHOT"
+version := "1.0"
 
 libraryDependencies += "org.quartz-scheduler" % "quartz" % "2.1.6"
 
