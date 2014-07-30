@@ -99,12 +99,12 @@
                     },
                     {
                         "Key": "Stack",
-                        "Value": "content-api",
+                        "Value": "content-api-sanity-tests",
                         "PropagateAtLaunch": "true"
                     },
                     {
                         "Key": "App",
-                        "Value": "content-api-sanity-tests",
+                        "Value": "sanity-tests",
                         "PropagateAtLaunch": "true"
                     }
                 ]

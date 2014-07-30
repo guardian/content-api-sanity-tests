@@ -1,5 +1,5 @@
 {
-    "defaultStacks": [ "content-api-sanity-tests-PROD" ],
+    "defaultStacks": [ "content-api-sanity-tests" ],
     "packages": {
         "sanity-tests": {
             "type": "autoscaling",
