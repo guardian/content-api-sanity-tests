@@ -28,22 +28,6 @@
                 }
             }
         },
-        "DescribeInstancesPolicy": {
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "ec2-describeinstances",
-                "PolicyDocument": {
-                    "Statement": [
-                        {
-                            "Action": "ec2:DescribeInstances",
-                            "Effect": "Allow",
-                            "Resource": "*"
-                        }
-                    ]
-                },
-                "Roles": [ { "Ref": "Role" } ]
-            }
-        },
         "S3Policy": {
             "Type": "AWS::IAM::Policy",
             "Properties": {
