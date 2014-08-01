@@ -126,7 +126,7 @@
 
                             { "Fn::Join": [ "", [ "wget https://s3-eu-west-1.amazonaws.com/content-api-sanity-tests-dist/content-api-sanity-tests/",{ "Ref": "Stage" }, "/sanity-tests/sanity-tests.tar.gz" ] ] },
                             "tar -xvf sanity-tests.tar.gz",
-                            "unzip /sanity-tests/sanity-tests-1.0.zip",
+                            "unzip sanity-tests-1.0.zip",
                             "mv sanity-tests-1.0 sanity-tests",
                             "rm sanity-tests.tar.gz",
                             "rm sanity-tests-1.0.zip",
