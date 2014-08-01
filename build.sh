@@ -33,7 +33,7 @@ cd downloads/ && tar -zcvf ../packages/sanity-tests/sanity-tests.tar.gz * && cd 
 cp ../app/deploy/deploy.json .
 zip -rv artifacts.zip packages/ deploy.json
 
-#[ -d downloads ] && rm -rf downloads
-#[ -d packages ] && rm -rf packages
+[ -d downloads ] && rm -rf downloads
+[ -d packages ] && rm -rf packages
 
 echo "##teamcity[publishArtifacts '$(pwd)/artifacts.zip => .']"
