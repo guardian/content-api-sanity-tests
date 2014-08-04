@@ -5,8 +5,6 @@ import org.scalatest.concurrent.{ScalaFutures, IntegrationPatience}
 import play.api.libs.ws.WS
 
 
-
-
 class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
   "The Content API" should "be using the latest AMI" taggedAs(InfrequentTest, PRODTest, LowPriorityTest)  in {
