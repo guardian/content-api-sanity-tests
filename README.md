@@ -1,9 +1,12 @@
 Simple set of sanity test for things like the AMI version.
 
 ## Config
-In the `resources` folder edit the `application.conf.sample` file with your own values and rename to `application.conf`.
+In the `conf` folder edit the `application.conf.sample` file with your own values and rename to `application.conf`.
 
 ## Running
+
+## Run as a scheduled service
+``sbt start``
 
 ### Run all tests
 ``sbt clean test``

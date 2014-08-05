@@ -1,25 +1,22 @@
-package com.gu.contentapi
-
 import com.gu.contentapi.sanity._
-import com.gu.sanity.utils.QuartzScheduler
+import com.gu.contentapi.sanity.utils.QuartzScheduler
 import scala.concurrent.duration._
+import play.api._
 
-object StartScheduledRunner {
-  def main(args: Array[String]) {
-    onStart()
-  }
+object Global extends GlobalSettings {
 
-  def onStart() {
+  override def onStart(app: Application) {
+    Logger.info("Application has started")
     QuartzScheduler.start()
     QuartzScheduler schedule("Frequent Tests", runFreqeuntTests) every (30 seconds)
     QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 12 ? * MON-FRI *"
     QuartzScheduler schedule("CODE environment Tests ", runCodeTests) at "0 0 12 ? * MON-FRI *"
   }
 
-  def onStop {
+  override def onStop(app: Application) {
+    Logger.info("Application shutdown...")
     QuartzScheduler.stop()
   }
-
 
   def runFreqeuntTests {
     (new CanaryWritingSanityTest).execute
@@ -40,4 +37,5 @@ object StartScheduledRunner {
     (new DraftR2ContentShouldAppearInPreviewTest).execute
     (new ReadComposerDraftInPreviewTest).execute
   }
+
 }

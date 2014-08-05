@@ -1,15 +1,15 @@
-scalaVersion := "2.10.4"
+name := "content-api-sanity-tests"
 
-resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases"
+version := "1.0-SNAPSHOT"
 
 libraryDependencies += "org.quartz-scheduler" % "quartz" % "2.1.6"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.4"
 
-libraryDependencies += "com.typesafe.play" %% "play" % "2.2.2"
-
-libraryDependencies += "com.typesafe" % "config" % "1.2.1"
-
 libraryDependencies += "org.seleniumhq.selenium" % "selenium-java" % "2.41.0"
 
 parallelExecution in ThisBuild := false
+
+play.Project.playScalaSettings
+
+javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
