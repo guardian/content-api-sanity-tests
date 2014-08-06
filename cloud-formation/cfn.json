@@ -14,7 +14,6 @@
         "Role": {
             "Type": "AWS::IAM::Role",
             "Properties": {
-                "Path": "/",
                 "AssumeRolePolicyDocument": {
                     "Statement": [
                         {
@@ -25,28 +24,24 @@
                             }
                         }
                     ]
-                }
-            }
-        },
-        "S3Policy": {
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "s3-get",
-                "PolicyDocument": {
-                    "Statement": [
-                        {
-                            "Action": [
-                                "s3:GetObject"
-                            ],
-                            "Effect": "Allow",
-                            "Resource": [
-                                "arn:aws:s3:::content-api-sanity-tests-dist",
-                                "arn:aws:s3:::content-api-sanity-tests-dist/*"
-                            ]
-                        }
-                    ]
                 },
-                "Roles": [ { "Ref": "Role" } ]
+                "Path": "/",                
+                "Policies": [ {
+                    "PolicyName": "S3Policy",
+                    "PolicyDocument": {
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "s3:GetObject"
+                                ],
+                                "Resource": [
+                                    "arn:aws:s3:::content-api-sanity-tests-dist/*"
+                                ]
+                            }
+                        ]
+                    }
+                } ]
             }
         },
         "InstanceProfile": {
@@ -86,7 +81,7 @@
                 "AWS::CloudFormation::Init" : {
                     "config": {
                         "files": {
-                            "/home/content-api/sanity-tests/application.conf": {
+                            "/etc/gu/content-api-sanity-tests.conf": {
                                 "source": "https://s3-eu-west-1.amazonaws.com/content-api-sanity-tests-dist/application.conf",
                                 "authentication": "distributionAuthentication"
                             }
@@ -128,7 +123,7 @@
             "Properties": {
                 "ImageId": "ami-896c96fe",
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
-                "InstanceType": "t2.micro",
+                "InstanceType": "t1.micro",
                 "UserData": {
                     "Fn::Base64": {
                         "Fn::Join": [ "\n", [
