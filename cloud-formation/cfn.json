@@ -75,6 +75,25 @@
 
         "AutoscalingGroup": {
             "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Metadata": {
+                "AWS::CloudFormation::Authentication" : {
+                    "distributionAuthentication" : {
+                        "type": "S3",
+                        "roleName": { "Ref": "Role" },
+                        "buckets": [ "content-api-sanity-tests-dist" ]
+                    }
+                },
+                "AWS::CloudFormation::Init" : {
+                    "config": {
+                        "files": {
+                            "/home/content-api/sanity-tests/application.conf": {
+                                "source": "https://s3-eu-west-1.amazonaws.com/content-api-sanity-tests-dist/application.conf",
+                                "authentication": "distributionAuthentication"
+                            }
+                        }
+                    }
+                }
+            },
             "Properties": {
                 "AvailabilityZones": { "Fn::GetAZs": "" },
                 "LaunchConfigurationName": { "Ref": "LaunchConfig" },
@@ -105,6 +124,7 @@
         },
         "LaunchConfig": {
             "Type": "AWS::AutoScaling::LaunchConfiguration",
+
             "Properties": {
                 "ImageId": "ami-896c96fe",
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
