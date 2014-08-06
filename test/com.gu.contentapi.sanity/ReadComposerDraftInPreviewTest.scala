@@ -6,13 +6,13 @@ import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import scala.sys.process._
 import scala.util.Random
 import scala.io.Source
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.{Minute, Seconds, Span}
 
 class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually with Retries {
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+      withRetryOnFailure (Span(1, Minute))(super.withFixture(test))
     else
       super.withFixture(test)
   }
