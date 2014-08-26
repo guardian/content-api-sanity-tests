@@ -1,0 +1,212 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Content API - Sanity Tests",
+
+    "Parameters": {
+        "Stage": {
+            "Description": "Environment name",
+            "Type": "String",
+            "Default": "PROD"
+        },
+        "host": {
+            "Type": "String"
+        },
+        "previewHost": {
+            "Type": "String"
+        },
+        "apiKey": {
+            "Type": "String"
+        },
+        "writeHost": {
+            "Type": "String"
+        },
+        "writeUsername": {
+            "Type": "String"
+        },
+        "writePassword": {
+            "Type": "String"
+        },
+        "pagerDutyServiceKey": {
+            "Type": "String"
+        },
+        "pagerDutyServiceKeyLowPriority": {
+            "Type": "String"
+        },
+        "codeHost": {
+            "Type": "String"
+        },
+        "codePreviewHost": {
+            "Type": "String"
+        },
+        "codeComposerHost": {
+            "Type": "String"
+        },
+        "codeR2AdminHost": {
+            "Type": "String"
+        },
+        "codeApiKey": {
+            "Type": "String"
+        },
+        "codePreviewUsername": {
+            "Type": "String"
+        },
+        "codePreviewPassword": {
+            "Type": "String"
+        },
+        "codeR2AdminUsername": {
+            "Type": "String"
+        },
+        "codeR2AdminPassword": {
+            "Type": "String"
+        }
+    },
+
+    "Resources": {
+        "LoadBalancer": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "LoadBalancerName": { "Fn::Join": [ "", ["content-api-sanity-tests-", { "Ref": "Stage" }] ] },
+                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "CrossZone": true,
+                "Listeners": [
+                    {
+                        "Protocol": "HTTP",
+                        "LoadBalancerPort": "9000",
+                        "InstancePort": "9000"
+                    }
+                ],
+                "HealthCheck": {
+                    "Target": "HTTP:9000/healthcheck",
+                    "Timeout": "5",
+                    "Interval": "10",
+                    "UnhealthyThreshold": "2",
+                    "HealthyThreshold": "2"
+                }
+            }
+        },
+        "AutoscalingGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
+                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "LaunchConfigurationName": { "Ref": "LaunchConfig" },
+                "MinSize": "1",
+                "MaxSize": "2",
+                "DesiredCapacity": "1",
+                "HealthCheckType": "ELB",
+                "HealthCheckGracePeriod": 300,
+                "LoadBalancerNames": [ { "Ref": "LoadBalancer" } ],
+                "Tags": [
+                    {
+                        "Key": "Stage",
+                        "Value": { "Ref": "Stage" },
+                        "PropagateAtLaunch": "true"
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": "content-api-sanity-tests",
+                        "PropagateAtLaunch": "true"
+                    },
+                    {
+                        "Key": "App",
+                        "Value": "sanity-tests",
+                        "PropagateAtLaunch": "true"
+                    }
+                ]
+            }
+        },
+        "LaunchConfig": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+
+            "Properties": {
+                "ImageId": "ami-896c96fe",
+                "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
+                "InstanceType": "t1.micro",
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [ "\n", [
+                            "#!/bin/bash -ev",
+                            "apt-get -y update",
+                            "apt-get -y install language-pack-en openjdk-7-jre-headless unzip",
+
+                            "adduser --disabled-password content-api",
+                            "wget -NP /home/ubuntu/.ssh https://s3-eu-west-1.amazonaws.com/content-api-dist/authorized_keys",
+                            "cd /home/content-api",
+                            "mkdir logs",
+                            "mkdir -p /etc/gu",
+                            "mkdir -p /var/run/ports",
+
+
+                            { "Fn::Join": [ "", [ "wget https://s3-eu-west-1.amazonaws.com/content-api-sanity-tests-dist/content-api-sanity-tests/",{ "Ref": "Stage" }, "/sanity-tests/sanity-tests.tar.gz" ] ] },
+                            "tar -xvf sanity-tests.tar.gz",
+                            "unzip sanity-tests-1.0.zip",
+                            "mv sanity-tests-1.0 sanity-tests",
+                            "rm sanity-tests.tar.gz",
+                            "rm sanity-tests-1.0.zip",
+                            "mv sanity-tests.conf /etc/init",
+                            "chown -R content-api /home/content-api /etc/gu",
+                            "chgrp -R content-api /home/content-api /etc/gu",
+                            "cat > /etc/gu/content-api-sanity-tests.conf <<EOF",
+                            "content-api-sanity-tests {",
+                            { "Fn::Join": [ "", [ "host=\"", { "Ref": "host" },"\"" ] ] },
+                            { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "previewHost" },"\"" ] ] },
+                            { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "apiKey" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "write-username=\"", { "Ref": "writeUsername" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "write-password=\"", { "Ref": "writePassword" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "pager-duty-service-key-low-priority=\"", { "Ref": "pagerDutyServiceKeyLowPriority" },"\""  ] ] },
+                            "}",
+                            "content-api-sanity-code {",
+                            { "Fn::Join": [ "", [ "host=\"", { "Ref": "codeHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "codePreviewHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "r2-admin-host=\"", { "Ref": "codeR2AdminHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "codeComposerHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "codeApiKey" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "preview-username=\"", { "Ref": "codePreviewUsername" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "preview-password=\"", { "Ref": "codePreviewPassword" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "r2-admin-username=\"", { "Ref": "codeR2AdminUsername" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "codeR2AdminPassword" },"\""  ] ] },
+                            "}",
+                            "EOF",
+                            "start sanity-tests"
+                        ] ]
+                    }
+                }
+            }
+        },
+
+        "SecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "SSH and HTTP",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9000",
+                        "ToPort": "9000",
+                        "CidrIp": "77.91.248.0/21"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9000",
+                        "ToPort": "9000",
+                        "SourceSecurityGroupName": "amazon-elb-sg",
+                        "SourceSecurityGroupOwnerId": "amazon-elb"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "77.91.248.0/21"
+                    }
+                ]
+            }
+        }
+    },
+
+    "Outputs": {
+        "LoadBalancer": {
+            "Value": { "Fn::GetAtt": [ "LoadBalancer", "DNSName" ] }
+        }
+    }
+}
