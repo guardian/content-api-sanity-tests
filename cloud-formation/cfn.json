@@ -74,10 +74,16 @@
                         "LoadBalancerPort": "80",
                         "InstancePort": "80"
                     }
-                ]
+                ],
+                "HealthCheck": {
+                    "Target": "HTTP:9000/healthcheck",
+                    "Timeout": "5",
+                    "Interval": "10",
+                    "UnhealthyThreshold": "2",
+                    "HealthyThreshold": "2"
+                }
             }
         },
-
         "AutoscalingGroup": {
             "Type": "AWS::AutoScaling::AutoScalingGroup",
             "Properties": {
