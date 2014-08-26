@@ -71,8 +71,8 @@
                 "Listeners": [
                     {
                         "Protocol": "HTTP",
-                        "LoadBalancerPort": "80",
-                        "InstancePort": "80"
+                        "LoadBalancerPort": "9000",
+                        "InstancePort": "9000"
                     }
                 ],
                 "HealthCheck": {
@@ -182,14 +182,14 @@
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
+                        "FromPort": "9000",
+                        "ToPort": "9000",
                         "CidrIp": "77.91.248.0/21"
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
+                        "FromPort": "9000",
+                        "ToPort": "9000",
                         "SourceSecurityGroupName": "amazon-elb-sg",
                         "SourceSecurityGroupOwnerId": "amazon-elb"
                     },
