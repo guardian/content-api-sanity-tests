@@ -11,6 +11,9 @@
         "host": {
             "Type": "String"
         },
+        "previewHost": {
+            "Type": "String"
+        },
         "apiKey": {
             "Type": "String"
         },
@@ -33,6 +36,9 @@
             "Type": "String"
         },
         "codePreviewHost": {
+            "Type": "String"
+        },
+        "codeComposerHost": {
             "Type": "String"
         },
         "codeR2AdminHost": {
@@ -133,11 +139,12 @@
                             "mv sanity-tests.conf /etc/init",
                             "chown -R content-api /home/content-api /etc/gu",
                             "chgrp -R content-api /home/content-api /etc/gu",
-                            "cat > /etc/gu/content-api-sanity-tests.properties <<EOF",
+                            "cat > /etc/gu/content-api-sanity-tests.conf <<EOF",
                             "content-api-sanity-tests {",
                             { "Fn::Join": [ "", [ "host=\"", { "Ref": "host" },"\"" ] ] },
+                            { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "previewHost" },"\"" ] ] },
                             { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "apiKey" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "apiKey" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-username=\"", { "Ref": "writeUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-password=\"", { "Ref": "writePassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
@@ -147,6 +154,7 @@
                             { "Fn::Join": [ "", [ "host=\"", { "Ref": "codeHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "codePreviewHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "r2-admin-host=\"", { "Ref": "codeR2AdminHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "codeComposerHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "codeApiKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "preview-username=\"", { "Ref": "codePreviewUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "preview-password=\"", { "Ref": "codePreviewPassword" },"\""  ] ] },
