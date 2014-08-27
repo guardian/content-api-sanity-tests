@@ -1,6 +1,7 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{Matchers, FlatSpec}
+import org.scalatest.tagobjects.Retryable
+import org.scalatest.{Retries, Matchers, FlatSpec}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import scala.sys.process._
 import scala.util.Random
@@ -8,13 +9,19 @@ import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
 
-class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
+class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually with Retries {
+  override def withFixture(test: NoArgTest) = {
+    if (isRetryable(test))
+      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+    else
+      super.withFixture(test)
+  }
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val uniquePageId = new Random().nextInt.toString
 
 
-  "An article POSTed to the Composer integration Endpoint" should "appear in the Preview API" taggedAs(FrequentTest, CODETest, LowPriorityTest) in {
+  "An article POSTed to the Composer integration Endpoint" should "appear in the Preview API" taggedAs(FrequentTest, CODETest, LowPriorityTest, Retryable) in {
     handleException {
 
       val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
