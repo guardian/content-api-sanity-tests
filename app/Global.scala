@@ -8,7 +8,7 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
     Logger.info("Application has started")
     QuartzScheduler.start()
-    QuartzScheduler schedule("Frequent Tests", runFreqeuntTests) every (30 seconds)
+    QuartzScheduler schedule("Frequent Tests", runFrequentTests) every (30 seconds)
     QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 12 ? * MON-FRI *"
     QuartzScheduler schedule("CODE environment Tests ", runCodeTests) at "0 0 12 ? * MON-FRI *"
   }
@@ -18,7 +18,7 @@ object Global extends GlobalSettings {
     QuartzScheduler.stop()
   }
 
-  def runFreqeuntTests {
+  def runFrequentTests {
     (new CanaryWritingSanityTest).execute
     (new PreviewRequiresAuthTest).execute
     (new ContentApiSanityTest).execute
