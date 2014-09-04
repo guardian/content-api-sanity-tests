@@ -49,7 +49,6 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
 
 
     val description = (testName + " failed " + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "...")
-    //val incidentKey: String= recentIncident.map(i => i.dateTime.toString).getOrElse("")
     val data = Json.obj(
       "service_key" -> serviceKey,
       "event_type" -> "trigger",
