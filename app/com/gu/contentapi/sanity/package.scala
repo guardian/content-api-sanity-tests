@@ -19,13 +19,11 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
   def getIncidentKey: String = {
     incidentKeyDateTime match {
       case Some(keyTimeStamp) if (Minutes.minutesBetween(keyTimeStamp, DateTime.now).getMinutes < 30) => {
-        println("reusing key")
         //re-use key if is less than 30 minutes since previous incident
         key.toString
       }
       case _ => {
         // generate new key at first and after 30 minutes
-        println("generate new key")
         val key = DateTime.now
         incidentKeyDateTime = Some(key)
         key.toString
