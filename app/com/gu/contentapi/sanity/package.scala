@@ -6,7 +6,7 @@ import org.joda.time.{Seconds, Minutes, DateTime}
 import org.scalatest.Matchers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.exceptions.TestFailedException
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json._
 import play.api.libs.ws.WS
 import play.api.libs.ws.WS.WSRequestHolder
 import scalax.file.Path
@@ -20,7 +20,8 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
     incidentKeyDateTime match {
       case Some(keyTimeStamp) if (Minutes.minutesBetween(keyTimeStamp, DateTime.now).getMinutes < 30) => {
         //re-use key if is less than 30 minutes since previous incident
-        key.toString
+       val key = keyTimeStamp
+       key.toString()
       }
       case _ => {
         // generate new key at first and after 30 minutes
@@ -52,7 +53,13 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
     val data = Json.obj(
       "service_key" -> serviceKey,
       "event_type" -> "trigger",
-      "description" -> description,
+      "description" -> /*description*/ "TEST PLEASE IGNORE",
+      "details" ->  Json.arr(
+      Json.obj(
+      "name" -> testName,
+      "description" -> tfe.getMessage()
+        )
+      ),
       "client" -> "Content API Sanity Tests",
       "client_url" -> "https://github.com/guardian/content-api-sanity-tests",
       "incident_key" -> incidentKey
