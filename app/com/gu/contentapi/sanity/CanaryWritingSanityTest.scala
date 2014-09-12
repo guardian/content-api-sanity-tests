@@ -1,6 +1,8 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.tagobjects.Retryable
+import org.scalatest.time.{Seconds, Span}
+import org.scalatest.{Retries, FlatSpec, Matchers}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
@@ -10,7 +12,7 @@ import org.scalatest.exceptions.TestFailedException
 
 
 
-class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
+class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually with Retries {
 
 
   val now = new DateTime()
@@ -23,8 +25,15 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
     whenReady(httpRequest) { result => result.body.contains(capiDateStamp)}
   }
 
+  override def withFixture(test: NoArgTest) = {
+    if (isRetryable(test))
+      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+    else
+      super.withFixture(test)
+  }
 
-  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest, PRODTest) in {
+
+  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs(FrequentTest, PRODTest, Retryable) in {
     handleException {
       val putSuccessResponseCode = 202
       val httpRequest = request(Config.writeHost + "collections/canary")
