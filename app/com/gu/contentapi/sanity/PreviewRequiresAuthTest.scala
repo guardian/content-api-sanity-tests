@@ -1,7 +1,7 @@
 package com.gu.contentapi.sanity
 
 import org.scalatest.tagobjects.Retryable
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.{Minute, Span}
 import org.scalatest.{Retries, Matchers, FlatSpec}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 
@@ -9,7 +9,7 @@ class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures w
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+      withRetryOnFailure (Span(1, Minute))(super.withFixture(test))
     else
       super.withFixture(test)
   }
