@@ -53,7 +53,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
     val data = Json.obj(
       "service_key" -> serviceKey,
       "event_type" -> "trigger",
-      "description" -> /*description*/ "TEST PLEASE IGNORE",
+      "description" -> description,
       "details" ->  Json.arr(
       Json.obj(
       "name" -> testName,
