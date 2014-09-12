@@ -1,6 +1,7 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{Ignore, Matchers, FlatSpec}
+import org.scalatest.tagobjects.Retryable
+import org.scalatest.{Retries, Ignore, Matchers, FlatSpec}
 import org.scalatest.selenium.{WebBrowser}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.WebDriver
@@ -9,13 +10,20 @@ import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
 
-class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser with ScalaFutures {
+class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser with ScalaFutures with Retries {
+
+  override def withFixture(test: NoArgTest) = {
+    if (isRetryable(test))
+      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+    else
+      super.withFixture(test)
+  }
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val pageId = "435627291"
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
-  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest, CODETest) in {
+  "Updating a draft in R2" should "show an update in the Preview API" taggedAs(FrequentTest, CODETest, Retryable) in {
     lazy val tempFilePathString = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, "Facebook messaging article", modifiedHeadline)
     login(Config.r2AdminHost + "/tools/newspaperintegration/index")
     postR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
