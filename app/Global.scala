@@ -10,7 +10,6 @@ object Global extends GlobalSettings {
     QuartzScheduler.start()
     QuartzScheduler schedule("Frequent Tests", runFreqeuntTests) every (30 seconds)
     QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 12 ? * MON-FRI *"
-    QuartzScheduler schedule("CODE environment Tests ", runCodeTests) at "0 0 12 ? * MON-FRI *"
   }
 
   override def onStop(app: Application) {
@@ -31,12 +30,6 @@ object Global extends GlobalSettings {
   def runInfrequentTests {
     (new JREVersionTest).execute
     (new AmiSanityTest).execute
-  }
-
-  def runCodeTests {
-    (new DraftR2ContentShouldAppearInPreviewTest).execute
-    // This fails on EC2 as it is restricted to internal IP addresses
-    // (new ReadComposerDraftInPreviewTest).execute
   }
 
 }
