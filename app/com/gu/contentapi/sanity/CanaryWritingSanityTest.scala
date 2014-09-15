@@ -45,7 +45,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
           result.status should equal(putSuccessResponseCode)
         }
         if (result.status == putSuccessResponseCode) {
-          eventually {
+          eventually(timeout(Span(60, Seconds))) {
             withClue("Collection did not show updated date stamp") {
               doesCanaryHaveUpdatedTimestamp should be(true)
             }
