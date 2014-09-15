@@ -10,11 +10,12 @@ class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures w
   "GETting preview content" should "require authentication" taggedAs(FrequentTest, PRODTest) in {
 
     handleException {
-      val httpRequest = request(Config.previewHost).get
       //Sometimes this throws a java.io.IOException, with message: Remotely Closed, so using Eventually to retry
-        eventually {
+      eventually {
+        val httpRequest = request(Config.previewHost).get
           whenReady(httpRequest) { result =>
             result.status should be(401)
+
           }
       }
     }(fail,testNames.head, tags)
