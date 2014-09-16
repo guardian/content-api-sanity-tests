@@ -2,10 +2,11 @@ package com.gu.contentapi
 
 import java.io.File
 import com.ning.http.client.Realm.AuthScheme
+import org.joda.time.{Seconds, Minutes, DateTime}
 import org.scalatest.Matchers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.exceptions.TestFailedException
-import play.api.libs.json.Json
+import play.api.libs.json._
 import play.api.libs.ws.WS
 import play.api.libs.ws.WS.WSRequestHolder
 import scalax.file.Path
@@ -13,39 +14,70 @@ import scalax.io.{Resource, Output}
 
 package object sanity extends ScalaFutures with Matchers with IntegrationPatience {
 
-  def handleException(test: =>Unit)(fail: =>Unit, testName: String, tags: Map[String, Set[String]])= {
+  var incidentKeyDateTime: Option[DateTime] = None
+
+  def getIncidentKey: String = {
+    incidentKeyDateTime match {
+      case Some(keyTimeStamp) if (Minutes.minutesBetween(keyTimeStamp, DateTime.now).getMinutes < 30) => {
+        //re-use key if is less than 30 minutes since previous incident
+       val key = keyTimeStamp
+       key.toString()
+      }
+      case _ => {
+        // generate new key at first and after 30 minutes
+        val key = DateTime.now
+        incidentKeyDateTime = Some(key)
+        key.toString
+      }
+    }
+  }
+
+  def handleException(test: => Unit)(fail: => Unit, testName: String, tags: Map[String, Set[String]]) = {
     try {
       test
     } catch {
       case tfe: TestFailedException =>
-        pagerDutyAlerter(testName, tfe, tags)
+        pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
         fail
     }
   }
 
-  def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]]) {
+  def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
     val isLowPriority = tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false)
     val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
-
     val serviceKey = if (isLowPriority) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
-
     val environmentInfo = if (isCODETest) "on environment CODE" else ""
 
+
     val description = (testName + " failed " + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "...")
-  println(description)
     val data = Json.obj(
       "service_key" -> serviceKey,
       "event_type" -> "trigger",
       "description" -> description,
+      "details" ->  Json.arr(
+      Json.obj(
+      "name" -> testName,
+      "description" -> tfe.getMessage()
+        )
+      ),
       "client" -> "Content API Sanity Tests",
-      "client_url" -> "https://github.com/guardian/content-api-sanity-tests"
+      "client_url" -> "https://github.com/guardian/content-api-sanity-tests",
+      "incident_key" -> incidentKey
     )
-    val httpRequest = request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
-    whenReady(httpRequest) { result =>
-      result.body should include("success")}
 
+    val httpRequest =
+      request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
+
+    whenReady(httpRequest) { result =>
+      val pagerDutyResponse: JsValue = Json.parse(result.body)
+      val responseStatus = (pagerDutyResponse \ "status").as[String]
+      val responseIncidentKey = (pagerDutyResponse \ "incident_key").as[String]
+      responseStatus should be("success")
+      responseIncidentKey should be(incidentKey)
+    }
   }
-  def request(uri: String):WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
+
+  def request(uri: String): WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
 
   def isCAPIShowingChange(capiURI: String, modifiedString: String, credentials: Option[(String, String)] = None) = {
 
