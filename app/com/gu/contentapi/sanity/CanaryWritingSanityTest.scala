@@ -1,7 +1,7 @@
 package com.gu.contentapi.sanity
 
 import org.scalatest.tagobjects.Retryable
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.{Minutes, Seconds, Span}
 import org.scalatest.{Retries, FlatSpec, Matchers}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import com.ning.http.client.Realm.AuthScheme
@@ -9,8 +9,6 @@ import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import scala.io.Source
 import org.scalatest.exceptions.TestFailedException
-
-
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually with Retries {
 
@@ -27,7 +25,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+      withRetryOnFailure (Span(2, Minutes))(super.withFixture(test))
     else
       super.withFixture(test)
   }
