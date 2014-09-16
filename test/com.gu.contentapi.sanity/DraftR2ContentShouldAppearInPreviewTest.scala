@@ -7,14 +7,14 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.WebDriver
 import org.scalatest.concurrent.{ScalaFutures, IntegrationPatience, Eventually}
 import scala.io.Source
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.{Minutes, Seconds, Span}
 
 
 class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers with Eventually with IntegrationPatience with WebBrowser with ScalaFutures with Retries {
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+      withRetryOnFailure (Span(2, Minutes))(super.withFixture(test))
     else
       super.withFixture(test)
   }
