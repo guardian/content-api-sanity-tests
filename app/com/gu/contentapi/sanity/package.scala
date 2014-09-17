@@ -15,6 +15,11 @@ import scalax.io.{Resource, Output}
 package object sanity extends ScalaFutures with Matchers with IntegrationPatience {
 
   var incidentKeyDateTime: Option[DateTime] = None
+  var incidentCount = 0
+  val pagerDutyThreshold = 3
+  def incrementIncidentCount = {
+    incidentCount = incidentCount +1
+  }
 
   def getIncidentKey: String = {
     incidentKeyDateTime match {
@@ -37,12 +42,20 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       test
     } catch {
       case tfe: TestFailedException =>
+        incidentCount match {
+        case `pagerDutyThreshold` =>
+        incidentCount = 0
         pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
-        fail
+        case _ =>
+        incrementIncidentCount
+         }
+      }
+    fail
     }
-  }
+
 
   def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
+ incidentCount = incidentCount + 1
     val isLowPriority = tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false)
     val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
     val serviceKey = if (isLowPriority) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
@@ -65,8 +78,9 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       "incident_key" -> incidentKey
     )
 
+
     val httpRequest =
-      request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
+      request("https://events.pagerduty.com/generic/2010-04-15/FAIL.json").post(data)
 
     whenReady(httpRequest) { result =>
       val pagerDutyResponse: JsValue = Json.parse(result.body)
