@@ -17,10 +17,8 @@ class ValidateArticleSchema extends FlatSpec with Matchers with ScalaFutures wit
         sectionName should be ("Life and style")
         val headline = (json \ "response" \ "content" \ "fields" \ "headline").as[String]
         headline should be ("Charlotte Crosby: a blueprint for civilisation")
-        val elementZeroAssetZeroMediaId = (((json \ "response" \ "content" \ "elements")(0) \ "assets")(0) \ "typeData" \ "mediaId").as[String]
-        elementZeroAssetZeroMediaId should be ("gu-fc-268ffa3e-ea38-46a8-a81f-be1275d07cf9")
-        val elementOneId = ((json \ "response" \ "content" \ "elements")(1) \ "id").as[String]
-        elementOneId should be ("gu-fc-268ffa3e-ea38-46a8-a81f-be1275d07cf9")
+        val mediaId = ((json \ "response" \ "content" \ "elements")(0) \\ "mediaId")
+        mediaId shouldBe a [List[_]]
       }
     }(fail,testNames.head, tags)
   }
