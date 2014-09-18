@@ -14,7 +14,7 @@ class SearchContainsLargeNumberOfResults extends FlatSpec with Matchers with Sca
         assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)
         val resultTotal = (json \ "response" \ "total").as[Int]
-        resultTotal should be >= 1819326
+        resultTotal should be >= 1600000
       }
     }(fail,testNames.head, tags)
   }
