@@ -24,6 +24,7 @@ object Global extends GlobalSettings {
     (new ContentApiSanityTest).execute
     (new GetNonExistentContentShould404).execute
     (new PreviewContentSetNotInLiveTest).execute
+    (new ValidateArticleSchema).execute
   }
 
 
