@@ -14,7 +14,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(2, Minutes))(super.withFixture(test))
+      withRetryOnFailure (Span(5, Minutes))(super.withFixture(test))
     else
       super.withFixture(test)
   }

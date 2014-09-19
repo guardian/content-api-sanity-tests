@@ -6,13 +6,13 @@ import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import scala.sys.process._
 import scala.util.Random
 import scala.io.Source
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.{Minutes, Seconds, Span}
 
 class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually with Retries {
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
+      withRetryOnFailure (Span(5, Minutes))(super.withFixture(test))
     else
       super.withFixture(test)
   }
@@ -27,7 +27,7 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     }
   }
 
-  "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" taggedAs (FrequentTest, CODETest, Retryable) in {
+  "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" taggedAs (FrequentTest, CODETest) in {
     lazy val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
     val importEndpoint = Config.composerHost + "incopyintegration/article/import"
     val result = importComposerArticle(importEndpoint, fileToImport)
