@@ -20,6 +20,11 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
   val pagerDutyThreshold = 3
   def incrementIncidentCount = {
     incidentCount = incidentCount +1
+    lastIncidentDateTime = Some(DateTime.now)
+  }
+  def resetCount: Unit ={
+    incidentCount = 0
+    lastIncidentDateTime = None
   }
 
   def getIncidentKey: String = {
@@ -44,25 +49,27 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
     } catch {
       case tfe: TestFailedException =>
         println(incidentCount)
+        println(lastIncidentDateTime)
         incidentCount match {
-        case `pagerDutyThreshold`  =>
-        incidentCount = 0
-        println("reporting")
-        pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
-        case _ =>
-           {
-            if(lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 30)) {
+          case `pagerDutyThreshold`  =>
+            println("reporting")
+            pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
+            resetCount
+          case _ =>
+            // increment the incident count only if there is an existing recent incident
+            {
+            if(lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 10)) {
               incrementIncidentCount
+              lastIncidentDateTime = Some(DateTime.now)
             }
-             else {
-              incidentCount = 0
+            else {
+              resetCount
             }
-            lastIncidentDateTime = Some(DateTime.now)
           }
-         }
-    fail
-      }
-}
+        }
+        fail
+    }
+  }
 
 
   def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
@@ -90,7 +97,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
 
 
     val httpRequest =
-      request("https://events.pagerduty.com/generic/2010-04-15/create_eventFAIL.json").post(data)
+      request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
 
     whenReady(httpRequest) { result =>
       val pagerDutyResponse: JsValue = Json.parse(result.body)
