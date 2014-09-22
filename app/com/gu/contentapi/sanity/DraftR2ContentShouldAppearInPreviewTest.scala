@@ -59,6 +59,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
     def postR2ArticleToNewspaperIntegrationEndpoint(r2XMLPath: String)
     {
+      assume (!(pageTitle equals("Service Unavailable")))
       xpath("//form[@action='article/import']/input[@type='file']").webElement.sendKeys(r2XMLPath)
       click on xpath("//form[@action='article/import']/input[@type='submit']")
       //check import is successful

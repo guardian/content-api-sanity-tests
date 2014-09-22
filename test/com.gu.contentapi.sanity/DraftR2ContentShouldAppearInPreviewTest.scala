@@ -14,7 +14,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(5, Minutes))(super.withFixture(test))
+      withRetryOnFailure (Span(1, Minutes))(super.withFixture(test))
     else
       super.withFixture(test)
   }
@@ -50,6 +50,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
     }
 
     def postR2ArticleToNewspaperIntegrationEndpoint(r2XMLPath: String) {
+      assume (!(pageTitle equals("Service Unavailable")), "R2 is down")
       xpath("//form[@action='article/import']/input[@type='file']").webElement.sendKeys(r2XMLPath)
       click on xpath("//form[@action='article/import']/input[@type='submit']")
       //check import is successful
