@@ -19,10 +19,12 @@ object Global extends GlobalSettings {
 
   def runFrequentTests {
     (new CanaryWritingSanityTest).execute
+    (new SearchContainsLargeNumberOfResults).execute
     (new PreviewRequiresAuthTest).execute
     (new ContentApiSanityTest).execute
     (new GetNonExistentContentShould404).execute
     (new PreviewContentSetNotInLiveTest).execute
+    (new ValidateArticleSchema).execute
   }
 
 
