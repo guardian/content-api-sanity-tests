@@ -20,6 +20,7 @@ class ContentApiSanityTest extends FlatSpec with Matchers with ScalaFutures with
 
       val httpRequest = requestHost("search?format=json&api-key=").get
       whenReady(httpRequest) { result =>
+        assume(result.status == 200, "Service is down")
         result.body should include("results")
       }
     }(fail, testNames.head, tags)

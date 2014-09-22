@@ -12,6 +12,7 @@ class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFu
       val httpRequest = requestHost("search?content-set=preview").get
 
       whenReady(httpRequest) { result =>
+        assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)
         val total = (json \ "response" \ "total").as[Long]
         val results = Json.stringify(json \ "response" \ "results")
