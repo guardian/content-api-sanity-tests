@@ -27,6 +27,11 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
     lastIncidentDateTime = None
   }
 
+  def isLowPriorityTest(tags: Map[String, Set[String]],testName: String) = {
+    (tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false))
+  }
+
+
   def getIncidentKey: String = {
     incidentKeyDateTime match {
       case Some(keyTimeStamp) if (Minutes.minutesBetween(keyTimeStamp, DateTime.now).getMinutes < 30) => {
@@ -48,34 +53,36 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       test
     } catch {
       case tfe: TestFailedException =>
-        println(incidentCount)
-        println(lastIncidentDateTime)
-        incidentCount match {
-          case `pagerDutyThreshold`  =>
-            println("reporting")
-            pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
-            resetCount
-          case _ =>
-            // increment the incident count only if there is an existing recent incident
-            {
-            if(lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 10)) {
-              incrementIncidentCount
-              lastIncidentDateTime = Some(DateTime.now)
-            }
-            else {
+        //low priority tests are excluded from counter because they run infrequently
+        if (isLowPriorityTest(tags, testName)) {
+          pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
+        }
+        else {
+          incidentCount match {
+            case `pagerDutyThreshold` =>
+              println("reporting")
+              pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
               resetCount
+            case _ =>
+              // increment the incident count only if there is an existing recent incident {
+              if (lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 10)) {
+                incrementIncidentCount
+                lastIncidentDateTime = Some(DateTime.now)
+              }
+              else {
+                resetCount
+              }
             }
           }
+          fail
         }
-        fail
     }
-  }
+
 
 
   def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
-    val isLowPriority = tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false)
     val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
-    val serviceKey = if (isLowPriority) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
+    val serviceKey = if (isLowPriorityTest(tags,testName)) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
     val environmentInfo = if (isCODETest) "on environment CODE" else ""
 
 
