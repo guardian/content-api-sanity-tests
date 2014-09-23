@@ -2,7 +2,7 @@ package com.gu.contentapi
 
 import java.io.File
 import com.ning.http.client.Realm.AuthScheme
-import org.joda.time.{Seconds, Minutes, DateTime}
+import org.joda.time.{Minutes, DateTime}
 import org.scalatest.Matchers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.exceptions.TestFailedException
@@ -19,7 +19,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
   var incidentCount = 0
   val pagerDutyThreshold = 3
   def incrementIncidentCount = {
-    incidentCount = incidentCount +1
+    incidentCount += 1
     lastIncidentDateTime = Some(DateTime.now)
   }
   def resetCount: Unit ={
