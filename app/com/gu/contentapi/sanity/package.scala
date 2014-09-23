@@ -15,6 +15,22 @@ import scalax.io.{Resource, Output}
 package object sanity extends ScalaFutures with Matchers with IntegrationPatience {
 
   var incidentKeyDateTime: Option[DateTime] = None
+  var lastIncidentDateTime: Option[DateTime] = None
+  var incidentCount = 0
+  val pagerDutyThreshold = 3
+  def incrementIncidentCount = {
+    incidentCount = incidentCount +1
+    lastIncidentDateTime = Some(DateTime.now)
+  }
+  def resetCount: Unit ={
+    incidentCount = 0
+    lastIncidentDateTime = None
+  }
+
+  def isLowPriorityTest(tags: Map[String, Set[String]],testName: String) = {
+    (tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false))
+  }
+
 
   def getIncidentKey: String = {
     incidentKeyDateTime match {
@@ -37,15 +53,36 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       test
     } catch {
       case tfe: TestFailedException =>
-        pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
-        fail
+        //low priority tests are excluded from counter because they run infrequently
+        if (isLowPriorityTest(tags, testName)) {
+          pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
+        }
+        else {
+          incidentCount match {
+            case `pagerDutyThreshold` =>
+              println("reporting")
+              pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
+              resetCount
+            case _ =>
+              // increment the incident count only if there is an existing recent incident {
+              if (lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 10)) {
+                incrementIncidentCount
+                lastIncidentDateTime = Some(DateTime.now)
+              }
+              else {
+                resetCount
+              }
+            }
+          }
+          fail
+        }
     }
-  }
+
+
 
   def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
-    val isLowPriority = tags.get(testName).map(_.contains("LowPriorityTest")).getOrElse(false)
     val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
-    val serviceKey = if (isLowPriority) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
+    val serviceKey = if (isLowPriorityTest(tags,testName)) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
     val environmentInfo = if (isCODETest) "on environment CODE" else ""
 
 
@@ -64,6 +101,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       "client_url" -> "https://github.com/guardian/content-api-sanity-tests",
       "incident_key" -> incidentKey
     )
+
 
     val httpRequest =
       request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
