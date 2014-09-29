@@ -21,6 +21,7 @@ class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures w
       eventually(timeout(Span(2, Minutes)),interval(Span(10, Seconds))) {
         var httpRequest = request(Config.previewHost).get
           whenReady(httpRequest) { result =>
+            assume(result.status !=503,"Service is down")
             result.status should be(401)
 
           }
