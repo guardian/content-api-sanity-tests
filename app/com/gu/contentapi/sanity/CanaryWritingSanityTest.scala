@@ -4,11 +4,11 @@ import org.scalatest.tagobjects.Retryable
 import org.scalatest.time.{Minutes, Seconds, Span}
 import org.scalatest.{Retries, FlatSpec, Matchers}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
-import com.ning.http.client.Realm.AuthScheme
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import scala.io.Source
 import org.scalatest.exceptions.TestFailedException
+import play.api.libs.ws.WSAuthScheme
 
 class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually with Retries {
 
@@ -35,7 +35,7 @@ class CanaryWritingSanityTest extends FlatSpec with Matchers with ScalaFutures w
     handleException {
       val putSuccessResponseCode = 202
       val httpRequest = request(Config.writeHost + "collections/canary")
-        .withAuth(Config.writeUsername, Config.writePassword, AuthScheme.BASIC)
+        .withAuth(Config.writeUsername, Config.writePassword, WSAuthScheme.BASIC)
         .withHeaders("Content-Type" -> "application/json")
         .put(collectionJSONWithNowTimestamp)
       whenReady(httpRequest) { result =>
