@@ -3,6 +3,7 @@ package com.gu.contentapi.sanity
 import org.scalatest.{Matchers, FlatSpec}
 import org.scalatest.concurrent.{ScalaFutures, IntegrationPatience}
 import play.api.libs.ws.WS
+import play.api.Play.current
 
 
 class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
