@@ -1,23 +1,29 @@
 package com.gu.contentapi
 
 import play.api.libs.ws.WS
-import play.api.libs.ws.WS.WSRequestHolder
-import com.ning.http.client.Realm.AuthScheme
+import play.api.libs.ws.WSRequestHolder
+import play.api.libs.ws.WSAuthScheme
 import org.scalatest.concurrent.ScalaFutures
 import scalax.io.{Resource, Output}
 import scalax.file.Path
 import java.io.File
+import play.api.Play.current
 
 
 package object sanity extends ScalaFutures {
 
-  def request(uri: String):WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
+  //see http://stackoverflow.com/questions/24881145/how-do-i-use-play-ws-library-in-normal-sbt-project-instead-of-play
+  val builder = new com.ning.http.client.AsyncHttpClientConfig.Builder
+  val client = new play.api.libs.ws.ning.NingWSClient(builder.build)
+
+
+  def request(uri: String):WSRequestHolder = client.url(uri).withRequestTimeout(10000)
 
   def isCAPIShowingChange(capiURI: String, modifiedString: String, credentials: Option[(String, String)] = None) = {
 
     val httpRequest = credentials match {
       case Some((username, password)) =>
-        request(capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, AuthScheme.BASIC)
+        request(capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, WSAuthScheme.BASIC)
       case None => {
         request(capiURI)
       }

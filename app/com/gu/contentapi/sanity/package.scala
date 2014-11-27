@@ -1,16 +1,18 @@
 package com.gu.contentapi
 
 import java.io.File
-import com.ning.http.client.Realm.AuthScheme
+
 import org.joda.time.{Minutes, DateTime}
 import org.scalatest.Matchers
+import play.api.libs.ws.WSAuthScheme
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.exceptions.TestFailedException
 import play.api.libs.json._
 import play.api.libs.ws.WS
-import play.api.libs.ws.WS.WSRequestHolder
+import play.api.libs.ws.WSRequestHolder
 import scalax.file.Path
 import scalax.io.{Resource, Output}
+import play.api.Play.current
 
 package object sanity extends ScalaFutures with Matchers with IntegrationPatience {
 
@@ -121,7 +123,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
 
     val httpRequest = credentials match {
       case Some((username, password)) =>
-        request(capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, AuthScheme.BASIC)
+        request(capiURI).withAuth(Config.previewUsernameCode, Config.previewPasswordCode, WSAuthScheme.BASIC)
       case None => {
         request(capiURI)
       }
