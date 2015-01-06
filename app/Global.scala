@@ -23,8 +23,7 @@ object Global extends GlobalSettings {
     (new PreviewRequiresAuthTest).execute
     (new ContentApiSanityTest).execute
     (new GetNonExistentContentShould404).execute
-// commenting out whilst we work on this
-//    (new PreviewContentSetNotInLiveTest).execute
+    (new PreviewContentSetNotInLiveTest).execute
     (new ValidateArticleSchema).execute
   }
 
