@@ -2,7 +2,7 @@ package com.gu.contentapi.sanity
 
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{Matchers, FlatSpec}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
@@ -14,27 +14,14 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
       assume(result.status == 200, "Service is down")
       val json = Json.parse(result.body)
       val newestItem = ((json \ "response" \ "results")(0))
-      val newestItemId = (newestItem \ "id").asOpt[String]
-      val mandatoryFields = List[String]("webTitle","webPublicationDate","sectionName","sectionId","id","webUrl","apiUrl")
-      for(mandatoryField <- mandatoryFields)
-        withClue (s"Mandatory field $mandatoryField for $newestItemId was not found \n") {
-          (newestItem \ mandatoryField).asOpt[String] should be (defined)
-          (newestItem \ mandatoryField).asOpt[String] should not be empty
-        }
-      val headline = (newestItem \ "fields" \ "headline").asOpt[String]
-      withClue (s"Mandatory field headline for $newestItemId was not found \n") {
-        headline should be (defined)
-        headline should not be empty
-      }
-
       val newestItemFirstTag = (newestItem \ "tags")(0)
-      val tagMandatoryFields = List("id","webTitle","type","sectionId","sectionName","webUrl","apiUrl")
-      for(tagMandatoryField <- tagMandatoryFields)
-        withClue (s"Mandatory tag field $tagMandatoryField for $newestItemId was not found \n") {
-          (newestItemFirstTag \ tagMandatoryField).asOpt[String] should be (defined)
-          (newestItemFirstTag \ tagMandatoryField).asOpt[String] should not be empty
+      val newestItemId = (newestItem \ "id").asOpt[String].getOrElse("ID not found")
+      val mandatoryFields = List[JsValue] (newestItem\"webTitle",newestItem\"sectionName",newestItem\"sectionId",newestItem\"id",newestItem\"webUrl",newestItem\"id",newestItem\"webUrl",newestItem\"apiUrl",newestItemFirstTag\"id",newestItemFirstTag\"webTitle",newestItemFirstTag\"type",newestItemFirstTag\"sectionId",newestItemFirstTag\"sectionName",newestItemFirstTag\"webUrl",newestItemFirstTag\"apiUrl",newestItem\"fields"\"headline")
+      for(mandatoryField <- mandatoryFields)
+        withClue (s"Mandatory field not found! $mandatoryField for ID: $newestItemId") {
+          (mandatoryField).asOpt[String] should be (defined)
+          (mandatoryField).asOpt[String] should not be empty
         }
-
     }
   }(fail,testNames.head, tags)
  }
