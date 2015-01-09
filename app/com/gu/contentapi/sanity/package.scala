@@ -55,6 +55,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       test
     } catch {
       case tfe: TestFailedException =>
+        Console.err.println(Console.RED + "Test failure: " + tfe.getMessage + Console.RESET)
         //low priority tests are excluded from counter because they run infrequently
         if (isLowPriorityTest(tags, testName)) {
           pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
