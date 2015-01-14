@@ -16,8 +16,21 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
       val newestItem = ((json \ "response" \ "results")(0))
       val newestItemFirstTag = (newestItem \ "tags")(0)
       val newestItemId = (newestItem \ "id").asOpt[String].getOrElse("ID not found")
-      val mandatoryFields = List[JsValue] (newestItem\"webTitle",newestItem\"sectionName",newestItem\"sectionId",newestItem\"id",newestItem\"webUrl",newestItem\"apiUrl",
-        newestItemFirstTag\"id",newestItemFirstTag\"webTitle",newestItemFirstTag\"type",newestItemFirstTag\"sectionId",newestItemFirstTag\"sectionName",newestItemFirstTag\"webUrl",newestItemFirstTag\"apiUrl")
+      val mandatoryFields = List[JsValue] (
+        newestItem\"webTitle",
+        newestItem\"sectionName",
+        newestItem\"sectionId",
+        newestItem\"id",
+        newestItem\"webUrl",
+        newestItem\"apiUrl",
+        newestItemFirstTag\"id",
+        newestItemFirstTag\"webTitle",
+        newestItemFirstTag\"type",
+        newestItemFirstTag\"sectionId",
+        newestItemFirstTag\"sectionName",
+        newestItemFirstTag\"webUrl",
+        newestItemFirstTag\"apiUrl")
+
       for(mandatoryField <- mandatoryFields)
         withClue (s"Mandatory field not found! $mandatoryField for ID: $newestItemId") {
           (mandatoryField).asOpt[String] should be (defined)
