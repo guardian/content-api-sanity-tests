@@ -25,6 +25,7 @@ object Global extends GlobalSettings {
     (new GetNonExistentContentShould404).execute
     (new PreviewContentSetNotInLiveTest).execute
     (new ValidateArticleSchema).execute
+    (new NewestItemFieldsTest).execute
     (new MostViewedContainsItemsTest).execute
   }
 
