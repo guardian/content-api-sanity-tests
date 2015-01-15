@@ -14,7 +14,7 @@ class MostViewedContainsItemsTest extends FlatSpec with Matchers with ScalaFutur
         val json = Json.parse(result.body)
         val mostViewedJson = (json \ "response" \ "mostViewed")
         val mostViewedList = mostViewedJson.as[List[Map[String, String]]]
-        mostViewedList.length should be (20)
+        mostViewedList.length should be > 10
       }
     }(fail,testNames.head, tags)
   }
