@@ -1,8 +1,6 @@
 package com.gu.contentapi.sanity
 
-import java.text.SimpleDateFormat
-
-import org.joda.time.{LocalDate, DateTime}
+import org.joda.time.{DateTime}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{Matchers, FlatSpec}
 import play.api.libs.json.Json
