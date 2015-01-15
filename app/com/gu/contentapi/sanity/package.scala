@@ -89,7 +89,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
     val environmentInfo = if (isCODETest) "on environment CODE" else ""
 
 
-    val description = (testName + " failed " + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "...")
+    val description = (testName + " failed" + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "...")
     val data = Json.obj(
       "service_key" -> serviceKey,
       "event_type" -> "trigger",
