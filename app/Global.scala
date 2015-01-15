@@ -9,7 +9,7 @@ object Global extends GlobalSettings {
     Logger.info("Application has started")
     QuartzScheduler.start()
     QuartzScheduler schedule("Frequent Tests", runFrequentTests) every (30 seconds)
-    QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 12 ? * MON-FRI *"
+    QuartzScheduler schedule("Infrequent Tests", runInfrequentTests) at "0 0 9 ? * MON-FRI *"
   }
 
   override def onStop(app: Application) {
@@ -27,6 +27,7 @@ object Global extends GlobalSettings {
     (new ValidateArticleSchema).execute
     (new NewestItemFieldsTest).execute
     (new MostViewedContainsItemsTest).execute
+    (new CrosswordsIndexingTest).execute
   }
 
 
@@ -34,6 +35,7 @@ object Global extends GlobalSettings {
   def runInfrequentTests {
     (new JREVersionTest).execute
     (new AmiSanityTest).execute
+    (new CrosswordsIndexingTest).execute
   }
 
 }
