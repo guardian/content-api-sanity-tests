@@ -33,7 +33,7 @@ Deploy the `sanity-tests` project from Riff-Raff.
 Once deployed the tests run on a regular schedule in EC2.
 
 #### Adding a test
-Add it to the `app` source root and to `global.scala`
+Add it to the `app` source root and to `Global.scala`
 
 -----------
 
