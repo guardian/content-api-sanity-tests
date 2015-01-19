@@ -10,10 +10,10 @@ The tests are split into two types. __Internal facing tests__ rely on endpoints 
 ### Internal facing tests
 Internal facing tests are run using the sbt `test` command.
 
-#### Run all internal facing tests locally
+#### Run all tests locally
 ``sbt clean test``
 
-#### Run internal facing tests with a specific tag locally
+#### Run tests with a specific tag locally
 ``sbt "test-only -- -n InfrequentTest"``
 
 #### Running remotely
@@ -22,10 +22,12 @@ The tests can be run in TeamCity by creating a build which runs `sbt test`
 #### Adding a test
 Add it to the `test` source root with a filename ending in `Test`
 
+-----------------
+
 ### External facing tests
 External facing tests are run as a scheduled service started by the sbt `start` command.              
 
-#### Run all external facing tests locally
+#### Run all tests locally
 `sbt start` 
 
 #### Running remotely
