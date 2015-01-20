@@ -1,33 +1,25 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.tagobjects.Retryable
-import org.scalatest.{Retries, Matchers, FlatSpec}
+import org.scalatest.{Matchers, FlatSpec}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import scala.sys.process._
 import scala.util.Random
 import scala.io.Source
-import org.scalatest.time.{Minutes, Seconds, Span}
+import org.scalatest.time.{Seconds, Span}
 
-class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually with Retries {
-
-  override def withFixture(test: NoArgTest) = {
-    if (isRetryable(test))
-      withRetryOnFailure (Span(5, Minutes))(super.withFixture(test))
-    else
-      super.withFixture(test)
-  }
+class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val uniquePageId = new Random().nextInt.toString
 
 
-  "GETting the InCopy integration homepage" should "respond with a welcome message" taggedAs (FrequentTest, CODETest) in {
+  "GETting the InCopy integration homepage" should "respond with a welcome message" in {
     val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
     whenReady(httpRequest) { result => result.body should equal("incopy Integration...")
     }
   }
 
-  "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" taggedAs (FrequentTest, CODETest) in {
+  "POSTting valid Article XML to the Composer integration Endpoint" should "respond with OK" in {
     lazy val fileToImport = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/composer_article.xml")).mkString, "story-bundle-placeholder|headline-placeholder|linktext-placeholder|slugword-placeholder", uniquePageId)
     val importEndpoint = Config.composerHost + "incopyintegration/article/import"
     val result = importComposerArticle(importEndpoint, fileToImport)

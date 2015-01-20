@@ -8,7 +8,7 @@ import play.api.Play.current
 
 class AmiSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "The Content API" should "be using the latest AMI" taggedAs(InfrequentTest, PRODTest, LowPriorityTest)  in {
+  "The Content API" should "be using the latest AMI" taggedAs(LowPriorityTest)  in {
     val currentAMI= "20140927"
 
     handleException {

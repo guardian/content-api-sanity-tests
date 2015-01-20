@@ -6,7 +6,7 @@ import play.api.libs.json.{JsValue, Json}
 
 class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "The newest items" should "include mandatory fields" taggedAs(FrequentTest, PRODTest) in {
+  "The newest items" should "include mandatory fields" in {
 
     handleException {
       val mandatoryItemFields = List[String](

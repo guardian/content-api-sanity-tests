@@ -6,7 +6,7 @@ import play.api.libs.json.Json
 
 class ValidateArticleSchema extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "The Content API" should "return correct article schema" taggedAs(FrequentTest, PRODTest)  in {
+  "The Content API" should "return correct article schema" in {
 
     handleException {
       val httpRequest = requestHost("/lifeandstyle/lostinshowbiz/2014/sep/18/charlotte-crosby-blueprint-for-civilisation-geordie-shore-celebrity-big-brother?show-fields=all&show-elements=all").get

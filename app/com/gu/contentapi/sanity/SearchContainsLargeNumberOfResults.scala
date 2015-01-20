@@ -6,7 +6,7 @@ import play.api.libs.json.Json
 
 class SearchContainsLargeNumberOfResults extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "The Content API" should "return a large total of results on the /search endpoint" taggedAs(FrequentTest, PRODTest)  in {
+  "The Content API" should "return a large total of results on the /search endpoint" in {
 
     handleException {
       val httpRequest = requestHost("search").get

@@ -5,7 +5,7 @@ import play.api.libs.json.Json
 
 class MostViewedContainsItemsTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "Most Viewed" should "contain more than 10 items" taggedAs(FrequentTest, PRODTest)  in {
+  "Most Viewed" should "contain more than 10 items" in {
 
     handleException {
       val httpRequest = requestHost("/uk?show-most-viewed=true").get

@@ -7,14 +7,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 
 class ContentApiSanityTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Retries {
 
-  override def withFixture(test: NoArgTest) = {
-    if (isRetryable(test))
-      withRetryOnFailure (Span(30, Seconds))(super.withFixture(test))
-    else
-      super.withFixture(test)
-  }
-
-  "Content api" should "serve gzipped" taggedAs(FrequentTest, Retryable) in {
+  "Content api" should "serve gzipped" in {
     handleException{
       // GZip Compression is enabled in application.conf
 
