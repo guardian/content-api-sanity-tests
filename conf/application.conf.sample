@@ -5,9 +5,11 @@ ws.compressionEnable=true
 # rename this to application.conf with real values
 content-api-sanity-tests {
     host="http://your-capi-host"
+    host-public-secure="https://your-public-secure-host"
     api-key=your-capi-key
     preview-host="http://your-preview-host"
-    write-host="your-write-host"
+    write-host="https://your-write-host"
+    write-preview-host="https://your-write-preview-host"
     write-username=your-write-username
     write-password=your-write-password
     pager-duty-service-key=your-pager-duty-service-key
