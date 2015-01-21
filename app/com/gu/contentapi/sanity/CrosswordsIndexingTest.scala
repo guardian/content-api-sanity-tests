@@ -3,7 +3,7 @@ package com.gu.contentapi.sanity
 import org.joda.time.{DateTime}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{Matchers, FlatSpec}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 class CrosswordsIndexingTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
@@ -19,11 +19,16 @@ class CrosswordsIndexingTest extends FlatSpec with Matchers with ScalaFutures wi
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)
-        val newestItem = (json \ "response" \ "results")(0)
-        val newestItemDateString = (newestItem \ "webPublicationDate").as[String]
-        val newestItemDate = DateTime.parse(newestItemDateString)
-        withClue(s"Latest indexed crossword was at $newestItemDate which is more than 25 hours ago ($twentyFiveHoursAgo)") {
-          newestItemDate.isAfter(twentyFiveHoursAgo) should be(true)
+        val newestItemOpt = (json \ "response" \ "results")(0).asOpt[JsValue]
+        withClue("First item not found in response") {
+          newestItemOpt should be (defined)
+        }
+        newestItemOpt foreach { newestItem =>
+          val newestItemDateString = (newestItem \ "webPublicationDate").as[String]
+          val newestItemDate = DateTime.parse(newestItemDateString)
+          withClue(s"Latest indexed crossword was at $newestItemDate which is more than 25 hours ago ($twentyFiveHoursAgo)") {
+            newestItemDate.isAfter(twentyFiveHoursAgo) should be(true)
+          }
         }
       }
     }(fail, testNames.head, tags)
