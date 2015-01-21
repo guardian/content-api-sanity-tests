@@ -12,7 +12,7 @@ class JREVersionTest extends FlatSpec with Matchers with ScalaFutures with Integ
       val httpRequest = request("http://java.com/applet/JreCurrentVersion2.txt").get
       whenReady(httpRequest) { result =>
      assume(result.status == 200, "Service is down")
-      result.body should include("1.8.0_25")
+      result.body should include("1.8.0_31")
 
 
       }
