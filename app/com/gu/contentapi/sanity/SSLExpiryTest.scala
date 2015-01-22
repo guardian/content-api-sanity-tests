@@ -12,7 +12,7 @@ import scala.util.Try
 
 class SSLExpiryTest extends FlatSpec with ScalaFutures with IntegrationPatience {
 
-  "SSL Certificates" should "be more than 30 days from expiry"/* taggedAs (LowPriorityTest)*/ in {
+  "SSL Certificates" should "be more than 30 days from expiry" taggedAs (LowPriorityTest) in {
     handleException {
       val hosts = Seq(
         Config.host,
