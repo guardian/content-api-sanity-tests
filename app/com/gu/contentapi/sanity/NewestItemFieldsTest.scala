@@ -35,7 +35,7 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
 
           for (mandatoryField <- mandatoryItemFields) {
             withClue( s"""Mandatory field not found! "$mandatoryField" for item: $id""") {
-              item.contains(mandatoryField) should be(true)
+              item.contains(mandatoryField) should be (true)
             }
           }
 
@@ -44,7 +44,7 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
           val firstTagList = firstTag.as[Map[String, String]]
           for (mandatoryTagField <- mandatoryTagFields) {
             withClue( s"""Mandatory tag field not found! "$mandatoryTagField" for item: $id""") {
-              firstTagList.contains(mandatoryTagField)
+              firstTagList.contains(mandatoryTagField) should be (true)
             }
           }
         }
