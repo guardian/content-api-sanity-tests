@@ -23,10 +23,11 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
   def incrementIncidentCount = {
     incidentCount += 1
     lastIncidentDateTime = Some(DateTime.now)
+    println(s"Incident count: $incidentCount")
   }
   def resetCount: Unit ={
     incidentCount = 0
-    lastIncidentDateTime = None
+    incrementIncidentCount
   }
 
   def isLowPriorityTest(tags: Map[String, Set[String]],testName: String) = {
@@ -63,23 +64,29 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
         else {
           incidentCount match {
             case `pagerDutyThreshold` =>
-              println("reporting")
-              pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
+              //reset incident count in next incident after threshold has been met
               resetCount
             case _ =>
-              // increment the incident count only if there is an existing recent incident {
+              // increment the incident count only if there is an existing recent incident or it is the first incident {
               if (lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 10)) {
+                //increment counter
                 incrementIncidentCount
-                lastIncidentDateTime = Some(DateTime.now)
+                if (incidentCount == pagerDutyThreshold)
+                //report when threshold is met
+                {
+                  println("Reporting")
+                  pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
+                }
               }
               else {
+                //reset counter if incident is not recent
                 resetCount
               }
-            }
           }
-          fail
         }
+        fail
     }
+  }
 
 
 
