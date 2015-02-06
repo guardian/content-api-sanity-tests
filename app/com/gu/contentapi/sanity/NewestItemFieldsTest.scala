@@ -20,8 +20,6 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
         "id",
         "webTitle",
         "type",
-        "sectionId",
-        "sectionName",
         "webUrl",
         "apiUrl")
 
