@@ -9,55 +9,75 @@
             "Default": "PROD"
         },
         "host": {
+            "Description": "Content API Live host",
             "Type": "String"
         },
         "previewHost": {
+            "Description": "Content API Preview host",
             "Type": "String"
         },
         "apiKey": {
+            "Description": "Content API Live API key",
             "Type": "String"
         },
         "writeHost": {
+            "Description": "Porter Live host",
             "Type": "String"
         },
         "writeUsername": {
+            "Description": "Porter username",
             "Type": "String"
         },
         "writePassword": {
-            "Type": "String"
+            "Description": "Porter password",
+            "Type": "String",
+            "NoEcho": true
         },
         "pagerDutyServiceKey": {
+            "Description": "Pager Duty Service key for High Priority incidents",
             "Type": "String"
         },
         "pagerDutyServiceKeyLowPriority": {
+            "Description": "Pager Duty Service key for Low Priority incidents",
             "Type": "String"
         },
         "codeHost": {
+            "Description": "Content API CODE Live host name",
             "Type": "String"
         },
         "codePreviewHost": {
+            "Description": "Content API CODE Preview host name",
             "Type": "String"
         },
         "codeComposerHost": {
+            "Description": "Composer Flex Import CODE host name",
             "Type": "String"
         },
         "codeR2AdminHost": {
+            "Description": "R2 Admin CODE host name",
             "Type": "String"
         },
         "codeApiKey": {
+            "Description": "Content API CODE API key",
             "Type": "String"
         },
         "codePreviewUsername": {
+            "Description": "Content API CODE Preview username",
             "Type": "String"
         },
         "codePreviewPassword": {
-            "Type": "String"
+            "Description": "Content API CODE Preview password",
+            "Type": "String",
+            "NoEcho": true
         },
         "codeR2AdminUsername": {
+            "Description": "R2 Admin CODE username",
             "Type": "String"
         },
         "codeR2AdminPassword": {
-            "Type": "String"
+            "Description": "R2 Admin CODE password",
+            "Type": "String",
+            "NoEcho": true
         }
     },
 
