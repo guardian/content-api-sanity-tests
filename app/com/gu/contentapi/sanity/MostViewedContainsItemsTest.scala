@@ -1,6 +1,7 @@
-import com.gu.contentapi.sanity._
+package com.gu.contentapi.sanity
+
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{Matchers, FlatSpec}
+import org.scalatest.{FlatSpec, Matchers}
 import play.api.libs.json.Json
 
 class MostViewedContainsItemsTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
