@@ -34,6 +34,7 @@ object Global extends GlobalSettings {
   def runInfrequentTests {
     (new JREVersionTest).execute
     (new AmiSanityTest).execute
+    (new SSLExpiryTest).execute
     (new CrosswordsIndexingTest).execute
   }
 
