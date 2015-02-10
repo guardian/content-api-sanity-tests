@@ -43,7 +43,11 @@ class SSLExpiryTest extends FlatSpec with ScalaFutures with IntegrationPatience 
 
         certsTry match {
           case Success(certs) =>
+            withClue(s"No Certificates found for $host") {
+              certs.length should be >= 1
+            }
             certs.headOption.map { cert =>
+              cert shouldBe a[X509CertImpl]
               val x = cert.asInstanceOf[X509CertImpl]
               val expiry = x.getNotAfter.getTime
               val daysleft = Days.daysBetween(new DateTime(), new DateTime(expiry.toLong)).getDays
