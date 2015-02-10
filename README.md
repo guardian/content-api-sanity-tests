@@ -13,9 +13,6 @@ Internal facing tests are run using the sbt `test` command.
 #### Run all tests locally
 ``sbt clean test``
 
-#### Run tests with a specific tag locally
-``sbt "test-only -- -n InfrequentTest"``
-
 #### Running remotely
 The tests can be run in TeamCity by creating a build which runs `sbt test`
 

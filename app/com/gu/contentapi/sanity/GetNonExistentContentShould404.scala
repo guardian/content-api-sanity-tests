@@ -5,7 +5,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 
 class GetNonExistentContentShould404 extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-    "GETting non existent content" should "404" taggedAs(FrequentTest, PRODTest) in {
+    "GETting non existent content" should "404" in {
       handleException {
         val httpRequest = requestHost("foo/should-not-exist").get
         whenReady(httpRequest) { result =>
