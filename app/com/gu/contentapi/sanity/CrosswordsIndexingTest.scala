@@ -4,6 +4,7 @@ import org.joda.time.{DateTime}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{Matchers, FlatSpec}
 import play.api.libs.json.{JsValue, Json}
+import org.scalatest.OptionValues._
 
 class CrosswordsIndexingTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
@@ -24,8 +25,8 @@ class CrosswordsIndexingTest extends FlatSpec with Matchers with ScalaFutures wi
           newestItemOpt should be (defined)
         }
         newestItemOpt foreach { newestItem =>
-          val newestItemDateString = (newestItem \ "webPublicationDate").as[String]
-          val newestItemDate = DateTime.parse(newestItemDateString)
+          val newestItemDateString = (newestItem \ "webPublicationDate").asOpt[String]
+          val newestItemDate = DateTime.parse(newestItemDateString.value)
           withClue(s"Latest indexed crossword was at $newestItemDate which is more than 25 hours ago ($twentyFiveHoursAgo)") {
             newestItemDate.isAfter(twentyFiveHoursAgo) should be(true)
           }
