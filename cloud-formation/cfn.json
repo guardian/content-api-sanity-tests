@@ -12,6 +12,9 @@
             "Description": "Content API Live host",
             "Type": "String"
         },
+        "hostPublicSecure": {
+            "Type": "String"
+        },
         "previewHost": {
             "Description": "Content API Preview host",
             "Type": "String"
@@ -22,6 +25,9 @@
         },
         "writeHost": {
             "Description": "Porter Live host",
+            "Type": "String"
+        },
+        "writePreviewHost": {
             "Type": "String"
         },
         "writeUsername": {
@@ -168,9 +174,11 @@
                             "cat > /etc/gu/content-api-sanity-tests.conf <<EOF",
                             "content-api-sanity-tests {",
                             { "Fn::Join": [ "", [ "host=\"", { "Ref": "host" },"\"" ] ] },
+                            { "Fn::Join": [ "", [ "host-public-secure=\"", { "Ref": "hostPublicSecure" },"\"" ] ] },
                             { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "previewHost" },"\"" ] ] },
                             { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "apiKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "write-preview-host=\"", { "Ref": "writePreviewHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-username=\"", { "Ref": "writeUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-password=\"", { "Ref": "writePassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
