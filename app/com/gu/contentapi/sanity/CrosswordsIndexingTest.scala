@@ -8,7 +8,7 @@ import org.scalatest.OptionValues._
 
 class CrosswordsIndexingTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
-  "A new Crossword" should "be indexed every day" taggedAs(LowPriorityTest, PRODTest) in {
+  "A new Crossword" should "be indexed every day" taggedAs(LowPriorityTest) in {
 
     handleException {
       val now = DateTime.now
