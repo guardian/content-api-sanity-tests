@@ -25,9 +25,12 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
     lastIncidentDateTime = Some(DateTime.now)
     println(s"Incident count: $incidentCount")
   }
-  def resetCount: Unit ={
+  def resetToOne(): Unit ={
     incidentCount = 0
     incrementIncidentCount
+  }
+  def resetToZero(): Unit ={
+    incidentCount = 0
   }
 
   def isLowPriorityTest(tags: Map[String, Set[String]],testName: String) = {
@@ -62,26 +65,20 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
           pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
         }
         else {
-          incidentCount match {
-            case `pagerDutyThreshold` =>
-              //reset incident count in next incident after threshold has been met
-              resetCount
-            case _ =>
-              // increment the incident count only if there is an existing recent incident or it is the first incident {
-              if (lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 10)) {
-                //increment counter
-                incrementIncidentCount
-                if (incidentCount == pagerDutyThreshold)
-                //report when threshold is met
-                {
-                  println("Reporting")
-                  pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
-                }
-              }
-              else {
-                //reset counter if incident is not recent
-                resetCount
-              }
+          // increment the incident count only if there is an existing recent incident or it is the first incident {
+          if (lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < 10)) {
+            //increment counter
+            incrementIncidentCount
+            if (incidentCount == pagerDutyThreshold)
+            //report when threshold is met
+            {
+              pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
+              resetToZero()
+            }
+          }
+          else {
+            //reset counter if incident is not recent
+            resetToOne()
           }
         }
         fail
@@ -91,6 +88,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
 
 
   def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
+    println("Reporting")
     val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
     val serviceKey = if (isLowPriorityTest(tags,testName)) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
     val environmentInfo = if (isCODETest) "on environment CODE" else ""
