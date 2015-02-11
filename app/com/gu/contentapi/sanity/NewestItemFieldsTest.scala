@@ -3,6 +3,7 @@ package com.gu.contentapi.sanity
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{Matchers, FlatSpec}
 import play.api.libs.json.{JsValue, Json}
+import org.scalatest.OptionValues._
 
 class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
@@ -20,8 +21,6 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
         "id",
         "webTitle",
         "type",
-        "sectionId",
-        "sectionName",
         "webUrl",
         "apiUrl")
 
@@ -29,8 +28,8 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)
-        val newestItemList = (json \ "response" \ "results").as[List[Map[String, JsValue]]]
-        for (item <- newestItemList) {
+        val newestItemList = (json \ "response" \ "results").asOpt[List[Map[String, JsValue]]]
+        for (item <- newestItemList.value) {
           val id = item.getOrElse("id", "ID for item was missing")
 
           for (mandatoryField <- mandatoryItemFields) {
@@ -39,12 +38,12 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
             }
           }
 
-          val tags = item.get("tags").get
-          val firstTag = tags(0)
-          val firstTagList = firstTag.as[Map[String, String]]
+          val tags = item.get("tags").value
+          val firstTag = tags(0).asOpt[JsValue]
+          val firstTagList = firstTag.value.asOpt[Map[String, String]]
           for (mandatoryTagField <- mandatoryTagFields) {
             withClue( s"""Mandatory tag field not found! "$mandatoryTagField" for item: $id""") {
-              firstTagList.contains(mandatoryTagField) should be (true)
+              firstTagList.value.contains(mandatoryTagField) should be (true)
             }
           }
         }

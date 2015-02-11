@@ -1,5 +1,6 @@
 package com.gu.contentapi
 
+import org.scalatest.Matchers
 import play.api.libs.ws.WS
 import play.api.libs.ws.WSRequestHolder
 import play.api.libs.ws.WSAuthScheme
@@ -10,7 +11,7 @@ import java.io.File
 import play.api.Play.current
 
 
-package object sanity extends ScalaFutures {
+package object sanity extends ScalaFutures with Matchers {
 
   //see http://stackoverflow.com/questions/24881145/how-do-i-use-play-ws-library-in-normal-sbt-project-instead-of-play
   val builder = new com.ning.http.client.AsyncHttpClientConfig.Builder
@@ -28,7 +29,11 @@ package object sanity extends ScalaFutures {
         request(capiURI)
       }
     }
-    whenReady(httpRequest.get) { result => result.body.contains(modifiedString)}
+    whenReady(httpRequest.get) { result =>
+      withClue("Authentication failed, check credentials") {
+        result.status should not equal (401)
+      }
+      result.body.contains(modifiedString)}
   }
 
   def createModifiedXMLTempFile(originalXML: String, originalString: String, replacedString: String): String = {

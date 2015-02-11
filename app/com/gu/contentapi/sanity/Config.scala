@@ -10,6 +10,7 @@ object Config {
   conf.checkValid(ConfigFactory.defaultReference(), "content-api-sanity-code")
 
   val host = sanityConfig.getString("host")
+  val hostPublicSecure = sanityConfig.getString("host-public-secure")
   val r2AdminHost = sanityCodeConfig.getString("r2-admin-host")
   val r2AdminUsername = sanityCodeConfig.getString("r2-admin-username")
   val r2AdminPassword = sanityCodeConfig.getString("r2-admin-password")
@@ -19,6 +20,7 @@ object Config {
   val apiKey = sanityConfig.getString("api-key")
   val previewHost = sanityConfig.getString("preview-host")
   val writeHost = sanityConfig.getString("write-host")
+  val writePreviewHost = sanityConfig.getString("write-preview-host")
   val writeUsername = sanityConfig.getString("write-username")
   val writePassword = sanityConfig.getString("write-password")
   val pagerDutyServiceKey=sanityConfig.getString("pager-duty-service-key")

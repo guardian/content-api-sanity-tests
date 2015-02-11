@@ -3,6 +3,7 @@ package com.gu.contentapi.sanity
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{Matchers, FlatSpec}
 import play.api.libs.json.Json
+import org.scalatest.OptionValues._
 
 class ValidateArticleSchema extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
 
@@ -13,12 +14,12 @@ class ValidateArticleSchema extends FlatSpec with Matchers with ScalaFutures wit
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)
-        val sectionName = (json \ "response" \ "content" \ "sectionName").as[String]
-        sectionName should be ("Life and style")
-        val headline = (json \ "response" \ "content" \ "fields" \ "headline").as[String]
-        headline should be ("Charlotte Crosby: a blueprint for civilisation")
-        val mediaId = ((json \ "response" \ "content" \ "elements")(0) \\ "mediaId")
-        mediaId shouldBe a [List[_]]
+        val sectionName = (json \ "response" \ "content" \ "sectionName").asOpt[String]
+        sectionName.value should be ("Life and style")
+        val headline = (json \ "response" \ "content" \ "fields" \ "headline").asOpt[String]
+        headline.value should be ("Charlotte Crosby: a blueprint for civilisation")
+        val mediaId = Option(((json \ "response" \ "content" \ "elements")(0) \\ "mediaId"))
+        mediaId.value shouldBe a [List[_]]
       }
     }(fail,testNames.head, tags)
   }
