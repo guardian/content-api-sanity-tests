@@ -10,7 +10,7 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
   "The newest items" should "include mandatory fields" in {
 
     handleException {
-      val mandatoryItemFields = List[String](
+      val mandatoryItemFields = Seq[String](
         "webTitle",
         "sectionName",
         "sectionId",
