@@ -195,6 +195,7 @@
                             { "Fn::Join": [ "", [ "r2-admin-username=\"", { "Ref": "codeR2AdminUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "codeR2AdminPassword" },"\""  ] ] },
                             "}",
+                            "ws.compressionEnabled=true",
                             "EOF",
                             "start sanity-tests"
                         ] ]
