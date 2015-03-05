@@ -27,6 +27,8 @@ object Global extends GlobalSettings {
     (new ValidateArticleSchema).execute
     (new NewestItemFieldsTest).execute
     (new MostViewedContainsItemsTest).execute
+    (new CriticalTagsTest).execute
+    (new TagSearchContainsLargeNumberOfResults).execute
   }
 
 
