@@ -9,14 +9,10 @@ import org.quartz.impl.StdSchedulerFactory
 import org.quartz.Scheduler
 import org.quartz.Job
 import org.quartz.JobExecutionContext
-import scala.concurrent.duration.Duration
 import java.lang.Class
 
-import javax.tools.ToolProvider
-
-import  scala.collection.mutable.Map
-import  scala.collection.mutable.HashMap
-import  scala.collection.mutable.SynchronizedMap
+import scala.collection.concurrent.TrieMap
+import scala.concurrent.duration.Duration
 
 object QuartzScheduler {
 
@@ -61,7 +57,7 @@ object ScheduleHolder {
 
   type JobFunc = JobExecutionContext => Unit
 
-  private val jobs = new HashMap[String, JobFunc] with SynchronizedMap[String, JobFunc]
+  private val jobs = new TrieMap[String, JobFunc]
 
   def add(name: String, job: JobFunc) {jobs.put(name, job)}
   def get(name: String):Option[JobFunc] = {jobs.get(name)}

@@ -1,6 +1,7 @@
 import com.gu.contentapi.sanity._
 import com.gu.contentapi.sanity.utils.QuartzScheduler
 import scala.concurrent.duration._
+import scala.language.postfixOps
 import play.api._
 
 object Global extends GlobalSettings {
