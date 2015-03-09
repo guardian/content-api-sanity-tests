@@ -1,0 +1,2 @@
+# This priority has to be < 700, so that we are used in preference to the default NingWSPlugin
+100:play.plugins.ConfigurableNingWSPlugin
