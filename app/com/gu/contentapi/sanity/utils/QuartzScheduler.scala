@@ -11,7 +11,7 @@ import org.quartz.Job
 import org.quartz.JobExecutionContext
 import java.lang.Class
 
-import  scala.collection.concurrent.TrieMap
+import scala.collection.concurrent.TrieMap
 import scala.concurrent.duration.Duration
 
 object QuartzScheduler {
