@@ -4,6 +4,10 @@ name := "sanity-tests"
 
 version := "1.0"
 
+scalaVersion := "2.11.5"
+
+scalacOptions ++= Seq("-feature")
+
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 libraryDependencies += "org.quartz-scheduler" % "quartz" % "2.1.6"
