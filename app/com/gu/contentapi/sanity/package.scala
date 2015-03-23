@@ -118,10 +118,10 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
 
       whenReady(httpRequest) { result =>
         val pagerDutyResponse: JsValue = Json.parse(result.body)
-      val responseStatus = (pagerDutyResponse \ "status").asOpt[String]
-      val responseIncidentKey = (pagerDutyResponse \ "incident_key").asOpt[String]
-      responseStatus.value should be("success")
-      responseIncidentKey.value should be(incidentKey)
+        val responseStatus = (pagerDutyResponse \ "status").asOpt[String]
+        val responseIncidentKey = (pagerDutyResponse \ "incident_key").asOpt[String]
+        responseStatus.value should be("success")
+        responseIncidentKey.value should be(incidentKey)
       }
     } catch {
       case e: Exception => Console.err.println(Console.RED + "PagerDuty reporting failed with exception: " + e.getMessage + Console.RESET)
