@@ -13,6 +13,7 @@ import play.api.libs.ws.WSRequestHolder
 import scalax.file.Path
 import scalax.io.{Resource, Output}
 import play.api.Play.current
+import org.scalatest.OptionValues._
 
 package object sanity extends ScalaFutures with Matchers with IntegrationPatience {
 
@@ -47,7 +48,7 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
       }
       case _ => {
         // generate new key at first and after 30 minutes
-        val key = DateTime.now
+         val key = DateTime.now
         incidentKeyDateTime = Some(key)
         key.toString
       }
@@ -88,39 +89,44 @@ package object sanity extends ScalaFutures with Matchers with IntegrationPatienc
 
 
   def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
-    println("Reporting")
-    val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
-    val serviceKey = if (isLowPriorityTest(tags,testName)) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
-    val environmentInfo = if (isCODETest) "on environment CODE" else ""
+    try {
+      println("Reporting")
+      val isCODETest = tags.get(testName).map(_.contains("CODETest")).getOrElse(false)
+      val serviceKey = if (isLowPriorityTest(tags,testName)) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
+      val environmentInfo = if (isCODETest) "on environment CODE" else ""
 
 
-    val description = (testName + " failed" + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "...")
-    val data = Json.obj(
-      "service_key" -> serviceKey,
-      "event_type" -> "trigger",
-      "description" -> description,
-      "details" ->  Json.arr(
-      Json.obj(
-      "name" -> testName,
-      "description" -> tfe.getMessage()
-        )
-      ),
-      "client" -> "Content API Sanity Tests",
-      "client_url" -> "https://github.com/guardian/content-api-sanity-tests",
-      "incident_key" -> incidentKey
-    )
+      val description = (testName + " failed" + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "...")
+      val data = Json.obj(
+        "service_key" -> serviceKey,
+        "event_type" -> "trigger",
+        "description" -> description,
+        "details" ->  Json.arr(
+          Json.obj(
+            "name" -> testName,
+            "description" -> tfe.getMessage()
+          )
+        ),
+        "client" -> "Content API Sanity Tests",
+        "client_url" -> "https://github.com/guardian/content-api-sanity-tests",
+        "incident_key" -> incidentKey
+      )
 
 
-    val httpRequest =
+      val httpRequest =
       request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
 
-    whenReady(httpRequest) { result =>
-      val pagerDutyResponse: JsValue = Json.parse(result.body)
-      val responseStatus = (pagerDutyResponse \ "status").as[String]
-      val responseIncidentKey = (pagerDutyResponse \ "incident_key").as[String]
-      responseStatus should be("success")
-      responseIncidentKey should be(incidentKey)
+      whenReady(httpRequest) { result =>
+        val pagerDutyResponse: JsValue = Json.parse(result.body)
+        val responseStatus = (pagerDutyResponse \ "status").asOpt[String]
+        val responseIncidentKey = (pagerDutyResponse \ "incident_key").asOpt[String]
+        responseStatus.value should be("success")
+        responseIncidentKey.value should be(incidentKey)
+      }
+    } catch {
+      case e: Exception => Console.err.println(Console.RED + "PagerDuty reporting failed with exception: " + e.getMessage + Console.RESET)
     }
+
   }
 
   def request(uri: String): WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
