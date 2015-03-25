@@ -1,7 +1,6 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.tagobjects.Retryable
-import org.scalatest.time.{Minutes, Seconds, Minute, Span}
+import org.scalatest.time.{Seconds, Span}
 import org.scalatest.{Retries, Matchers, FlatSpec}
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 
@@ -11,7 +10,7 @@ class PreviewRequiresAuthTest extends FlatSpec with Matchers with ScalaFutures w
 
     handleException {
       //Sometimes this throws a java.io.IOException, with message: Remotely Closed, so using Eventually to retry
-      eventually(timeout(Span(2, Minutes)),interval(Span(10, Seconds))) {
+      eventually(timeout(Span(15, Seconds)),interval(Span(3, Seconds))) {
         var httpRequest = request(Config.previewHost).get
           whenReady(httpRequest) { result =>
             assume(result.status !=503,"Service is down")
