@@ -34,7 +34,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends FlatSpec with Matchers wit
       }
       eventually(timeout(Span(60, Seconds))) {
         withClue(s"R2 Article with Page ID:$pageId did not show updated headline $modifiedHeadline within 60 seconds on search endpoint") {
-          isCAPIShowingChange(Config.previewHostCode + "search?use-date=last-modified", modifiedHeadline, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
+          isCAPIShowingChange(Config.previewHostCode + "search?use-date=last-modified&page-size=100", modifiedHeadline, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
         }
       }
     }
