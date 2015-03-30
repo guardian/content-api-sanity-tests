@@ -6,24 +6,20 @@ ws.ning.maximumConnectionLifeTime = 60000
 # these are our own config values defined by the app
 # rename this to application.conf with real values
 content-api-sanity-tests {
-    host="http://your-capi-host"
-    host-public-secure="https://your-public-secure-host"
-    api-key=your-capi-key
-    preview-host="http://your-preview-host"
-    write-host="https://your-write-host"
-    write-preview-host="https://your-write-preview-host"
-    write-username=your-write-username
-    write-password=your-write-password
-    pager-duty-service-key=your-pager-duty-service-key
-    pager-duty-service-key-low-priority=your-pager-duty-key-low-priority
-}
-
-
-content-api-sanity-code {
-    host="http://your-capi-host"
-    preview-host:"http://your-preview-host"
-    r2-admin-host:"http://your-r2-admin-host"
-    api-key=your-capi-key
-    r2-admin-username=your-r2-username
-    r2-admin-password=your-r2-password
+    host="http://capi-host/"
+    host-public-secure="https://capi-public-secure-host/" # Only on PROD
+    write-preview-host="https://capi-write-preview-host/"
+    preview-host="https://capi-preview-host/"
+    preview-username="capi-preview-username"
+    preview-password="capi-preview-password"
+    api-key="capi-api-key"
+    write-host="https://write-host/"
+    write-username="write-username"
+    write-password="write-password"
+    pager-duty-service-key="page-duty-service-key" # Set as 'invalid' if testing locally
+    pager-duty-service-key-low-priority="pager-duty-low-priority-service-key" # Set as 'invalid' if testing locally
+    r2-admin-host="http://r2-admin-host/"
+    r2-admin-username="r2-admin-username"
+    r2-admin-password="r2-admin-password"
+    composer-host="http://composer-host/"
 }

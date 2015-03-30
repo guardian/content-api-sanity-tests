@@ -27,8 +27,8 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     val results = result.split(":|;")
     val status = results(0)
     val articleID = results(1)
-    val composerItemEndpointURI = Config.previewHostCode + "internal-code/composer/" + articleID
-    val lastModifiedSearchURI = Config.previewHostCode + "search?use-date=last-modified&page-size=100"
+    val composerItemEndpointURI = Config.previewHost + "internal-code/composer/" + articleID
+    val lastModifiedSearchURI = Config.previewHost + "search?use-date=last-modified&page-size=100"
     withClue(s"Import was not successful, the endpoint said: $result") {
       status should be("OK")
     }
