@@ -196,6 +196,7 @@
                             { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "codeR2AdminPassword" },"\""  ] ] },
                             "}",
                             "ws.compressionEnabled=true",
+                            "ws.ning.maximumConnectionLifeTime = 60000",
                             "EOF",
                             "start sanity-tests"
                         ] ]
