@@ -4,7 +4,7 @@ Currently it is difficult (though not impossible) to run the Sanity Tests agains
 
 ## Current steps to run against CODE
 * Get a copy of the complete application.conf file
-* Change the properties of `content-api-sanity-tests` to have CODE environment values
+* Set the properties to CODE environments either using `application.conf` or passing in an external config by `sbt -Dconfig.file`
 * Run `sbt test` to run internal facing (GC2) tests
 * Run `sbt start` to run external facing (internet accessible) tests. You have to force quit the process once the tests have run one loop.
 

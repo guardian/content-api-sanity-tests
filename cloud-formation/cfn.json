@@ -9,7 +9,7 @@
             "Default": "PROD"
         },
         "host": {
-            "Description": "Content API Live host",
+            "Description": "Content API host",
             "Type": "String"
         },
         "hostPublicSecure": {
@@ -24,7 +24,7 @@
             "Type": "String"
         },
         "writeHost": {
-            "Description": "Porter Live host",
+            "Description": "Porter host",
             "Type": "String"
         },
         "writePreviewHost": {
@@ -47,40 +47,28 @@
             "Description": "Pager Duty Service key for Low Priority incidents",
             "Type": "String"
         },
-        "codeHost": {
-            "Description": "Content API CODE Live host name",
-            "Type": "String"
-        },
-        "codePreviewHost": {
-            "Description": "Content API CODE Preview host name",
-            "Type": "String"
-        },
-        "codeComposerHost": {
+        "composerHost": {
             "Description": "Composer Flex Import CODE host name",
             "Type": "String"
         },
-        "codeR2AdminHost": {
+        "r2AdminHost": {
             "Description": "R2 Admin CODE host name",
             "Type": "String"
         },
-        "codeApiKey": {
-            "Description": "Content API CODE API key",
-            "Type": "String"
-        },
-        "codePreviewUsername": {
+        "previewUsername": {
             "Description": "Content API CODE Preview username",
             "Type": "String"
         },
-        "codePreviewPassword": {
+        "previewPassword": {
             "Description": "Content API CODE Preview password",
             "Type": "String",
             "NoEcho": true
         },
-        "codeR2AdminUsername": {
+        "r2AdminUsername": {
             "Description": "R2 Admin CODE username",
             "Type": "String"
         },
-        "codeR2AdminPassword": {
+        "r2AdminPassword": {
             "Description": "R2 Admin CODE password",
             "Type": "String",
             "NoEcho": true
@@ -175,25 +163,20 @@
                             "content-api-sanity-tests {",
                             { "Fn::Join": [ "", [ "host=\"", { "Ref": "host" },"\"" ] ] },
                             { "Fn::Join": [ "", [ "host-public-secure=\"", { "Ref": "hostPublicSecure" },"\"" ] ] },
+                            { "Fn::Join": [ "", [ "write-preview-host=\"", { "Ref": "writePreviewHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "previewHost" },"\"" ] ] },
+                            { "Fn::Join": [ "", [ "preview-username=\"", { "Ref": "previewUsername" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "preview-password=\"", { "Ref": "previewPassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "apiKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "write-preview-host=\"", { "Ref": "writePreviewHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-username=\"", { "Ref": "writeUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-password=\"", { "Ref": "writePassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key-low-priority=\"", { "Ref": "pagerDutyServiceKeyLowPriority" },"\""  ] ] },
-                            "}",
-                            "content-api-sanity-code {",
-                            { "Fn::Join": [ "", [ "host=\"", { "Ref": "codeHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "codePreviewHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "r2-admin-host=\"", { "Ref": "codeR2AdminHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "codeComposerHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "codeApiKey" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "preview-username=\"", { "Ref": "codePreviewUsername" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "preview-password=\"", { "Ref": "codePreviewPassword" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "r2-admin-username=\"", { "Ref": "codeR2AdminUsername" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "codeR2AdminPassword" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "r2-admin-host=\"", { "Ref": "r2AdminHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "r2-admin-username=\"", { "Ref": "r2AdminUsername" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "r2AdminPassword" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "composerHost" },"\""  ] ] },
                             "}",
                             "ws.compressionEnabled=true",
                             "ws.ning.maximumConnectionLifeTime = 60000",
