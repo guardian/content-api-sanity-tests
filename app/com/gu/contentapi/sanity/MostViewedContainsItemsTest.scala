@@ -1,7 +1,9 @@
 package com.gu.contentapi.sanity
 
+import com.gu.contentapi.sanity.tags.ProdOnly
 import play.api.libs.json.Json
 
+@ProdOnly
 class MostViewedContainsItemsTest extends SanityTestBase {
 
   "Most Viewed" should "contain more than 10 items" in {

@@ -1,5 +1,7 @@
 package com.gu.contentapi.sanity
 
+import com.gu.contentapi.sanity.tags.LowPriorityTest
+
 import scala.util.{Success, Failure}
 import javax.net.ssl._
 import java.net.URL

@@ -21,28 +21,13 @@ object Global extends GlobalSettings {
 
   def runFrequentTests(): Unit = {
     println(s"=== Starting frequent tests at ${new DateTime()} ===")
-    (new CanaryWritingSanityTest).execute
-    (new SearchContainsLargeNumberOfResults).execute
-    (new PreviewRequiresAuthTest).execute
-    (new ContentApiSanityTest).execute
-    (new GetNonExistentContentShould404).execute
-    (new PreviewContentSetNotInLiveTest).execute
-    (new ValidateArticleSchema).execute
-    (new NewestItemFieldsTest).execute
-    (new MostViewedContainsItemsTest).execute
-    (new CriticalTagsTest).execute
-    (new TagSearchContainsLargeNumberOfResults).execute
+    MetaSuites.ProdFrequent.foreach(_.execute)
     println(s"=== Frequent tests finished at ${new DateTime()} ===")
   }
 
-
-
   def runInfrequentTests(): Unit = {
     println(s"=== Starting infrequent tests at ${new DateTime()} ===")
-    (new JREVersionTest).execute
-    (new AmiSanityTest).execute
-    (new SSLExpiryTest).execute
-    (new CrosswordsIndexingTest).execute
+    MetaSuites.ProdInfrequent.foreach(_.execute)
     println(s"=== Infrequent tests finished at ${new DateTime()} ===")
   }
 

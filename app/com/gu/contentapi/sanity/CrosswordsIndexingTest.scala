@@ -1,5 +1,6 @@
 package com.gu.contentapi.sanity
 
+import com.gu.contentapi.sanity.tags.LowPriorityTest
 import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 

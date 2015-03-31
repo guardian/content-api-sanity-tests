@@ -1,5 +1,6 @@
 package com.gu.contentapi.sanity
 
+import com.gu.contentapi.sanity.tags.LowPriorityTest
 import org.scalatest.time.{Span, Seconds}
 
 class AmiSanityTest extends SanityTestBase {
