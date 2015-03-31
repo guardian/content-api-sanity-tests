@@ -9,14 +9,13 @@ import org.quartz.impl.StdSchedulerFactory
 import org.quartz.Scheduler
 import org.quartz.Job
 import org.quartz.JobExecutionContext
-import java.lang.Class
 
 import scala.collection.concurrent.TrieMap
 import scala.concurrent.duration.Duration
 
 object QuartzScheduler {
 
-  private val scheduler = StdSchedulerFactory.getDefaultScheduler()
+  private val scheduler = StdSchedulerFactory.getDefaultScheduler
 
   def start() {scheduler.start()}
 
@@ -67,6 +66,6 @@ object ScheduleHolder {
 class GenJob extends Job {
   def execute(ctx: JobExecutionContext): Unit = {
     val name = ctx.getJobDetail.getKey.getName
-    ScheduleHolder.get(name).map(f => f(ctx))
+    ScheduleHolder.get(name).foreach(f => f(ctx))
   }
 }

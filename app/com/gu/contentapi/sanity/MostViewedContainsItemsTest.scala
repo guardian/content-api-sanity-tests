@@ -1,10 +1,8 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{FlatSpec, Matchers}
 import play.api.libs.json.Json
 
-class MostViewedContainsItemsTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
+class MostViewedContainsItemsTest extends SanityTestBase {
 
   "Most Viewed" should "contain more than 10 items" in {
 

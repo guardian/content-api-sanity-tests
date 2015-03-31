@@ -1,16 +1,12 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{FlatSpec, Matchers}
 import play.api.libs.json.Json
-import org.scalatest.OptionValues._
 
-
-class PreviewContentSetNotInLiveTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
+class PreviewContentSetNotInLiveTest extends SanityTestBase {
 
   "GETting the preview content set JSON" should "show no results on live" in {
     handleException{
-      val httpRequest = requestHost("search?content-set=preview").get
+      val httpRequest = requestHost("search?content-set=preview").get()
 
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")

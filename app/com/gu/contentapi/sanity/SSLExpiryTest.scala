@@ -1,18 +1,16 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import scala.util.{Try, Success, Failure}
-import org.scalatest.{FlatSpec}
+import scala.util.{Success, Failure}
 import javax.net.ssl._
-import java.net.{URL}
+import java.net.URL
 import org.joda.time.{Days, DateTime}
 import sun.security.x509.X509CertImpl
 
 import scala.util.Try
 
-class SSLExpiryTest extends FlatSpec with ScalaFutures with IntegrationPatience {
+class SSLExpiryTest extends SanityTestBase {
 
-  "SSL Certificates" should "be more than 30 days from expiry" taggedAs (LowPriorityTest) in {
+  "SSL Certificates" should "be more than 30 days from expiry" taggedAs LowPriorityTest in {
     handleException {
       val hosts = Seq(
         Config.host,
@@ -46,7 +44,7 @@ class SSLExpiryTest extends FlatSpec with ScalaFutures with IntegrationPatience 
             withClue(s"No Certificates found for $host") {
               certs.length should be >= 1
             }
-            certs.headOption.map { cert =>
+            certs.headOption.foreach { cert =>
               cert shouldBe a[X509CertImpl]
               val x = cert.asInstanceOf[X509CertImpl]
               val expiry = x.getNotAfter.getTime

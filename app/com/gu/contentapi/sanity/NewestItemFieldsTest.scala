@@ -1,11 +1,8 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{Matchers, FlatSpec}
 import play.api.libs.json.{JsValue, Json}
-import org.scalatest.OptionValues._
 
-class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
+class NewestItemFieldsTest extends SanityTestBase {
 
   "The newest items" should "include mandatory fields" in {
 
@@ -18,7 +15,7 @@ class NewestItemFieldsTest extends FlatSpec with Matchers with ScalaFutures with
         "webUrl",
         "apiUrl")
 
-      val httpRequest = requestHost("search?order-by=newest").get
+      val httpRequest = requestHost("search?order-by=newest").get()
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)

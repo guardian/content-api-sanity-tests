@@ -1,20 +1,19 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.{Matchers, FlatSpec}
-import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
+import com.gu.contentapi.sanity.support.FakeAppSupport
+
 import scala.sys.process._
 import scala.util.Random
 import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
-class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience with Eventually {
+class ReadComposerDraftInPreviewTest extends SanityTestBase with FakeAppSupport {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
-  val uniquePageId = new Random().nextInt.toString
-
+  val uniquePageId = Random.nextInt().toString
 
   "GETting the InCopy integration homepage" should "respond with a welcome message" in {
-    val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get
+    val httpRequest = request(Config.composerHost + "incopyintegration/index").withHeaders("User-Agent" -> "curl").get()
     whenReady(httpRequest) { result => result.body should equal("incopy Integration...")
     }
   }
@@ -34,13 +33,13 @@ class ReadComposerDraftInPreviewTest extends FlatSpec with Matchers with ScalaFu
     }
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"Composer article was not found at: $composerItemEndpointURI within 60 seconds") {
-        isCAPIShowingChange(composerItemEndpointURI, uniquePageId, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
+        isCAPIShowingChange(composerItemEndpointURI, uniquePageId, Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
       }
     }
 
     eventually(timeout(Span(60, Seconds))) {
       withClue(s"Composer article was not $articleID was not found at: $lastModifiedSearchURI within 60 seconds") {
-        isCAPIShowingChange(lastModifiedSearchURI, uniquePageId, Some(Config.previewUsernameCode: String, Config.previewPasswordCode: String)) should be(true)
+        isCAPIShowingChange(lastModifiedSearchURI, uniquePageId, Some(Config.previewUsernameCode, Config.previewPasswordCode)) should be(true)
       }
     }
   }

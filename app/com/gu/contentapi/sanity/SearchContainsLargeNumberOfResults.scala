@@ -1,16 +1,13 @@
 package com.gu.contentapi.sanity
 
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{Matchers, FlatSpec}
 import play.api.libs.json.Json
-import org.scalatest.OptionValues._
 
-class SearchContainsLargeNumberOfResults extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
+class SearchContainsLargeNumberOfResults extends SanityTestBase {
 
   "The Content API" should "return a large total of results on the /search endpoint" in {
 
     handleException {
-      val httpRequest = requestHost("search").get
+      val httpRequest = requestHost("search").get()
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)

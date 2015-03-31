@@ -1,14 +1,11 @@
 package com.gu.contentapi.sanity
 
-import org.joda.time.{DateTime}
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{Matchers, FlatSpec}
+import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
-import org.scalatest.OptionValues._
 
-class CrosswordsIndexingTest extends FlatSpec with Matchers with ScalaFutures with IntegrationPatience {
+class CrosswordsIndexingTest extends SanityTestBase {
 
-  "A new Crossword" should "be indexed every day" taggedAs(LowPriorityTest) in {
+  "A new Crossword" should "be indexed every day" taggedAs LowPriorityTest in {
 
     handleException {
       val now = DateTime.now
@@ -16,7 +13,7 @@ class CrosswordsIndexingTest extends FlatSpec with Matchers with ScalaFutures wi
       val twentyFiveHoursAgo = now.minusHours(25)
       assume(!isAfterChristmas, "Cancelling as Crosswords are not always published over the Christmas period")
 
-      val httpRequest = requestHost("search?tag=type/crossword&order-by=newest").get
+      val httpRequest = requestHost("search?tag=type/crossword&order-by=newest").get()
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")
         val json = Json.parse(result.body)
