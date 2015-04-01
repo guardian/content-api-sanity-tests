@@ -1,7 +1,7 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
-import com.gu.contentapi.sanity.tags.LowPriorityTest
+import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
 
 import scala.util.{Success, Failure}
 import javax.net.ssl._
@@ -11,6 +11,7 @@ import sun.security.x509.X509CertImpl
 
 import scala.util.Try
 
+@ProdOnly
 class SSLExpiryTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
 
   "SSL Certificates" should "be more than 30 days from expiry" taggedAs LowPriorityTest in {
