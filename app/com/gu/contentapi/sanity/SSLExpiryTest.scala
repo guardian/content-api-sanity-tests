@@ -32,8 +32,7 @@ class SSLExpiryTest extends SanityTestBase {
         val conn = url.openConnection().asInstanceOf[HttpsURLConnection]
         conn.setHostnameVerifier(new HostnameVerifier {
           override def verify(hostnameVerifier: String, sslSession: SSLSession) = true
-        }
-        )
+        })
 
         val certsTry = Try {
           conn.connect()

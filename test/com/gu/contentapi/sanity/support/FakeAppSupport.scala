@@ -14,7 +14,12 @@ trait FakeAppSupport extends OneAppPerSuite { self: Suite =>
 
 object FakeAppSupport {
 
-  // override Global so that we don't start the Quartz scheduler
-  val fakeApp = new FakeApplication(withGlobal = Some(new GlobalSettings {}))
+  val fakeApp = new FakeApplication(
+
+    // override Global so that we don't start the Quartz scheduler
+    withGlobal = Some(new GlobalSettings {}),
+
+    // don't trip up on the Guardian self-signed certificate in CODE
+    additionalConfiguration = Map("ws.acceptAnyCertificate" -> true))
 
 }
