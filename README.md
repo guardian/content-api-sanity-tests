@@ -22,10 +22,10 @@ Add it to the `test` source root with a filename ending in `Test`
 -----------------
 
 ### External facing tests
-External facing tests are run as a scheduled service started by the sbt `start` command.              
+External facing tests are run as a scheduled service started by the sbt `start` command.
 
 #### Run all tests locally
-`sbt start` 
+`sbt test:run` will run a large subset of the tests. Any tests that should only be run in the PROD environment are skipped.
 
 #### Running remotely
 Deploy the `sanity-tests` project from Riff-Raff.
