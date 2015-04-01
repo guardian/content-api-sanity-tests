@@ -1,6 +1,6 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.FakeAppSupport
+import com.gu.contentapi.sanity.support.{DoNothing, FakeAppSupport}
 import play.api.test.Helpers.running
 
 /**
@@ -11,8 +11,10 @@ import play.api.test.Helpers.running
  */
 object RunCODETests extends App {
 
+  val suites = MetaSuites.codeStandalone(testFailureHandler = DoNothing)
+
   running(FakeAppSupport.fakeApp) {
-    MetaSuites.CodeStandalone.foreach(_.execute)
+    suites.foreach(_.execute)
   }
 
 }

@@ -1,13 +1,13 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.FakeAppSupport
+import com.gu.contentapi.sanity.support.{DoNothing, FakeAppSupport}
 
 import scala.sys.process._
 import scala.util.Random
 import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
-class ReadComposerDraftInPreviewTest extends SanityTestBase with FakeAppSupport {
+class ReadComposerDraftInPreviewTest extends SanityTestBase(testFailureHandler = DoNothing) with FakeAppSupport {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val uniquePageId = Random.nextInt().toString

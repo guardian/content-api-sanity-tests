@@ -1,4 +1,5 @@
 import com.gu.contentapi.sanity._
+import com.gu.contentapi.sanity.support.{InfrequentScheduledTestsFailureHandler, FrequentScheduledTestFailureHandler}
 import com.gu.contentapi.sanity.utils.QuartzScheduler
 import org.joda.time.DateTime
 import scala.concurrent.duration._
@@ -21,13 +22,15 @@ object Global extends GlobalSettings {
 
   def runFrequentTests(): Unit = {
     println(s"=== Starting frequent tests at ${new DateTime()} ===")
-    MetaSuites.ProdFrequent.foreach(_.execute)
+    val suites = MetaSuites.prodFrequent(testFailureHandler = FrequentScheduledTestFailureHandler)
+    suites.foreach(_.execute)
     println(s"=== Frequent tests finished at ${new DateTime()} ===")
   }
 
   def runInfrequentTests(): Unit = {
     println(s"=== Starting infrequent tests at ${new DateTime()} ===")
-    MetaSuites.ProdInfrequent.foreach(_.execute)
+    val suites = MetaSuites.prodInfrequent(testFailureHandler = InfrequentScheduledTestsFailureHandler)
+    suites.foreach(_.execute)
     println(s"=== Infrequent tests finished at ${new DateTime()} ===")
   }
 

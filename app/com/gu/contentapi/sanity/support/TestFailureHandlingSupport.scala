@@ -3,8 +3,7 @@ package com.gu.contentapi.sanity.support
 import com.gu.contentapi.sanity.Config
 import org.joda.time.{DateTime, Minutes}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.exceptions.TestFailedException
-import org.scalatest.{Matchers, OptionValues}
+import org.scalatest._
 import play.api.libs.json.{JsValue, Json}
 
 /**
@@ -12,69 +11,54 @@ import play.api.libs.json.{JsValue, Json}
  *  - counting test failures
  *  - sending PagerDuty alerts
  */
-trait TestFailureHandlingSupport extends HttpRequestSupport with Matchers with ScalaFutures with IntegrationPatience with OptionValues {
-  import TestFailureHandlingSupport._
+trait TestFailureHandlingSupport extends Suite {
 
-  private def isLowPriorityTest(tags: Map[String, Set[String]],testName: String) = {
-    tags.get(testName).exists(_.contains("LowPriorityTest"))
+  def testFailureHandler: TestFailureHandler
+
+  override protected def withFixture(test: NoArgTest): Outcome = {
+    val outcome = super.withFixture(test)
+    outcome match {
+      case Failed(e) => testFailureHandler.handleTestFailure(test.name, e, tags.getOrElse(test.name, Set.empty))
+      case _ => // do nothing
+    }
+    outcome
   }
 
-  private def getIncidentKey: String = {
+}
+
+trait TestFailureHandler {
+
+  def handleTestFailure(testName: String, exception: Throwable, tags: Set[String])
+
+}
+
+abstract class PagerDutyAlertingTestFailureHandler
+  extends TestFailureHandler with HttpRequestSupport with Matchers with ScalaFutures with IntegrationPatience with OptionValues {
+  import PagerDutyAlertingTestFailureHandler._
+
+  protected def latestIncidentKey(): String = {
     incidentKeyDateTime match {
-      case Some(keyTimeStamp) if Minutes.minutesBetween(keyTimeStamp, DateTime.now).getMinutes < 30 => {
+      case Some(keyTimeStamp) if Minutes.minutesBetween(keyTimeStamp, DateTime.now).getMinutes < 30 =>
         //re-use key if is less than 30 minutes since previous incident
         val key = keyTimeStamp
         key.toString
-      }
-      case _ => {
+      case _ =>
         // generate new key at first and after 30 minutes
         val key = DateTime.now
         incidentKeyDateTime = Some(key)
         key.toString
-      }
     }
   }
 
-  def handleException(test: => Unit)(fail: => Unit, testName: String, tags: Map[String, Set[String]]) = {
-    try {
-      test
-    } catch {
-      case tfe: TestFailedException =>
-        Console.err.println(Console.RED + "Test failure: " + tfe.getMessage + Console.RESET)
-        //low priority tests are excluded from counter because they run infrequently
-        if (isLowPriorityTest(tags, testName)) {
-          pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
-        }
-        else {
-          // increment the incident count only if there is an existing recent incident or it is the first incident {
-          if (lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < RecentIncidentWindowMinutes)) {
-            //increment counter
-            incrementIncidentCount()
-            if (incidentCount == PagerDutyThreshold)
-            //report when threshold is met
-            {
-              pagerDutyAlerter(testName, tfe, tags, getIncidentKey)
-              resetToZero()
-            }
-          }
-          else {
-            //reset counter if incident is not recent
-            resetToOne()
-          }
-        }
-        fail
-    }
-  }
-
-  def pagerDutyAlerter(testName: String, tfe: TestFailedException, tags: Map[String, Set[String]], incidentKey: String) = {
+  protected def sendPagerDutyAlert(testName: String, exception: Throwable, tags: Set[String], incidentKey: String) = {
     try {
       println("Reporting")
-      val isCODETest = tags.get(testName).exists(_.contains("CODETest"))
-      val serviceKey = if (isLowPriorityTest(tags,testName)) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
+      val isLowPriorityTest = tags.contains("LowPriorityTest")
+      val isCODETest = tags.contains("CODETest")
+      val serviceKey = if (isLowPriorityTest) Config.pagerDutyServiceKeyLowPriority else Config.pagerDutyServiceKey
       val environmentInfo = if (isCODETest) "on environment CODE" else ""
 
-
-      val description = testName + " failed" + environmentInfo + ", the error reported was: " + tfe.getMessage().take(250) + "..."
+      val description = testName + " failed" + environmentInfo + ", the error reported was: " + exception.getMessage.take(250) + "..."
       val data = Json.obj(
         "service_key" -> serviceKey,
         "event_type" -> "trigger",
@@ -82,14 +66,13 @@ trait TestFailureHandlingSupport extends HttpRequestSupport with Matchers with S
         "details" ->  Json.arr(
           Json.obj(
             "name" -> testName,
-            "description" -> tfe.getMessage()
+            "description" -> exception.getMessage
           )
         ),
         "client" -> "Content API Sanity Tests",
         "client_url" -> "https://github.com/guardian/content-api-sanity-tests",
         "incident_key" -> incidentKey
       )
-
 
       val httpRequest = request("https://events.pagerduty.com/generic/2010-04-15/create_event.json").post(data)
 
@@ -108,9 +91,20 @@ trait TestFailureHandlingSupport extends HttpRequestSupport with Matchers with S
 }
 
 /**
- * Holds all the state that needs to be shared between all suites.
+ * Holds state about PagerDuty incident keys that needs to be shared across multiple suites
+ * and even across multiple runs of the scheduler.
  */
-object TestFailureHandlingSupport {
+object PagerDutyAlertingTestFailureHandler {
+  private var incidentKeyDateTime: Option[DateTime] = None
+}
+
+/**
+ * Handler that sends PagerDuty alerts only when a few test failures occur within a few minutes of each other.
+ *
+ * Note that this handler holds state about failure counts that needs to be shared across multiple suites
+ * and even across multiple runs of the scheduler.
+ */
+object FrequentScheduledTestFailureHandler extends PagerDutyAlertingTestFailureHandler {
 
   /**
    * How long to wait between failed tests before resetting the incident counter
@@ -122,9 +116,26 @@ object TestFailureHandlingSupport {
    */
   private val PagerDutyThreshold = 3
 
-  private var incidentKeyDateTime: Option[DateTime] = None
   private var lastIncidentDateTime: Option[DateTime] = None
   private var incidentCount = 0
+
+  override def handleTestFailure(testName: String, exception: Throwable, tags: Set[String]): Unit = {
+    Console.err.println(Console.RED + "Test failure: " + exception.getMessage + Console.RESET)
+    // increment the incident count only if there is an existing recent incident or it is the first incident {
+    if (lastIncidentDateTime.isEmpty || (Minutes.minutesBetween(lastIncidentDateTime.get, DateTime.now).getMinutes < RecentIncidentWindowMinutes)) {
+      //increment counter
+      incrementIncidentCount()
+      if (incidentCount == PagerDutyThreshold) {
+        //report when threshold is met
+        sendPagerDutyAlert(testName, exception, tags, latestIncidentKey())
+        resetToZero()
+      }
+    }
+    else {
+      //reset counter if incident is not recent
+      resetToOne()
+    }
+  }
 
   private def incrementIncidentCount() = {
     incidentCount += 1
@@ -138,5 +149,20 @@ object TestFailureHandlingSupport {
   private def resetToZero(): Unit ={
     incidentCount = 0
   }
+}
 
+/**
+ * Handler that sends a PagerDuty alert immediately
+ */
+object InfrequentScheduledTestsFailureHandler extends PagerDutyAlertingTestFailureHandler {
+
+  override def handleTestFailure(testName: String, exception: Throwable, tags: Set[String]): Unit = {
+    Console.err.println(Console.RED + "Test failure: " + exception.getMessage + Console.RESET)
+    sendPagerDutyAlert(testName, exception, tags, latestIncidentKey())
+  }
+
+}
+
+object DoNothing extends TestFailureHandler {
+  override def handleTestFailure(testName: String, exception: Throwable, tags: Set[String]): Unit = {}
 }

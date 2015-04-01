@@ -1,32 +1,34 @@
 package com.gu.contentapi.sanity
 
+import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.ProdOnly
 import org.scalatest.Suite
 
 object MetaSuites {
 
-  val ProdFrequent = Seq(
-    new CanaryWritingSanityTest,
-    new SearchContainsLargeNumberOfResults,
-    new PreviewRequiresAuthTest,
-    new ContentApiSanityTest,
-    new GetNonExistentContentShould404,
-    new PreviewContentSetNotInLiveTest,
-    new ValidateArticleSchema,
-    new NewestItemFieldsTest,
-    new MostViewedContainsItemsTest,
-    new CriticalTagsTest,
-    new TagSearchContainsLargeNumberOfResults
+  def prodFrequent(testFailureHandler: TestFailureHandler) = Seq(
+    new CanaryWritingSanityTest(testFailureHandler),
+    new SearchContainsLargeNumberOfResults(testFailureHandler),
+    new PreviewRequiresAuthTest(testFailureHandler),
+    new ContentApiSanityTest(testFailureHandler),
+    new GetNonExistentContentShould404(testFailureHandler),
+    new PreviewContentSetNotInLiveTest(testFailureHandler),
+    new ValidateArticleSchema(testFailureHandler),
+    new NewestItemFieldsTest(testFailureHandler),
+    new MostViewedContainsItemsTest(testFailureHandler),
+    new CriticalTagsTest(testFailureHandler),
+    new TagSearchContainsLargeNumberOfResults(testFailureHandler)
   )
 
-  val ProdInfrequent = Seq(
-    new JREVersionTest,
-    new AmiSanityTest,
-    new SSLExpiryTest,
-    new CrosswordsIndexingTest
+  def prodInfrequent(testFailureHandler: TestFailureHandler) = Seq(
+    new JREVersionTest(testFailureHandler),
+    new AmiSanityTest(testFailureHandler),
+    new SSLExpiryTest(testFailureHandler),
+    new CrosswordsIndexingTest(testFailureHandler)
   )
 
-  val CodeStandalone = (ProdFrequent ++ ProdInfrequent)
+  def codeStandalone(testFailureHandler: TestFailureHandler) =
+    (prodFrequent(testFailureHandler) ++ prodInfrequent(testFailureHandler))
       .filter(isNotTaggedWithProdOnly)
 
   private def isNotTaggedWithProdOnly(s: Suite): Boolean = {
