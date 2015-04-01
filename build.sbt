@@ -25,3 +25,5 @@ libraryDependencies ++= Seq(
 parallelExecution in ThisBuild := false
 
 javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
+
+testOptions ++= Seq("-u", "target/test-reports").map(Tests.Argument(_))
