@@ -1,6 +1,7 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.{DoNothing, FakeAppSupport}
+import org.scalatest.DoNotDiscover
 import org.scalatest.tagobjects.Retryable
 import org.scalatest.selenium.WebBrowser
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
@@ -9,7 +10,8 @@ import scala.io.Source
 import org.scalatest.time.{Minutes, Seconds, Span}
 
 
-class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(testFailureHandler = DoNothing) with WebBrowser with FakeAppSupport {
+@DoNotDiscover
+class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(testFailureHandler = DoNothing) with WebBrowser {
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))

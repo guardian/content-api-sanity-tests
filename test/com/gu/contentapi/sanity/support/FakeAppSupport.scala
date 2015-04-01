@@ -1,19 +1,13 @@
 package com.gu.contentapi.sanity.support
 
-import org.scalatest.Suite
-import org.scalatestplus.play.OneAppPerSuite
+import org.scalatest.{TestData, Suite}
+import org.scalatestplus.play.{OneAppPerTest, OneAppPerSuite}
 import play.api.GlobalSettings
 import play.api.test.FakeApplication
 
 trait FakeAppSupport extends OneAppPerSuite { self: Suite =>
 
-  override implicit lazy val app = FakeAppSupport.fakeApp
-
-}
-
-object FakeAppSupport {
-
-  val fakeApp = new FakeApplication(
+  override implicit lazy val app = new FakeApplication(
 
     // override Global so that we don't start the Quartz scheduler
     withGlobal = Some(new GlobalSettings {}),
@@ -22,3 +16,4 @@ object FakeAppSupport {
     additionalConfiguration = Map("ws.acceptAnyCertificate" -> true))
 
 }
+
