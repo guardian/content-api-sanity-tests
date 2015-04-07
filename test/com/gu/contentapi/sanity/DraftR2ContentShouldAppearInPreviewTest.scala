@@ -19,7 +19,7 @@ class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(testFailure
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(1, Minutes))(super.withFixture(test))
+      withRetryOnFailure(super.withFixture(test))
     else
       super.withFixture(test)
   }

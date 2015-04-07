@@ -23,7 +23,7 @@ class CanaryWritingSanityTest(testFailureHandler: TestFailureHandler) extends Sa
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))
-      withRetryOnFailure (Span(2, Minutes))(super.withFixture(test))
+      withRetryOnFailure(super.withFixture(test))
     else
       super.withFixture(test)
   }
