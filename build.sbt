@@ -18,9 +18,12 @@ libraryDependencies ++= Seq(
   ws,
   "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
   "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3",
-  "com.github.cb372" %% "play-configurable-ningwsplugin" % "0.2"
+  "com.github.cb372" %% "play-configurable-ningwsplugin" % "0.2",
+  "org.scalatestplus" %% "play" % "1.1.1"
 )
 
 parallelExecution in ThisBuild := false
 
 javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
+
+testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
