@@ -1,10 +1,11 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
-import com.gu.contentapi.sanity.tags.LowPriorityTest
+import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
 import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 
+@ProdOnly
 class CrosswordsIndexingTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
 
   "A new Crossword" should "be indexed every day" taggedAs LowPriorityTest in {
