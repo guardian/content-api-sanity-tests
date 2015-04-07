@@ -21,7 +21,7 @@ CODE tests are run using the sbt `test` command.
 The tests are run in TeamCity by the [content-api-sanity-tests (CODE)](https://teamcity.gutools.co.uk/viewType.html?buildTypeId=bt1321) build.
 
 #### Adding a test
-Add it to the `test` source root.
+Add it to the `test` source root, annotated with `@DoNotDiscover`, and to the list of suites in `CODESuite.scala`.
 
 -----------------
 

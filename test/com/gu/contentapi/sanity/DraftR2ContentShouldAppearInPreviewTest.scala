@@ -1,15 +1,19 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.{DoNothing, FakeAppSupport}
-import org.scalatest.DoNotDiscover
-import org.scalatest.tagobjects.Retryable
-import org.scalatest.selenium.WebBrowser
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import com.gu.contentapi.sanity.support.DoNothing
 import org.openqa.selenium.WebDriver
-import scala.io.Source
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.scalatest.DoNotDiscover
+import org.scalatest.selenium.WebBrowser
+import org.scalatest.tagobjects.Retryable
 import org.scalatest.time.{Minutes, Seconds, Span}
 
+import scala.io.Source
 
+/**
+ * Note: this test writes dummy data to the system, so it should NOT be run in PROD.
+ * It's in the `/test` folder so that you can't accidentally run it in the scheduler.
+ */
 @DoNotDiscover
 class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(testFailureHandler = DoNothing) with WebBrowser {
 

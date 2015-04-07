@@ -27,7 +27,8 @@ object MetaSuites {
     new CrosswordsIndexingTest(testFailureHandler)
   )
 
-  def codeStandalone(testFailureHandler: TestFailureHandler) =
+  /** All suites that can be run against either PROD or CODE */
+  def suitableForBothProdAndCode(testFailureHandler: TestFailureHandler) =
     (prodFrequent(testFailureHandler) ++ prodInfrequent(testFailureHandler))
       .filter(isNotTaggedWithProdOnly)
 

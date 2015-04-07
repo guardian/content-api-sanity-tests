@@ -1,13 +1,17 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.{DoNothing, FakeAppSupport}
+import com.gu.contentapi.sanity.support.DoNothing
 import org.scalatest.DoNotDiscover
-
-import scala.sys.process._
-import scala.util.Random
-import scala.io.Source
 import org.scalatest.time.{Seconds, Span}
 
+import scala.io.Source
+import scala.sys.process._
+import scala.util.Random
+
+/**
+ * Note: this test writes dummy data to the system, so it should NOT be run in PROD.
+ * It's in the `/test` folder so that you can't accidentally run it in the scheduler.
+ */
 @DoNotDiscover
 class ReadComposerDraftInPreviewTest extends SanityTestBase(testFailureHandler = DoNothing) {
 
