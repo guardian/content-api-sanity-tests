@@ -65,9 +65,8 @@ class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(testFailure
     //check import is successful
     val result = cssSelector("body").webElement.getText
     val items = result.split(":|;")
-    val importStatus = items(0)
     val importedPageId = items(1)
-    importStatus should be("OK")
+    result should startWith("OK")
     close
     importedPageId
   }
