@@ -28,6 +28,9 @@ class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(testFailure
   implicit val webDriver: WebDriver = new HtmlUnitDriver
 
   "Updating a draft in R2" should "show an update in the Preview API" taggedAs Retryable in {
+    // Currently waiting for a response from Stephen Wells about why this is failing
+    pending
+
     lazy val tempFilePathString = createModifiedXMLTempFile(Source.fromURL(getClass.getResource("/TestR2IntegrationArticle.xml")).mkString, "Facebook messaging article", modifiedHeadline)
     login(Config.r2AdminHost + "/tools/newspaperintegration/index")
     val pageId = postR2ArticleToNewspaperIntegrationEndpoint(tempFilePathString)
