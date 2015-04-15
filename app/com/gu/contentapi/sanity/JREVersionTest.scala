@@ -12,7 +12,7 @@ class JREVersionTest(testFailureHandler: TestFailureHandler) extends SanityTestB
       assume(httpRequest.isReadyWithin(Span(5, Seconds)))
       whenReady(httpRequest) { result =>
         assume(result.status == 200, "Service is down")
-        result.body should include("1.8.0_40")
+        result.body should include("1.8.0_45")
 
         // TODO we should add an endpoint to Concierge that reports the JVM version,
         // so we can check whether it matches the value we just got.
