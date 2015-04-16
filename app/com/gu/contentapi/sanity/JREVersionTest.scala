@@ -1,9 +1,10 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
-import com.gu.contentapi.sanity.tags.LowPriorityTest
+import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
 import org.scalatest.time.{Span, Seconds}
 
+@ProdOnly
 class JREVersionTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
 
   {
