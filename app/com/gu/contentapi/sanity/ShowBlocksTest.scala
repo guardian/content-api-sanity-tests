@@ -32,8 +32,8 @@ class ShowBlocksTest(testFailureHandler: TestFailureHandler) extends SanityTestB
       val newestFlexItem = newestItemList.find(item => (item("fields") \ "internalComposerCode").asOpt[String].isDefined)
       newestFlexItem foreach { item =>
         // Second request to the item endpoint for the first flexible content item in the search results
-        val itemUrl = item("id").as[String] + "?show-blocks=all"
-        val itemRequest = requestHost(itemUrl).get()
+        val itemPath = item("id").as[String]
+        val itemRequest = requestHost(s"$itemPath?show-blocks=all").get()
         whenReady(itemRequest) { result =>
           assume(result.status == 200, "Service is down")
           val json = Json.parse(result.body)
