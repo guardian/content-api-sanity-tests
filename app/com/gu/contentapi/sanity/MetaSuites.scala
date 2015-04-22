@@ -17,7 +17,8 @@ object MetaSuites {
     new NewestItemFieldsTest(testFailureHandler),
     new MostViewedContainsItemsTest(testFailureHandler),
     new CriticalTagsTest(testFailureHandler),
-    new TagSearchContainsLargeNumberOfResults(testFailureHandler)
+    new TagSearchContainsLargeNumberOfResults(testFailureHandler),
+    new ShowBlocksTest(testFailureHandler)
   )
 
   def prodInfrequent(testFailureHandler: TestFailureHandler) = Seq(
