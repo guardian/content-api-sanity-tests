@@ -13,7 +13,7 @@ class ShowBlocksTest(testFailureHandler: TestFailureHandler) extends SanityTestB
       val json = Json.parse(result.body)
       val newestItemList = (json \ "response" \ "results").asOpt[List[Map[String, JsValue]]]
       for (item <- newestItemList.value) {
-        if ((item("fields") \ "internalComposerCode").asOpt[String].isDefined) {
+        if (hasInternalComposerCode(item)) {
           checkBlocks(item)
         }
       }
@@ -29,7 +29,7 @@ class ShowBlocksTest(testFailureHandler: TestFailureHandler) extends SanityTestB
       assume(result.status == 200, "Service is down")
       val json = Json.parse(result.body)
       val newestItemList = (json \ "response" \ "results").as[List[Map[String, JsValue]]]
-      val newestFlexItem = newestItemList.find(item => (item("fields") \ "internalComposerCode").asOpt[String].isDefined)
+      val newestFlexItem = newestItemList.find(hasInternalComposerCode)
       newestFlexItem foreach { item =>
         // Second request to the item endpoint for the first flexible content item in the search results
         val itemPath = item("id").as[String]
@@ -43,6 +43,9 @@ class ShowBlocksTest(testFailureHandler: TestFailureHandler) extends SanityTestB
       }
     }
   }
+
+  def hasInternalComposerCode(item: Map[String, JsValue]): Boolean =
+    item.get("fields").flatMap(fields => (fields \ "internalComposerCode").asOpt[String]).isDefined
 
   def checkBlocks(item: Map[String, JsValue]) = {
     val id = item.getOrElse("id", "ID for item was missing")
