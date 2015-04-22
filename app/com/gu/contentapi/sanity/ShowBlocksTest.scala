@@ -53,17 +53,9 @@ class ShowBlocksTest(testFailureHandler: TestFailureHandler) extends SanityTestB
 
     val blocks = item("blocks")
 
-    // TODO currently the main block appears to be missing in CODE.
-    // Flexible content is not exposing it.
-    // Investigating.
-
-    //          val mainBlock = (blocks \ "main").asOpt[JsObject]
-    //          withClue(s"blocks.main field not found! for item: $id") {
-    //            mainBlock should be (defined)
-    //          }
-    //          withClue(s"main block field has no bodyHtml! for item: $id") {
-    //            (mainBlock.value \ "bodyHtml").as[String] should not be empty
-    //          }
+    // Many articles in CODE don't have a main block
+    // (because people don't bother adding a main image when manually testing Composer)
+    // so don't check for the presence of a main block.
 
     val bodyBlocks = (blocks \ "body").asOpt[JsArray]
     withClue(s"blocks.body field not found! for item: $id") {
