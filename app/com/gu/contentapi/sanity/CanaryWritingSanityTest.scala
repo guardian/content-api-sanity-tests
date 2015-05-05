@@ -7,18 +7,19 @@ import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import scala.io.Source
 import org.scalatest.exceptions.TestFailedException
-import play.api.libs.ws.WSAuthScheme
+import play.api.libs.ws.{EmptyBody, WSAuthScheme}
 
 class CanaryWritingSanityTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
 
   val now = new DateTime()
-  val collectionJSON = Source.fromURL(getClass.getResource("/CanaryCollection.json")).getLines().mkString
   val capiDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
-  val collectionJSONWithNowTimestamp = collectionJSON.replace("2013-10-15T11:42:17Z", capiDateStamp)
 
-  def doesCanaryHaveUpdatedTimestamp = {
-    val httpRequest = requestHost("collections/canary").get()
-    whenReady(httpRequest) { result => result.body.contains(capiDateStamp)}
+  private def retrieveCanaryLastModifiedTimestamp(): Option[DateTime] = {
+    val httpRequest = requestHost("/canary?show-fields=lastModified").get()
+    whenReady(httpRequest) { result =>
+      val stringValue = (result.json \ "response" \ "content" \ "fields" \ "lastModified").asOpt[String]
+      stringValue.map(new DateTime(_))
+    }
   }
 
   override def withFixture(test: NoArgTest) = {
@@ -28,26 +29,22 @@ class CanaryWritingSanityTest(testFailureHandler: TestFailureHandler) extends Sa
       super.withFixture(test)
   }
 
-
-  "PUTting and GETting a collection" should "show an updated timestamp" taggedAs Retryable in {
-    val putSuccessResponseCode = 202
-    val httpRequest = request(Config.writeHost + "collections/canary")
-      .withAuth(Config.writeUsername, Config.writePassword, WSAuthScheme.BASIC)
+  "Touching the canary content" should "update the timestamp" taggedAs Retryable in {
+    val postSuccessResponseCode = 202
+    val httpRequest = request(Config.writeHost + "canary/content")
       .withHeaders("Content-Type" -> "application/json")
-      .put(collectionJSONWithNowTimestamp)
+      .post("")
     whenReady(httpRequest) { result =>
-      withClue("Response code was " + result.status + " expected " + putSuccessResponseCode) {
-        result.status should equal(putSuccessResponseCode)
+      withClue("Response code was " + result.status + " expected " + postSuccessResponseCode) {
+        result.status should equal(postSuccessResponseCode)
       }
-      if (result.status == putSuccessResponseCode) {
-        eventually(timeout(Span(60, Seconds))) {
-          withClue("Collection did not show updated date stamp") {
-            doesCanaryHaveUpdatedTimestamp should be(true)
-          }
+
+      val thirtySecondsAgo = DateTime.now.minusSeconds(30)
+      eventually(timeout(Span(30, Seconds))) {
+        val lastModified = retrieveCanaryLastModifiedTimestamp()
+        withClue(s"Collection did not show a lastModified >= $thirtySecondsAgo. lastModified field was $lastModified") {
+          lastModified.value.isAfter(thirtySecondsAgo) should be(true)
         }
-      }
-      else {
-        throw new TestFailedException("Collection did not post successfully", 1)
       }
     }
   }
