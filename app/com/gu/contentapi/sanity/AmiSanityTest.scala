@@ -7,7 +7,14 @@ import org.scalatest.time.{Span, Seconds}
 class AmiSanityTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
 
   "The Content API" should "be using the latest AMI" taggedAs LowPriorityTest in {
-    val currentAMI = "20140927"
+    /*
+     Note: this test is not very helpful anymore for CAPI directly,
+     as we are gradually moving our services over to the machine-images AMIs.
+     But it is useful for reminding us to update the base AMI in the machine-images repo.
+     e.g. it prompted this PR: https://github.com/guardian/machine-images/pull/13
+     */
+
+    val currentAMI = "20150417"
     val httpRequest = request("https://cloud-images.ubuntu.com/locator/ec2/releasesTable").get()
     assume(httpRequest.isReadyWithin(Span(5, Seconds)),"Service took too long to respond")
     whenReady(httpRequest) { result =>
