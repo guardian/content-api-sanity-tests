@@ -10,9 +10,9 @@ class EditorsPicksContainsItemsTest(testFailureHandler: TestFailureHandler) exte
     whenReady(httpRequest) { result =>
       assume(result.status == 200, "Service is down")
       val json = Json.parse(result.body)
-      val mostViewedJson = (json \ "response" \ "editorsPicks")
-      val mostViewedList = mostViewedJson.as[List[Map[String, String]]]
-      mostViewedList should not be empty
+      val editorsPicksJson = (json \ "response" \ "editorsPicks")
+      val editorsPicksList = editorsPicksJson.as[List[Map[String, String]]]
+      editorsPicksList should not be empty
     }
   }
 
