@@ -8,6 +8,7 @@ object MetaSuites {
 
   def prodFrequent(testFailureHandler: TestFailureHandler) = Seq(
     new CanaryWritingSanityTest(testFailureHandler),
+    new CanaryContentSanityTest(testFailureHandler),
     new SearchContainsLargeNumberOfResults(testFailureHandler),
     new PreviewRequiresAuthTest(testFailureHandler),
     new ContentApiSanityTest(testFailureHandler),
