@@ -7,6 +7,7 @@ import org.scalatest.Suite
 object MetaSuites {
 
   def prodFrequent(testFailureHandler: TestFailureHandler) = Seq(
+    new CanaryWritingSanityTest(testFailureHandler),
     new CanaryContentSanityTest(testFailureHandler),
     new SearchContainsLargeNumberOfResults(testFailureHandler),
     new PreviewRequiresAuthTest(testFailureHandler),
