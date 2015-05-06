@@ -18,6 +18,8 @@ object Config {
   val apiKey = sanityConfig.getString("api-key")
   val writeHost = sanityConfig.getString("write-host")
   val writePreviewHost = sanityConfig.getString("write-preview-host")
+  val writeUsername = sanityConfig.getString("write-username")
+  val writePassword = sanityConfig.getString("write-password")
   val pagerDutyServiceKey=sanityConfig.getString("pager-duty-service-key")
   val pagerDutyServiceKeyLowPriority=sanityConfig.getString("pager-duty-service-key-low-priority")
   val composerHost = sanityConfig.getString("composer-host")
