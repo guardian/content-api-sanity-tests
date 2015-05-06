@@ -16,6 +16,7 @@ object MetaSuites {
     new ValidateArticleSchema(testFailureHandler),
     new NewestItemFieldsTest(testFailureHandler),
     new MostViewedContainsItemsTest(testFailureHandler),
+    new EditorsPicksContainsItemsTest(testFailureHandler),
     new CriticalTagsTest(testFailureHandler),
     new TagSearchContainsLargeNumberOfResults(testFailureHandler),
     new ShowBlocksTest(testFailureHandler)
