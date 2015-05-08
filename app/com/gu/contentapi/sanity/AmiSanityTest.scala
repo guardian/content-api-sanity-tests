@@ -11,7 +11,7 @@ class AmiSanityTest(testFailureHandler: TestFailureHandler) extends SanityTestBa
      Note: this test is not very helpful anymore for CAPI directly,
      as we are gradually moving our services over to the machine-images AMIs.
      But it is useful for reminding us to update the base AMI in the machine-images repo.
-     e.g. it prompted this PR: https://github.com/guardian/machine-images/pull/
+     e.g. it prompted this PR: https://github.com/guardian/machine-images/pull/13
 
      Typical AMI criteria: 
       - eu-west-1
