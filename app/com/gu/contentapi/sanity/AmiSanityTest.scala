@@ -12,9 +12,16 @@ class AmiSanityTest(testFailureHandler: TestFailureHandler) extends SanityTestBa
      as we are gradually moving our services over to the machine-images AMIs.
      But it is useful for reminding us to update the base AMI in the machine-images repo.
      e.g. it prompted this PR: https://github.com/guardian/machine-images/pull/13
+
+     Typical AMI criteria: 
+      - eu-west-1
+      - amd64
+      - hvm:ebs
+      - trusty
+      - 14.04 LTS
      */
 
-    val currentAMI = "20150417"
+    val currentAMI = "20150506"
     val httpRequest = request("https://cloud-images.ubuntu.com/locator/ec2/releasesTable").get()
     assume(httpRequest.isReadyWithin(Span(5, Seconds)),"Service took too long to respond")
     whenReady(httpRequest) { result =>
