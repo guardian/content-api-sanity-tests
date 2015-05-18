@@ -13,9 +13,6 @@ import org.joda.time.format.ISODateTimeFormat
  */
 class CanaryContentSanityTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
 
-  val now = new DateTime()
-  val capiDateStamp = now.toString(ISODateTimeFormat.dateTimeNoMillis().withZoneUTC())
-
   private def retrieveCanaryLastModifiedTimestamp(): Option[DateTime] = {
     val httpRequest = requestHost("/canary?show-fields=lastModified").get()
     whenReady(httpRequest) { result =>
@@ -44,7 +41,7 @@ class CanaryContentSanityTest(testFailureHandler: TestFailureHandler) extends Sa
       val thirtySecondsAgo = DateTime.now.minusSeconds(30)
       eventually(timeout(Span(30, Seconds))) {
         val lastModified = retrieveCanaryLastModifiedTimestamp()
-        withClue(s"Collection did not show a lastModified >= $thirtySecondsAgo. lastModified field was $lastModified") {
+        withClue(s"Canary content did not show a lastModified >= $thirtySecondsAgo. lastModified field was $lastModified") {
           lastModified.value.isAfter(thirtySecondsAgo) should be(true)
         }
       }
