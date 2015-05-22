@@ -1,12 +1,12 @@
 package com.gu.contentapi.sanity.support
 
 import com.gu.contentapi.sanity.Config
-import org.scalatest.Matchers
+import org.scalatest.{Assertions, Matchers}
 import org.scalatest.concurrent.ScalaFutures
-import play.api.libs.ws.{WSAuthScheme, WS, WSRequestHolder}
+import play.api.libs.ws.{WSResponse, WSAuthScheme, WS, WSRequestHolder}
 import play.api.Play.current
 
-trait HttpRequestSupport extends ScalaFutures with Matchers {
+trait HttpRequestSupport extends ScalaFutures with Matchers with Assertions {
 
   def request(uri: String): WSRequestHolder = WS.url(uri).withRequestTimeout(10000)
 
@@ -30,6 +30,11 @@ trait HttpRequestSupport extends ScalaFutures with Matchers {
       }
       result.body.contains(modifiedString)
     }
+  }
+
+  def assumeNot5xxResponse(response: WSResponse): Unit = {
+    assume(response.status !=503,"Service is down")
+    assume(response.status !=504,"ELB timeout")
   }
 
 }

@@ -7,7 +7,7 @@ class GetNonExistentContentShould404(testFailureHandler: TestFailureHandler) ext
     "GETting non existent content" should "404" in {
       val httpRequest = requestHost("foo/should-not-exist").get()
       whenReady(httpRequest) { result =>
-        assume(result.status != 503)
+        assumeNot5xxResponse(result)
         result.status should be(404)
       }
     }
