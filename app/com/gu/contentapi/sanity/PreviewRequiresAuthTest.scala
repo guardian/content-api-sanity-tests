@@ -10,7 +10,7 @@ class PreviewRequiresAuthTest(testFailureHandler: TestFailureHandler) extends Sa
     eventually(timeout(Span(15, Seconds)),interval(Span(3, Seconds))) {
       val httpRequest = request(Config.previewHost).get()
       whenReady(httpRequest) { result =>
-        assume(result.status !=503,"Service is down")
+        assumeNot5xxResponse(result)
         result.status should be(401)
 
       }

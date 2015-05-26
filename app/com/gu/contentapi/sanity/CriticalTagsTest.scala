@@ -22,7 +22,7 @@ class CriticalTagsTest(testFailureHandler: TestFailureHandler) extends SanityTes
     for (criticalTag <- criticalTags) {
       val httpRequest = requestHost(criticalTag).get()
       whenReady(httpRequest) { result =>
-        assume(result.status != 503, "Service is down")
+        assumeNot5xxResponse(result)
         withClue("Failed attempting to GET " + Config.host + criticalTag) {
           result.status should equal(200)
         }
