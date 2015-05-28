@@ -30,15 +30,6 @@
         "writePreviewHost": {
             "Type": "String"
         },
-        "writeUsername": {
-            "Description": "Porter username",
-            "Type": "String"
-        },
-        "writePassword": {
-            "Description": "Porter password",
-            "Type": "String",
-            "NoEcho": true
-        },
         "pagerDutyServiceKey": {
             "Description": "Pager Duty Service key for High Priority incidents",
             "Type": "String"
