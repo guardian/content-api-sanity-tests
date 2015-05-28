@@ -14,8 +14,6 @@ content-api-sanity-tests {
     preview-password="capi-preview-password"
     api-key="capi-api-key"
     write-host="https://write-host/"
-    write-username="write-username"
-    write-password="write-password"
     pager-duty-service-key="page-duty-service-key" # Set as 'invalid' if testing locally
     pager-duty-service-key-low-priority="pager-duty-low-priority-service-key" # Set as 'invalid' if testing locally
     r2-admin-host="http://r2-admin-host/"
