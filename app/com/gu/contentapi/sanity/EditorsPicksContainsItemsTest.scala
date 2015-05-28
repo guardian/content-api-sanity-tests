@@ -1,8 +1,10 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
+import com.gu.contentapi.sanity.tags.ProdOnly
 import play.api.libs.json.Json
 
+@ProdOnly
 class EditorsPicksContainsItemsTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
 
   "Editors picks for /uk" should "not be empty" in {
