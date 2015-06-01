@@ -24,7 +24,6 @@ object MetaSuites {
 
   def prodInfrequent(testFailureHandler: TestFailureHandler) = Seq(
     new JREVersionTest(testFailureHandler),
-    new AmiSanityTest(testFailureHandler),
     new SSLExpiryTest(testFailureHandler),
     new CrosswordsIndexingTest(testFailureHandler)
   )
