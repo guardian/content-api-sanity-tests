@@ -21,4 +21,6 @@ object Config {
   val pagerDutyServiceKey=sanityConfig.getString("pager-duty-service-key")
   val pagerDutyServiceKeyLowPriority=sanityConfig.getString("pager-duty-service-key-low-priority")
   val composerHost = sanityConfig.getString("composer-host")
+  val apiIndexerLiveHost = sanityConfig.getString("api-indexer-live-host")
+  val apiIndexerPreviewHost = sanityConfig.getString("api-indexer-preview-host")
 }

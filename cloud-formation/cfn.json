@@ -63,6 +63,14 @@
             "Description": "R2 Admin CODE password",
             "Type": "String",
             "NoEcho": true
+        },
+        "apiIndexerLiveHost": {
+            "Description": "Live api-indexer base URL (e.g. http://host-10-252-48-243.prod1.gws.gutools.co.uk:8700/)",
+            "Type": "String"
+        },
+        "apiIndexerPreviewHost": {
+            "Description": "Preview api-indexer base URL (e.g. http://host-10-252-48-245.prod1.gws.gutools.co.uk:8700/)",
+            "Type": "String"
         }
     },
 
@@ -168,6 +176,8 @@
                             { "Fn::Join": [ "", [ "r2-admin-username=\"", { "Ref": "r2AdminUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "r2AdminPassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "composerHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "api-indexer-live-host=\"", { "Ref": "apiIndexerLiveHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "api-indexer-preview-host=\"", { "Ref": "apiIndexerPreviewHost" },"\""  ] ] },
                             "}",
                             "ws.compressionEnabled=true",
                             "ws.ning.maximumConnectionLifeTime = 60000",
