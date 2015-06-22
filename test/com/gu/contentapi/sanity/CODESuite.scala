@@ -15,7 +15,8 @@ object CODESuite {
   /** Tests that should only be run on CODE, e.g. because they write data that would be undesirable in PROD */
   val CodeOnlySuites = Seq(
     new DraftR2ContentShouldAppearInPreviewTest,
-    new ReadComposerDraftInPreviewTest
+    new ReadComposerDraftInPreviewTest,
+    new ApiIndexerClockDriftTest
   )
 
 }
