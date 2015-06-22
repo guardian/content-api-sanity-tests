@@ -131,7 +131,7 @@
                         "Fn::Join": [ "\n", [
                             "#!/bin/bash -ev",
                             "apt-get -y update",
-                            "apt-get -y install language-pack-en openjdk-7-jre-headless unzip",
+                            "apt-get -y install language-pack-en openjdk-7-jre-headless unzip ntp",
 
                             "adduser --disabled-password content-api",
                             "wget -NP /home/ubuntu/.ssh https://s3-eu-west-1.amazonaws.com/content-api-dist/authorized_keys",
