@@ -131,7 +131,7 @@
                         "Fn::Join": [ "\n", [
                             "#!/bin/bash -ev",
                             "apt-get -y update",
-                            "apt-get -y install language-pack-en openjdk-7-jre-headless unzip",
+                            "apt-get -y install language-pack-en openjdk-7-jre-headless unzip ntp",
 
                             "adduser --disabled-password content-api",
                             "wget -NP /home/ubuntu/.ssh https://s3-eu-west-1.amazonaws.com/content-api-dist/authorized_keys",
@@ -168,6 +168,8 @@
                             { "Fn::Join": [ "", [ "r2-admin-username=\"", { "Ref": "r2AdminUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "r2AdminPassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "composerHost" },"\""  ] ] },
+                            "api-indexer-live-host=\"invalid\" # Cannot access this host from EC2 ",
+                            "api-indexer-preview-host=\"invalid\" # Cannot access this host from EC2 ",
                             "}",
                             "ws.compressionEnabled=true",
                             "ws.ning.maximumConnectionLifeTime = 60000",

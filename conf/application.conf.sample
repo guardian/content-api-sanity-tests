@@ -20,4 +20,6 @@ content-api-sanity-tests {
     r2-admin-username="r2-admin-username"
     r2-admin-password="r2-admin-password"
     composer-host="http://composer-host/"
+    api-indexer-live-host="http://api-indexer-live:8700/"
+    api-indexer-preview-host="http://api-indexer-preview:8700/"
 }
