@@ -8,6 +8,14 @@
             "Type": "String",
             "Default": "PROD"
         },
+        "VPC": {
+            "Description": "Virtual Private Cloud to run EC2 instances within",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "Subnets": {
+            "Description": "Subnets to run load balancer within",
+            "Type": "List<AWS::EC2::Subnet::Id>"
+        },
         "host": {
             "Description": "Content API host",
             "Type": "String"
@@ -70,8 +78,9 @@
         "LoadBalancer": {
             "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
             "Properties": {
-                "LoadBalancerName": { "Fn::Join": [ "", ["content-api-sanity-tests-", { "Ref": "Stage" }] ] },
-                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "Scheme": "internet-facing",
+                "SecurityGroups": [ { "Ref": "LoadBalancerSecurityGroup" } ],
+                "Subnets": { "Ref": "Subnets" },
                 "CrossZone": true,
                 "Listeners": [
                     {
@@ -92,6 +101,7 @@
         "AutoscalingGroup": {
             "Type": "AWS::AutoScaling::AutoScalingGroup",
             "Properties": {
+                "VPCZoneIdentifier": { "Ref": "Subnets" },
                 "AvailabilityZones": { "Fn::GetAZs": "" },
                 "LaunchConfigurationName": { "Ref": "LaunchConfig" },
                 "MinSize": "1",
@@ -124,6 +134,7 @@
 
             "Properties": {
                 "ImageId": "ami-aa0d49dd",
+                "AssociatePublicIpAddress": true,
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
                 "InstanceType": "t2.micro",
                 "UserData": {
@@ -175,10 +186,34 @@
             }
         },
 
+        "LoadBalancerSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Public access to the load balancer on port 80",
+                "VpcId": { "Ref": "VPC" },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9000",
+                        "ToPort": "9000",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            }
+        },
         "SecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "SSH and HTTP",
+                "VpcId": { "Ref": "VPC" },
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
@@ -190,8 +225,7 @@
                         "IpProtocol": "tcp",
                         "FromPort": "9000",
                         "ToPort": "9000",
-                        "SourceSecurityGroupName": "amazon-elb-sg",
-                        "SourceSecurityGroupOwnerId": "amazon-elb"
+                        "SourceSecurityGroupId": { "Ref": "LoadBalancerSecurityGroup" }
                     },
                     {
                         "IpProtocol": "tcp",
