@@ -8,6 +8,14 @@
             "Type": "String",
             "Default": "PROD"
         },
+        "VPC": {
+            "Description": "Virtual Private Cloud to run EC2 instances within",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "Subnets": {
+            "Description": "Subnets to run load balancer within",
+            "Type": "List<AWS::EC2::Subnet::Id>"
+        },
         "host": {
             "Description": "Content API host",
             "Type": "String"
@@ -70,8 +78,9 @@
         "LoadBalancer": {
             "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
             "Properties": {
-                "LoadBalancerName": { "Fn::Join": [ "", ["content-api-sanity-tests-", { "Ref": "Stage" }] ] },
-                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "Scheme": "internet-facing",
+                "SecurityGroups": [ { "Ref": "LoadBalancerSecurityGroup" } ],
+                "Subnets": { "Ref": "Subnets" },
                 "CrossZone": true,
                 "Listeners": [
                     {
@@ -92,6 +101,7 @@
         "AutoscalingGroup": {
             "Type": "AWS::AutoScaling::AutoScalingGroup",
             "Properties": {
+                "VPCZoneIdentifier": { "Ref": "Subnets" },
                 "AvailabilityZones": { "Fn::GetAZs": "" },
                 "LaunchConfigurationName": { "Ref": "LaunchConfig" },
                 "MinSize": "1",
@@ -123,15 +133,14 @@
             "Type": "AWS::AutoScaling::LaunchConfiguration",
 
             "Properties": {
-                "ImageId": "ami-896c96fe",
+                "ImageId": "ami-aa0d49dd",
+                "AssociatePublicIpAddress": true,
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
-                "InstanceType": "t1.micro",
+                "InstanceType": "t2.micro",
                 "UserData": {
                     "Fn::Base64": {
                         "Fn::Join": [ "\n", [
                             "#!/bin/bash -ev",
-                            "apt-get -y update",
-                            "apt-get -y install language-pack-en openjdk-7-jre-headless unzip",
 
                             "adduser --disabled-password content-api",
                             "wget -NP /home/ubuntu/.ssh https://s3-eu-west-1.amazonaws.com/content-api-dist/authorized_keys",
@@ -160,8 +169,6 @@
                             { "Fn::Join": [ "", [ "preview-password=\"", { "Ref": "previewPassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "apiKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "write-username=\"", { "Ref": "writeUsername" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "write-password=\"", { "Ref": "writePassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key-low-priority=\"", { "Ref": "pagerDutyServiceKeyLowPriority" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "r2-admin-host=\"", { "Ref": "r2AdminHost" },"\""  ] ] },
@@ -179,10 +186,34 @@
             }
         },
 
+        "LoadBalancerSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Public access to the load balancer on port 80",
+                "VpcId": { "Ref": "VPC" },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9000",
+                        "ToPort": "9000",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            }
+        },
         "SecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "SSH and HTTP",
+                "VpcId": { "Ref": "VPC" },
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
@@ -194,8 +225,7 @@
                         "IpProtocol": "tcp",
                         "FromPort": "9000",
                         "ToPort": "9000",
-                        "SourceSecurityGroupName": "amazon-elb-sg",
-                        "SourceSecurityGroupOwnerId": "amazon-elb"
+                        "SourceSecurityGroupId": { "Ref": "LoadBalancerSecurityGroup" }
                     },
                     {
                         "IpProtocol": "tcp",
