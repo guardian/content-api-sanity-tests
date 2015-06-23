@@ -158,8 +158,6 @@
                             { "Fn::Join": [ "", [ "preview-password=\"", { "Ref": "previewPassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "apiKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "write-username=\"", { "Ref": "writeUsername" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "write-password=\"", { "Ref": "writePassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key-low-priority=\"", { "Ref": "pagerDutyServiceKeyLowPriority" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "r2-admin-host=\"", { "Ref": "r2AdminHost" },"\""  ] ] },
