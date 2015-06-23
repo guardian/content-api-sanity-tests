@@ -123,15 +123,13 @@
             "Type": "AWS::AutoScaling::LaunchConfiguration",
 
             "Properties": {
-                "ImageId": "ami-896c96fe",
+                "ImageId": "ami-aa0d49dd",
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
-                "InstanceType": "t1.micro",
+                "InstanceType": "t2.micro",
                 "UserData": {
                     "Fn::Base64": {
                         "Fn::Join": [ "\n", [
                             "#!/bin/bash -ev",
-                            "apt-get -y update",
-                            "apt-get -y install language-pack-en openjdk-7-jre-headless unzip",
 
                             "adduser --disabled-password content-api",
                             "wget -NP /home/ubuntu/.ssh https://s3-eu-west-1.amazonaws.com/content-api-dist/authorized_keys",
