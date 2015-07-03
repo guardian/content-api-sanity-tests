@@ -2,7 +2,7 @@ package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
 
-class CriticalTagsTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class CriticalTagsTest(context: Context) extends SanityTestBase(context) {
 
   "Tags critical for publication (including Kindle)" should "exist" in {
     val criticalTags = Seq(

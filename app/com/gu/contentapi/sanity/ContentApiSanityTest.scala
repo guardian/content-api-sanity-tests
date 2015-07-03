@@ -2,7 +2,7 @@ package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
 
-class ContentApiSanityTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class ContentApiSanityTest(context: Context) extends SanityTestBase(context) {
 
   "Content api" should "serve gzipped" in {
     // GZip Compression is enabled in application.conf

@@ -3,7 +3,7 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import play.api.libs.json.{JsValue, Json}
 
-class NewestItemFieldsTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class NewestItemFieldsTest(context: Context) extends SanityTestBase(context) {
 
   "The newest items" should "include mandatory fields" in {
     val mandatoryItemFields = Seq[String](

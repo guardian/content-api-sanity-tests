@@ -3,7 +3,7 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import org.scalatest.time.{Seconds, Span}
 
-class PreviewRequiresAuthTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class PreviewRequiresAuthTest(context: Context) extends SanityTestBase(context) {
 
   "GETting preview content" should "require authentication" in {
     //Sometimes this throws a java.io.IOException, with message: Remotely Closed, so using Eventually to retry

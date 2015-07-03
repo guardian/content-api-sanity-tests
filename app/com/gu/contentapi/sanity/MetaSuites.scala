@@ -1,36 +1,35 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.ProdOnly
 import org.scalatest.Suite
 
 object MetaSuites {
 
-  def prodFrequent(testFailureHandler: TestFailureHandler) = Seq(
-    new CanaryContentSanityTest(testFailureHandler),
-    new SearchContainsLargeNumberOfResults(testFailureHandler),
-    new PreviewRequiresAuthTest(testFailureHandler),
-    new ContentApiSanityTest(testFailureHandler),
-    new GetNonExistentContentShould404(testFailureHandler),
-    new PreviewContentSetNotInLiveTest(testFailureHandler),
-    new ValidateArticleSchema(testFailureHandler),
-    new NewestItemFieldsTest(testFailureHandler),
-    new MostViewedContainsItemsTest(testFailureHandler),
-    new EditorsPicksContainsItemsTest(testFailureHandler),
-    new CriticalTagsTest(testFailureHandler),
-    new TagSearchContainsLargeNumberOfResults(testFailureHandler),
-    new ShowBlocksTest(testFailureHandler)
+  def prodFrequent(context: Context) = Seq(
+    new CanaryContentSanityTest(context),
+    new SearchContainsLargeNumberOfResults(context),
+    new PreviewRequiresAuthTest(context),
+    new ContentApiSanityTest(context),
+    new GetNonExistentContentShould404(context),
+    new PreviewContentSetNotInLiveTest(context),
+    new ValidateArticleSchema(context),
+    new NewestItemFieldsTest(context),
+    new MostViewedContainsItemsTest(context),
+    new EditorsPicksContainsItemsTest(context),
+    new CriticalTagsTest(context),
+    new TagSearchContainsLargeNumberOfResults(context),
+    new ShowBlocksTest(context)
   )
 
-  def prodInfrequent(testFailureHandler: TestFailureHandler) = Seq(
-    new JREVersionTest(testFailureHandler),
-    new SSLExpiryTest(testFailureHandler),
-    new CrosswordsIndexingTest(testFailureHandler)
+  def prodInfrequent(context: Context) = Seq(
+    new JREVersionTest(context),
+    new SSLExpiryTest(context),
+    new CrosswordsIndexingTest(context)
   )
 
   /** All suites that can be run against either PROD or CODE */
-  def suitableForBothProdAndCode(testFailureHandler: TestFailureHandler) =
-    (prodFrequent(testFailureHandler) ++ prodInfrequent(testFailureHandler))
+  def suitableForBothProdAndCode(context: Context) =
+    (prodFrequent(context) ++ prodInfrequent(context))
       .filter(isNotTaggedWithProdOnly)
 
   private def isNotTaggedWithProdOnly(s: Suite): Boolean = {

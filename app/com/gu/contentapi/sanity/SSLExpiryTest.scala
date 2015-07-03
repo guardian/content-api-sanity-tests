@@ -12,7 +12,7 @@ import sun.security.x509.X509CertImpl
 import scala.util.Try
 
 @ProdOnly
-class SSLExpiryTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class SSLExpiryTest(context: Context) extends SanityTestBase(context) {
 
   "SSL Certificates" should "be more than 30 days from expiry" taggedAs LowPriorityTest in {
     val hosts = Seq(
