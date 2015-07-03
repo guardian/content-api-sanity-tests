@@ -28,6 +28,7 @@ object Global extends GlobalSettings {
     val suites = MetaSuites.prodFrequent(context)
     suites.foreach(_.execute)
     println(s"=== Frequent tests finished at ${new DateTime()} ===")
+    cloudWatchReporter.reportTestRunComplete()
   }
 
   def runInfrequentTests(cloudWatchReporter: CloudWatchReporter): Unit = {
@@ -36,6 +37,7 @@ object Global extends GlobalSettings {
     val suites = MetaSuites.prodInfrequent(context)
     suites.foreach(_.execute)
     println(s"=== Infrequent tests finished at ${new DateTime()} ===")
+    cloudWatchReporter.reportTestRunComplete()
   }
 
 }

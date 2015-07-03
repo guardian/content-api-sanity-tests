@@ -4,11 +4,22 @@ import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.{ServiceAbbreviations, Regions, Region}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClient
 import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest, Dimension}
+import org.scalatest.{Succeeded, Failed, Outcome, Suite}
 import play.api.{Logger, Configuration}
 
-trait CloudWatchReportingSupport {
+trait CloudWatchReportingSupport extends Suite {
 
   def cloudWatchReporter: CloudWatchReporter
+
+  override protected def withFixture(test: NoArgTest): Outcome = {
+    val outcome = super.withFixture(test)
+    outcome match {
+      case Failed(e) => cloudWatchReporter.reportFailedTest()
+      case Succeeded => cloudWatchReporter.reportSuccessfulTest()
+      case _ => // do nothing
+    }
+    outcome
+  }
 
 }
 
