@@ -16,6 +16,10 @@
             "Description": "Subnets to run load balancer within",
             "Type": "List<AWS::EC2::Subnet::Id>"
         },
+        "AlarmTopic": {
+            "Description": "A SNS topic ARN for Cloudwatch alerts",
+            "Type": "String"
+        },
         "host": {
             "Description": "Content API host",
             "Type": "String"
@@ -71,6 +75,22 @@
             "Description": "R2 Admin CODE password",
             "Type": "String",
             "NoEcho": true
+        },
+        "cloudwatchNamespace": {
+            "Type": "String",
+            "Default": "content-api-sanity-tests"
+        },
+        "cloudwatchTestRunsMetric": {
+            "Type": "String",
+            "Default": "TestRuns"
+        },
+        "cloudwatchSuccessfulTestsMetric": {
+            "Type": "String",
+            "Default": "SuccessfulTests"
+        },
+        "cloudwatchFailedTestsMetric": {
+            "Type": "String",
+            "Default": "content-api-sanity-tests"
         }
     },
 
@@ -226,6 +246,10 @@
                             { "Fn::Join": [ "", [ "r2-admin-username=\"", { "Ref": "r2AdminUsername" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "r2-admin-password=\"", { "Ref": "r2AdminPassword" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "composerHost" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "cloudwatch-namespace=\"", { "Ref": "cloudwatchNamespace" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "cloudwatch-test-runs-metric=\"", { "Ref": "cloudwatchTestRunsMetric" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "cloudwatch-successful-tests-metric=\"", { "Ref": "cloudwatchSuccessfulTestsMetric" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "cloudwatch-failed-tests-metric=\"", { "Ref": "cloudwatchFailedTestsMetric" },"\""  ] ] },
                             "}",
                             "ws.compressionEnabled=true",
                             "ws.ning.maximumConnectionLifeTime = 60000",
@@ -285,6 +309,21 @@
                         "CidrIp": "77.91.248.0/21"
                     }
                 ]
+            }
+        },
+        "NotEnoughSuccessfulTestsAlarm": {
+            "Type": "AWS::CloudWatch::Alarm",
+            "Properties": {
+                "AlarmName": { "Fn::Join": ["-", [ "content-api-sanity-tests", { "Ref": "Stage" }, "alarm", "not-enough-successful-tests" ] ] },
+                "AlarmDescription": "Fewer than 100 tests in 5 minutes (we expect to run at least 14 tests every 30 seconds)",
+                "Namespace": { "Ref": "cloudwatch-namespace" },
+                "MetricName": "SuccessfulTests",
+                "Statistic": "Sum",
+                "ComparisonOperator": "LessThanThreshold",
+                "Threshold": "100",
+                "Period": "300",
+                "EvaluationPeriods": "5",
+                "AlarmActions": { "Ref": "AlarmTopic" }
             }
         }
     },
