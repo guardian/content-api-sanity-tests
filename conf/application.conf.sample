@@ -20,4 +20,12 @@ content-api-sanity-tests {
     r2-admin-username="r2-admin-username"
     r2-admin-password="r2-admin-password"
     composer-host="http://composer-host/"
+
+    # PROD only. In other environments, these keys can be omitted.
+    # If any key is omitted, nothing will be reported to CloudWatch.
+    test-runs-cloudwatch-namespace="content-api-sanity-tests"
+    test-runs-cloudwatch-stack="content-api-sanity-tests"
+    test-runs-cloudwatch-testruns-metric="TestRuns"
+    test-runs-cloudwatch-successful-tests-metric="SuccessfulTests"
+    test-runs-cloudwatch-failed-tests-metric="FailedTests"
 }
