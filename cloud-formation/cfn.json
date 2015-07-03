@@ -316,7 +316,7 @@
             "Properties": {
                 "AlarmName": { "Fn::Join": ["-", [ "content-api-sanity-tests", { "Ref": "Stage" }, "alarm", "not-enough-successful-tests" ] ] },
                 "AlarmDescription": "Fewer than 100 tests in 5 minutes (we expect to run at least 14 tests every 30 seconds)",
-                "Namespace": { "Ref": "cloudwatch-namespace" },
+                "Namespace": { "Ref": "cloudwatchNamespace" },
                 "MetricName": "SuccessfulTests",
                 "Statistic": "Sum",
                 "ComparisonOperator": "LessThanThreshold",
