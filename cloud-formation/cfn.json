@@ -75,6 +75,56 @@
     },
 
     "Resources": {
+        "Role": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Principal": { "Service": ["ec2.amazonaws.com" ] },
+                        "Action": [ "sts:AssumeRole" ]
+                    }]
+                },
+                "Path": "/"
+            }
+        },
+        "RolePolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "root",
+                "PolicyDocument": {
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Action": ["cloudformation:DescribeStackResource", "s3:*"],
+                        "Resource": "*"
+                    }]
+                },
+                "Roles": [{ "Ref": "Role" }]
+            }
+        },
+        "CloudwatchPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "cloudwatch-put",
+                "PolicyDocument": {
+                    "Statement":[
+                        {
+                            "Effect":"Allow",
+                            "Action": [ "cloudwatch:PutMetricData" ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Roles": [{"Ref": "Role" }]
+            }
+        },
+        "InstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [{ "Ref": "Role" }]
+            }
+        },
         "LoadBalancer": {
             "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
             "Properties": {
@@ -137,6 +187,7 @@
                 "AssociatePublicIpAddress": true,
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
                 "InstanceType": "t2.micro",
+                "IamInstanceProfile": { "Ref": "InstanceProfile" },
                 "UserData": {
                     "Fn::Base64": {
                         "Fn::Join": [ "\n", [
