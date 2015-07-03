@@ -3,7 +3,7 @@ package com.gu.contentapi.sanity.support
 import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.{ServiceAbbreviations, Regions, Region}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClient
-import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest, Dimension}
+import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest}
 import org.scalatest.{Succeeded, Failed, Outcome, Suite}
 import play.api.{Logger, Configuration}
 
@@ -37,13 +37,12 @@ object CloudWatchReporter {
     def cfg(key: String) = config.getString(s"content-api-sanity-tests.cloudwatch-$key")
     val reporter = for {
       namespace <- cfg("namespace")
-      stack <- cfg("stack")
       testRunsMetric <- cfg("test-runs-metric")
       successfulTestsMetric <- cfg("successful-tests-metric")
       failedTestsMetric <- cfg("failed-tests-metric")
     } yield {
-      Logger.info(s"Will report metrics to CloudWatch. namespace=$namespace, stack=$stack, metrics=($testRunsMetric, $successfulTestsMetric, $failedTestsMetric)")
-      new RealCloudWatchReporter(namespace, stack, testRunsMetric, successfulTestsMetric, failedTestsMetric)
+      Logger.info(s"Will report metrics to CloudWatch. namespace=$namespace, metrics=($testRunsMetric, $successfulTestsMetric, $failedTestsMetric)")
+      new RealCloudWatchReporter(namespace, testRunsMetric, successfulTestsMetric, failedTestsMetric)
     }
 
     reporter getOrElse {
@@ -55,14 +54,11 @@ object CloudWatchReporter {
 }
 
 class RealCloudWatchReporter(namespace: String,
-                              stack: String,
-                              testRunsMetric: String,
-                              successfulTestsMetric: String,
-                              failedTestsMetric: String) extends CloudWatchReporter {
+                             testRunsMetric: String,
+                             successfulTestsMetric: String,
+                             failedTestsMetric: String) extends CloudWatchReporter {
 
   private val region = Region.getRegion(Regions.EU_WEST_1)
-
-  lazy val stackDimension = new Dimension().withName("Stack").withValue(stack)
 
   lazy val cloudwatch = {
     val client = new AmazonCloudWatchAsyncClient()
@@ -83,7 +79,6 @@ class RealCloudWatchReporter(namespace: String,
     val metric = new MetricDatum()
       .withValue(value)
       .withMetricName(metricName)
-      .withDimensions(stackDimension)
 
     val request = new PutMetricDataRequest().withNamespace(namespace).withMetricData(metric)
 

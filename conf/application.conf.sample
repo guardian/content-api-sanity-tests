@@ -24,7 +24,6 @@ content-api-sanity-tests {
     # PROD only. In other environments, these keys can be omitted.
     # If any key is omitted, nothing will be reported to CloudWatch.
     cloudwatch-namespace="content-api-sanity-tests"
-    cloudwatch-stack="content-api-sanity-tests"
     cloudwatch-test-runs-metric="TestRuns"
     cloudwatch-successful-tests-metric="SuccessfulTests"
     cloudwatch-failed-tests-metric="FailedTests"
