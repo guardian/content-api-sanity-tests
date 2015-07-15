@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 
 @ProdOnly
-class CrosswordsIndexingTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class CrosswordsIndexingTest(context: Context) extends SanityTestBase(context) {
 
   "A new Crossword" should "be indexed every day" taggedAs LowPriorityTest in {
     val now = DateTime.now

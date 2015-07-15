@@ -3,7 +3,7 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import play.api.libs.json.{JsArray, JsValue, Json}
 
-class ShowBlocksTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class ShowBlocksTest(context: Context) extends SanityTestBase(context) {
 
   "The newest Flex items in the search results" should "include blocks if show-blocks=all" in {
 

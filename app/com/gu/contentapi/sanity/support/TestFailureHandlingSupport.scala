@@ -163,6 +163,6 @@ object InfrequentScheduledTestsFailureHandler extends PagerDutyAlertingTestFailu
 
 }
 
-object DoNothing extends TestFailureHandler {
+object DoNothingTestFailureHandler extends TestFailureHandler {
   override def handleTestFailure(testName: String, exception: Throwable, tags: Set[String]): Unit = {}
 }

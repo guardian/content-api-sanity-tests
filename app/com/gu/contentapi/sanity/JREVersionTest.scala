@@ -5,7 +5,7 @@ import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
 import org.scalatest.time.{Span, Seconds}
 
 @ProdOnly
-class JREVersionTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class JREVersionTest(context: Context) extends SanityTestBase(context) {
 
   {
     "The Content API" should "be using the latest JRE" taggedAs LowPriorityTest in {

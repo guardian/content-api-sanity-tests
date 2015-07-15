@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
   "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3",
   "com.github.cb372" %% "play-configurable-ningwsplugin" % "0.2",
-  "org.scalatestplus" %% "play" % "1.1.1"
+  "org.scalatestplus" %% "play" % "1.1.1",
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.2"
 )
 
 parallelExecution in ThisBuild := false

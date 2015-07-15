@@ -1,6 +1,6 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.DoNothing
+import com.gu.contentapi.sanity.support.DoNothingTestFailureHandler
 import org.scalatest.DoNotDiscover
 import org.scalatest.time.{Seconds, Span}
 
@@ -13,7 +13,7 @@ import scala.util.Random
  * It's in the `/test` folder so that you can't accidentally run it in the scheduler.
  */
 @DoNotDiscover
-class ReadComposerDraftInPreviewTest extends SanityTestBase(testFailureHandler = DoNothing) {
+class ReadComposerDraftInPreviewTest extends SanityTestBase(context = Context.Testing) {
 
   val modifiedHeadline = "Content API Sanity Test " + java.util.UUID.randomUUID.toString
   val uniquePageId = Random.nextInt().toString

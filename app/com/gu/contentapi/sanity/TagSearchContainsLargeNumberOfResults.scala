@@ -3,7 +3,7 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import play.api.libs.json.Json
 
-class TagSearchContainsLargeNumberOfResults(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class TagSearchContainsLargeNumberOfResults(context: Context) extends SanityTestBase(context) {
 
   "The Content API" should "return a large total of tags on the /tags endpoint" in {
     val httpRequest = requestHost("tags").get()

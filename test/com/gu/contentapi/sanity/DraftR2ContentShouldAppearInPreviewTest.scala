@@ -1,6 +1,6 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.DoNothing
+import com.gu.contentapi.sanity.support.DoNothingTestFailureHandler
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalatest.DoNotDiscover
@@ -15,7 +15,7 @@ import scala.io.Source
  * It's in the `/test` folder so that you can't accidentally run it in the scheduler.
  */
 @DoNotDiscover
-class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(testFailureHandler = DoNothing) with WebBrowser {
+class DraftR2ContentShouldAppearInPreviewTest extends SanityTestBase(context = Context.Testing) with WebBrowser {
 
   override def withFixture(test: NoArgTest) = {
     if (isRetryable(test))

@@ -3,7 +3,7 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import play.api.libs.json.Json
 
-class PreviewContentSetNotInLiveTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class PreviewContentSetNotInLiveTest(context: Context) extends SanityTestBase(context) {
 
   "GETting the preview content set JSON" should "show no results on live" in {
     val httpRequest = requestHost("search?content-set=preview").get()

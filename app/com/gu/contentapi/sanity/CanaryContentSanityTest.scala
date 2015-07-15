@@ -11,7 +11,7 @@ import org.joda.time.format.ISODateTimeFormat
  * 1. POSTing to a special endpoint on Porter that creates a new piece of known content and pushes it to Attendant's queue
  * 2. Checking that the content shows up in Concierge with a recent lastModified timestamp
  */
-class CanaryContentSanityTest(testFailureHandler: TestFailureHandler) extends SanityTestBase(testFailureHandler) {
+class CanaryContentSanityTest(context: Context) extends SanityTestBase(context) {
 
   private def retrieveCanaryLastModifiedTimestamp(): Option[DateTime] = {
     val httpRequest = requestHost("/canary?show-fields=lastModified").get()
