@@ -90,7 +90,7 @@
         },
         "cloudwatchFailedTestsMetric": {
             "Type": "String",
-            "Default": "content-api-sanity-tests"
+            "Default": "FailedTests"
         }
     },
 
