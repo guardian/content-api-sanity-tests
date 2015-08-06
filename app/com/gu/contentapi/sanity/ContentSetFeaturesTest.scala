@@ -18,7 +18,7 @@ class ContentSetFeaturesTest(context: Context) extends SanityTestBase(context) {
     }
   }
 
-  /*"GETting the print-sent content set JSON" should "return a newspaper-book-section tag for each result" in {
+  "GETting the print-sent content set JSON" should "return a newspaper-book-section tag for each result" in {
     val httpRequest = requestHost("search?content-set=print-sent&show-tags=newspaper-book-section").get()
 
     whenReady(httpRequest) { result =>
@@ -34,6 +34,6 @@ class ContentSetFeaturesTest(context: Context) extends SanityTestBase(context) {
         }
       }
     }
-  }*/
+  }
 
 }
