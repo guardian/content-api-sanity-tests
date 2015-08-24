@@ -38,13 +38,20 @@ class CanaryContentSanityTest(context: Context) extends SanityTestBase(context) 
         result.status should equal(postSuccessResponseCode)
       }
 
-      val thirtySecondsAgo = DateTime.now.minusSeconds(30)
-      eventually(timeout(Span(30, Seconds))) {
-        val lastModified = retrieveCanaryLastModifiedTimestamp()
-        withClue(s"Canary content did not show a lastModified >= $thirtySecondsAgo. lastModified field was $lastModified") {
-          lastModified.value.isAfter(thirtySecondsAgo) should be(true)
+       result.status match {
+          case 202 =>
+            
+            val thirtySecondsAgo = DateTime.now.minusSeconds(30)
+            eventually(timeout(Span(30, Seconds))) {
+              val lastModified = retrieveCanaryLastModifiedTimestamp()
+              withClue(s"Canary content did not show a lastModified >= $thirtySecondsAgo. lastModified field was $lastModified") {
+                lastModified.value.isAfter(thirtySecondsAgo) should be(true)
+              }
+            }
+
+          case 555 => /*  push to elasticsearch switch is not activated on porter - can't test */
+          case _   => fail("Response code was " + result.status + " expected " + postSuccessResponseCode)
         }
-      }
     }
   }
 }
