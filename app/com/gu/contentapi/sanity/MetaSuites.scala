@@ -6,7 +6,7 @@ import org.scalatest.Suite
 object MetaSuites {
 
   def prodFrequent(context: Context) = Seq(
-    /*new CanaryContentSanityTest(context),*/
+    new CanaryContentSanityTest(context),
     new SearchContainsLargeNumberOfResults(context),
     new PreviewRequiresAuthTest(context),
     new ContentApiSanityTest(context),
