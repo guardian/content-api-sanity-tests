@@ -9,7 +9,7 @@ object MetaSuites {
     new CanaryContentSanityTest(context),
     new SearchContainsLargeNumberOfResults(context),
     new PreviewRequiresAuthTest(context),
-    /*new ContentApiSanityTest(context),*/
+    new ContentApiSanityTest(context),
     new GetNonExistentContentShould404(context),
     new ContentSetFeaturesTest(context),
     new ValidateArticleSchema(context),
