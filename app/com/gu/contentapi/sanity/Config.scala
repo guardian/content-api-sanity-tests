@@ -9,9 +9,6 @@ object Config {
 
   val host = sanityConfig.getString("host")
   val hostPublicSecure = sanityConfig.getString("host-public-secure")
-  val r2AdminHost = sanityConfig.getString("r2-admin-host")
-  val r2AdminUsername = sanityConfig.getString("r2-admin-username")
-  val r2AdminPassword = sanityConfig.getString("r2-admin-password")
   val previewHost = sanityConfig.getString("preview-host")
   val previewUsernameCode = sanityConfig.getString("preview-username")
   val previewPasswordCode = sanityConfig.getString("preview-password")
