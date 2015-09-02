@@ -54,25 +54,12 @@
             "Description": "Composer Flex Import CODE host name",
             "Type": "String"
         },
-        "r2AdminHost": {
-            "Description": "R2 Admin CODE host name",
-            "Type": "String"
-        },
         "previewUsername": {
             "Description": "Content API CODE Preview username",
             "Type": "String"
         },
         "previewPassword": {
             "Description": "Content API CODE Preview password",
-            "Type": "String",
-            "NoEcho": true
-        },
-        "r2AdminUsername": {
-            "Description": "R2 Admin CODE username",
-            "Type": "String"
-        },
-        "r2AdminPassword": {
-            "Description": "R2 Admin CODE password",
             "Type": "String",
             "NoEcho": true
         },

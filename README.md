@@ -27,7 +27,7 @@ Add it to the `test` source root, annotated with `@DoNotDiscover`, and to the li
 
 ### PROD tests
 * only rely on internet accessible endpoints, thus can be run on an EC2 machine
-* and do not insert anything (apart from one special canary collection) into the system, thus can be safely executed against PROD. 
+* and do not insert anything (apart from one special canary content) into the system, thus can be safely executed against PROD. 
 
 These tests are run as a scheduled service in the Play app running on an EC2 machine.
 
