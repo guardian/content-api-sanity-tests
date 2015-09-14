@@ -22,7 +22,7 @@ object MetaSuites {
   )
 
   def prodInfrequent(context: Context) = Seq(
-    new JREVersionTest(context),
+    //new JREVersionTest(context), disabled for now because it spams us every day
     new SSLExpiryTest(context),
     new CrosswordsIndexingTest(context)
   )
