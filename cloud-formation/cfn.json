@@ -310,7 +310,7 @@
                 "Threshold": "100",
                 "Period": "300",
                 "EvaluationPeriods": "5",
-                "AlarmActions": { "Ref": "AlarmTopic" }
+                "AlarmActions": [ { "Ref": "AlarmTopic" } ]
             }
         }
     },
