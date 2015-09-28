@@ -22,7 +22,7 @@ class CriticalTagsTest(context: Context) extends SanityTestBase(context) {
     for (criticalTag <- criticalTags) {
       val httpRequest = requestHost(criticalTag).get()
       whenReady(httpRequest) { result =>
-        assumeNot5xxResponse(result)
+        assumeNot(503, 504)(result)
         withClue("Failed attempting to GET " + Config.host + criticalTag) {
           result.status should equal(200)
         }

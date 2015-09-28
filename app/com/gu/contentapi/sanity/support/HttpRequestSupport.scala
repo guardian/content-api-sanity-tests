@@ -32,9 +32,15 @@ trait HttpRequestSupport extends ScalaFutures with Matchers with Assertions {
     }
   }
 
-  def assumeNot5xxResponse(response: WSResponse): Unit = {
-    assume(response.status !=503,"Service is down")
-    assume(response.status !=504,"ELB timeout")
+  import HttpRequestSupport._
+
+  def assumeNot(statuses:Int*)(response: WSResponse): Unit = {
+    statuses.foreach(s => assume(response.status != s, statusMsg.get(s).getOrElse("")))
   }
 
+}
+
+
+object HttpRequestSupport {
+  val statusMsg = Map(503 -> "Service is currently not available", 504 -> "ELB timeout")
 }

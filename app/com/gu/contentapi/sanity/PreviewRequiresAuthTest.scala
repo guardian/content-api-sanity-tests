@@ -10,7 +10,7 @@ class PreviewRequiresAuthTest(context: Context) extends SanityTestBase(context) 
     eventually(timeout(Span(15, Seconds)),interval(Span(3, Seconds))) {
       val httpRequest = request(Config.previewHost).get()
       whenReady(httpRequest) { result =>
-        assumeNot5xxResponse(result)
+        assumeNot(503, 504)(result)
         result.status should be(401)
 
       }

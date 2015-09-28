@@ -7,7 +7,7 @@ class GetNonExistentContentShould404(context: Context) extends SanityTestBase(co
     "GETting non existent content" should "404" in {
       val httpRequest = requestHost("foo/should-not-exist").get()
       whenReady(httpRequest) { result =>
-        assumeNot5xxResponse(result)
+        assumeNot(503, 504)(result)
         result.status should be(404)
       }
     }
