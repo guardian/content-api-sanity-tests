@@ -33,7 +33,9 @@ class CanaryContentSanityTest(context: Context) extends SanityTestBase(context) 
     val httpRequest = request(Config.writeHost + "canary/content")
       .withHeaders("Content-Type" -> "application/json")
       .post("")
+    
     whenReady(httpRequest) { result =>
+      assumeNot(504)(result)
       withClue("Response code was " + result.status + " expected " + postSuccessResponseCode) {
         result.status should equal(postSuccessResponseCode)
       }
