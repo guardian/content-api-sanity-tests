@@ -11,7 +11,6 @@ object MetaSuites {
     new PreviewRequiresAuthTest(context),
     new ContentApiSanityTest(context),
     new GetNonExistentContentShould404(context),
-    new ContentSetFeaturesTest(context),
     new ValidateArticleSchema(context),
     new NewestItemFieldsTest(context),
     new MostViewedContainsItemsTest(context),
