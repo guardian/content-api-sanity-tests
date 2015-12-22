@@ -1,6 +1,7 @@
 package com.gu.contentapi.sanity.support
 
 import com.gu.contentapi.sanity.Config
+import org.scalatest.exceptions.TestPendingException
 import org.scalatest.{Assertions, Matchers}
 import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.ws.{WSResponse, WSAuthScheme, WS, WSRequestHolder}
@@ -35,7 +36,12 @@ trait HttpRequestSupport extends ScalaFutures with Matchers with Assertions {
   import HttpRequestSupport._
 
   def assumeNot(statuses:Int*)(response: WSResponse): Unit = {
-    statuses.foreach(s => assume(response.status != s, statusMsg.get(s).getOrElse("")))
+    statuses.foreach(s => assume(response.status != s, statusMsg.getOrElse(s, "")))
+  }
+
+  def assumeNotInsideEventually(statuses:Int*)(response: WSResponse): Unit = {
+    // workaround until https://github.com/scalatest/scalatest/pull/807 is merged
+    statuses.foreach(s => if (response.status != s) throw new TestPendingException)
   }
 
 }
