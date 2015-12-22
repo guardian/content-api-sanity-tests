@@ -1,6 +1,5 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.TestFailureHandler
 import org.scalatest.time.{Seconds, Span}
 
 class PreviewRequiresAuthTest(context: Context) extends SanityTestBase(context) {
@@ -10,7 +9,7 @@ class PreviewRequiresAuthTest(context: Context) extends SanityTestBase(context) 
     eventually(timeout(Span(21, Seconds)),interval(Span(3, Seconds))) {
       val httpRequest = request(Config.previewHost).get()
       whenReady(httpRequest) { result =>
-        assumeNot(503, 504)(result)
+        assumeNotInsideEventually(503, 504)(result)
         result.status should be(401)
 
       }
