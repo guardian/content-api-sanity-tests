@@ -95,20 +95,6 @@
                 "Path": "/"
             }
         },
-        "RolePolicy": {
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "root",
-                "PolicyDocument": {
-                    "Statement": [{
-                        "Effect": "Allow",
-                        "Action": ["cloudformation:DescribeStackResource", "s3:*"],
-                        "Resource": "*"
-                    }]
-                },
-                "Roles": [{ "Ref": "Role" }]
-            }
-        },
         "CloudwatchPolicy": {
             "Type": "AWS::IAM::Policy",
             "Properties": {
