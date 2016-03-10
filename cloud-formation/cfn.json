@@ -78,6 +78,11 @@
         "cloudwatchFailedTestsMetric": {
             "Type": "String",
             "Default": "FailedTests"
+        },
+        "AMI": {
+            "Description": "AMI ID",
+            "Type": "String",
+            "Default": "ami-b0be07c3"
         }
     },
 
@@ -176,7 +181,7 @@
             "Type": "AWS::AutoScaling::LaunchConfiguration",
 
             "Properties": {
-                "ImageId": "ami-aa0d49dd",
+                "ImageId": {"Ref": "AMI"},
                 "AssociatePublicIpAddress": true,
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
                 "InstanceType": "t2.nano",
@@ -200,7 +205,7 @@
                             "mv sanity-tests-1.0 sanity-tests",
                             "rm sanity-tests.tar.gz",
                             "rm sanity-tests-1.0.zip",
-                            "mv sanity-tests.conf /etc/init",
+                            "mv sanity-tests.service /etc/systemd/system/",
                             "chown -R content-api /home/content-api /etc/gu",
                             "chgrp -R content-api /home/content-api /etc/gu",
                             "cat > /etc/gu/content-api-sanity-tests.conf <<EOF",
@@ -224,7 +229,7 @@
                             "ws.compressionEnabled=true",
                             "ws.ning.maximumConnectionLifeTime = 60000",
                             "EOF",
-                            "start sanity-tests"
+                            "systemctl start sanity-tests"
                         ] ]
                     }
                 }
