@@ -1,0 +1,15 @@
+[Unit]
+Description=sanity-tests
+
+[Service]
+User=content-api
+Group=content-api
+Restart=no
+WorkingDirectory=/home/content-api/sanity-tests
+
+Environment='JAVA_OPTS=-XX:+UseConcMarkSweepGC -XX:NewRatio=2 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/home/content-api/logs/gc.log -XX:+TieredCompilation -XX:ReservedCodeCacheSize=256m -Dconfig.file=/etc/gu/content-api-sanity-tests.conf'
+
+ExecStart=/bin/bash -c 'bin/sanity-tests >> /home/content-api/logs/sanity-tests.log 2>&1'
+
+[Install]
+WantedBy=multi-user.target

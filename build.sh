@@ -24,7 +24,7 @@ fi
 if cd .. && $JAVA $SBT_OPTIONS -jar sbt-launch.jar dist && cd target
 then
     cp universal/sanity-tests-1.0.zip downloads/sanity-tests-1.0.zip
-    cp ../sanity-tests.conf downloads
+    cp ../sanity-tests.service downloads
 else
     echo 'Failed to build Sanity Tests'
     exit 1
