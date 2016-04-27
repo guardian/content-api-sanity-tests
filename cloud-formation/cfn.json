@@ -184,7 +184,7 @@
                 "ImageId": {"Ref": "AMI"},
                 "AssociatePublicIpAddress": true,
                 "SecurityGroups": [ { "Ref": "SecurityGroup" } ],
-                "InstanceType": "t2.nano",
+                "InstanceType": "t2.micro",
                 "IamInstanceProfile": { "Ref": "InstanceProfile" },
                 "UserData": {
                     "Fn::Base64": {
