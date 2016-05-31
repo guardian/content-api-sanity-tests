@@ -6,6 +6,16 @@
             "data": {
                 "bucket": "content-api-sanity-tests-dist"
             }
+        },
+        "sanity-tests-ami-update" : {
+            "type": "ami-cloudformation-parameter",
+            "data": {
+                "amiTags" : { "Recipe": "ubuntu-wily-java8", "AmigoStage" : "PROD" },
+                "amiParameter" : "AMI",
+                "cloudFormationStackName": "content-api-sanity-tests",
+                "prependStackToCloudFormationStackName" : false,
+                "appendStageToCloudFormationStackName" : true
+            }
         }
     },
     "recipes": {
@@ -17,6 +27,9 @@
         },
         "deployOnly": {
             "actions": [ "sanity-tests.deploy" ]
+        },
+        "ami-cloudformation-parameter" : {
+            "actions": [ "sanity-tests-ami-update.update" ]
         }
     }
 }
