@@ -12,9 +12,7 @@ class EditorsPicksContainsItemsTest(context: Context) extends SanityTestBase(con
     whenReady(httpRequest) { result =>
       assume(result.status == 200, "Service is down")
       val json = Json.parse(result.body)
-      val editorsPicksJson = (json \ "response" \ "editorsPicks")
-      val editorsPicksList = editorsPicksJson.as[List[Map[String, String]]]
-      editorsPicksList should not be empty
+      (json \ "response" \ "editorsPicks")(0).toOption should not be(None)
     }
   }
 
