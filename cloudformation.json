@@ -83,6 +83,10 @@
             "Description": "AMI ID",
             "Type": "String",
             "Default": "ami-b0be07c3"
+        },
+        "playCryptoSecret": {
+            "Description": "play.crypto.secret value for Play project",
+            "Type": "String"
         }
     },
 
@@ -209,6 +213,8 @@
                             "chown -R content-api /home/content-api /etc/gu",
                             "chgrp -R content-api /home/content-api /etc/gu",
                             "cat > /etc/gu/content-api-sanity-tests.conf <<EOF",
+                            { "Fn::Join": [ "", [ "include ", "\"", "application", "\"" ] ] },
+                            { "Fn::Join": [ "", [ "play.crypto.secret=\"", { "Ref": "playCryptoSecret" },"\"" ] ] },
                             "content-api-sanity-tests {",
                             { "Fn::Join": [ "", [ "host=\"", { "Ref": "host" },"\"" ] ] },
                             { "Fn::Join": [ "", [ "host-public-secure=\"", { "Ref": "hostPublicSecure" },"\"" ] ] },
