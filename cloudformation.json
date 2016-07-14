@@ -87,6 +87,10 @@
         "playCryptoSecret": {
             "Description": "play.crypto.secret value for Play project",
             "Type": "String"
+        },
+        "facebookInstantArticlesHost": {
+            "Description": "Url of Facebook instant articles application",
+            "Type": "String"
         }
     },
 
@@ -231,6 +235,8 @@
                             { "Fn::Join": [ "", [ "cloudwatch-test-runs-metric=\"", { "Ref": "cloudwatchTestRunsMetric" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "cloudwatch-successful-tests-metric=\"", { "Ref": "cloudwatchSuccessfulTestsMetric" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "cloudwatch-failed-tests-metric=\"", { "Ref": "cloudwatchFailedTestsMetric" },"\""  ] ] },
+                            { "Fn::Join": [ "", [ "facebook-instant-articles-host=\"", { "Ref": "facebookInstantArticlesHost" },"\""  ] ] },
+
                             "}",
                             "play.ws.compressionEnabled=true",
                             "play.ws.ahc.maxConnectionLifetime = 1 minute",
