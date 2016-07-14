@@ -17,7 +17,8 @@ object MetaSuites {
     new EditorsPicksContainsItemsTest(context),
     new CriticalTagsTest(context),
     new TagSearchContainsLargeNumberOfResults(context),
-    new ShowBlocksTest(context)
+    new ShowBlocksTest(context),
+    new FacebookInstantArticlesIsPublishingTest(context)
   )
 
   def prodInfrequent(context: Context) = Seq(

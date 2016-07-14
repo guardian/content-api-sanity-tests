@@ -1,8 +1,10 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
+import com.gu.contentapi.sanity.tags.ProdOnly
 import play.api.libs.json.Json
 
+@ProdOnly
 class SearchContainsLargeNumberOfResults(context: Context) extends SanityTestBase(context) {
 
   "The Content API" should "return a large total of results on the /search endpoint" in {

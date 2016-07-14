@@ -15,7 +15,7 @@ class FacebookInstantArticlesIsPublishingTest(context: Context) extends SanityTe
       assume(result.status == 200, "Cannot access publication healthcheck endpoint for FB IA")
       val json = Json.parse(result.body)
       (json \ "lastPublished").toOption.map{ lastPublished =>
-        val lastPublishedDateTime = new DateTime(lastPublished.toString)
+        val lastPublishedDateTime = new DateTime(lastPublished.as[String])
         Minutes.minutesBetween(lastPublishedDateTime, new DateTime()).isLessThan(Minutes.minutes(30)) should be(true)
       }
     }
