@@ -50,10 +50,6 @@
             "Description": "Pager Duty Service key for Low Priority incidents",
             "Type": "String"
         },
-        "composerHost": {
-            "Description": "Composer Flex Import CODE host name",
-            "Type": "String"
-        },
         "previewUsername": {
             "Description": "Content API CODE Preview username",
             "Type": "String"
@@ -230,7 +226,6 @@
                             { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "pager-duty-service-key-low-priority=\"", { "Ref": "pagerDutyServiceKeyLowPriority" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "composer-host=\"", { "Ref": "composerHost" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "cloudwatch-namespace=\"", { "Ref": "cloudwatchNamespace" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "cloudwatch-test-runs-metric=\"", { "Ref": "cloudwatchTestRunsMetric" },"\""  ] ] },
                             { "Fn::Join": [ "", [ "cloudwatch-successful-tests-metric=\"", { "Ref": "cloudwatchSuccessfulTestsMetric" },"\""  ] ] },
