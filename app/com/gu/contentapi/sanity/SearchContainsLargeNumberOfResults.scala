@@ -13,6 +13,13 @@ class SearchContainsLargeNumberOfResults(context: Context) extends SanityTestBas
       assume(result.status == 200, "Service is down")
       val json = Json.parse(result.body)
       val resultTotal = (json \ "response" \ "total").asOpt[Int]
+      if (resultTotal.value < 1819326) {
+        println("-------------- DEBUG ----------------")
+      	println(s"body: ${result.body}")
+        println(s"json $json")
+        resultTotal map println
+        println("-------------- DEBUG ----------------")
+      }
       resultTotal.value should be >= 1819326
     }
   }
