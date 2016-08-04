@@ -18,8 +18,8 @@ class FacebookInstantArticlesIsPublishingTest(context: Context) extends SanityTe
         val lastPublishedDateTime = new DateTime(lastPublished.as[String])
 
         val now = DateTime.now()
-        val twelveAM = new DateTime().withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0)
-        val eightThirtyAM = new DateTime().withHourOfDay(8).withMinuteOfHour(30).withSecondOfMinute(0)
+        val twelveAM = now.withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0)
+        val eightThirtyAM = now.withHourOfDay(8).withMinuteOfHour(30).withSecondOfMinute(0)
 
         if (now.dayOfWeek.get == DateTimeConstants.SATURDAY ||
             now.dayOfWeek.get == DateTimeConstants.SUNDAY ||
