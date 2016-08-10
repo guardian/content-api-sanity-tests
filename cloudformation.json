@@ -20,73 +20,14 @@
             "Description": "A SNS topic ARN for Cloudwatch alerts",
             "Type": "String"
         },
-        "host": {
-            "Description": "Content API host",
-            "Type": "String"
-        },
-        "hostPublicSecure": {
-            "Type": "String"
-        },
-        "previewHost": {
-            "Description": "Content API Preview host",
-            "Type": "String"
-        },
-        "apiKey": {
-            "Description": "Content API Live API key",
-            "Type": "String"
-        },
-        "writeHost": {
-            "Description": "Porter host",
-            "Type": "String"
-        },
-        "writePreviewHost": {
-            "Type": "String"
-        },
-        "pagerDutyServiceKey": {
-            "Description": "Pager Duty Service key for High Priority incidents",
-            "Type": "String"
-        },
-        "pagerDutyServiceKeyLowPriority": {
-            "Description": "Pager Duty Service key for Low Priority incidents",
-            "Type": "String"
-        },
-        "previewUsername": {
-            "Description": "Content API CODE Preview username",
-            "Type": "String"
-        },
-        "previewPassword": {
-            "Description": "Content API CODE Preview password",
-            "Type": "String",
-            "NoEcho": true
-        },
         "cloudwatchNamespace": {
             "Type": "String",
             "Default": "content-api-sanity-tests"
-        },
-        "cloudwatchTestRunsMetric": {
-            "Type": "String",
-            "Default": "TestRuns"
-        },
-        "cloudwatchSuccessfulTestsMetric": {
-            "Type": "String",
-            "Default": "SuccessfulTests"
-        },
-        "cloudwatchFailedTestsMetric": {
-            "Type": "String",
-            "Default": "FailedTests"
         },
         "AMI": {
             "Description": "AMI ID",
             "Type": "String",
             "Default": "ami-b0be07c3"
-        },
-        "playCryptoSecret": {
-            "Description": "play.crypto.secret value for Play project",
-            "Type": "String"
-        },
-        "facebookInstantArticlesHost": {
-            "Description": "Url of Facebook instant articles application",
-            "Type": "String"
         }
     },
 
@@ -119,6 +60,24 @@
                 },
                 "Roles": [{"Ref": "Role" }]
             }
+        },
+        "DownloadStuffFromS3Policy": {
+          "Type": "AWS::IAM::Policy",
+          "Properties": {
+            "PolicyName": "download-config-and-artifact-from-s3",
+            "PolicyDocument": {
+              "Statement": [{
+                "Effect": "Allow",
+                "Action": "s3:GetObject",
+                "Resource": [
+                  "arn:aws:s3::*:content-api-config/*",
+                  "arn:aws:s3::*:content-api-dist/*",
+                  "arn:aws:s3::*:content-api-sanity-tests-dist/*"
+                ]
+              }]
+            },
+            "Roles": [{ "Ref": "Role" }]
+          }
         },
         "InstanceProfile": {
             "Type": "AWS::IAM::InstanceProfile",
@@ -196,46 +155,24 @@
                             "#!/bin/bash -ev",
 
                             "adduser --disabled-password content-api",
-                            "wget -NP /home/ubuntu/.ssh https://s3-eu-west-1.amazonaws.com/content-api-dist/authorized_keys",
+                            "aws --region eu-west-1 s3 cp s3://content-api-dist/authorized_keys /home/ubuntu/.ssh/authorized_keys",
+
                             "cd /home/content-api",
                             "mkdir logs",
                             "mkdir -p /etc/gu",
                             "mkdir -p /var/run/ports",
 
+                            { "Fn::Join": [ "", [ "aws --region eu-west-1 s3 cp s3://content-api-config/content-api-sanity-tests/", { "Ref": "Stage" }, "/sanity-tests/", "content-api-sanity-tests.conf /etc/gu/content-api-sanity-tests.conf" ] ] },
 
-                            { "Fn::Join": [ "", [ "wget https://s3-eu-west-1.amazonaws.com/content-api-sanity-tests-dist/content-api-sanity-tests/",{ "Ref": "Stage" }, "/sanity-tests/sanity-tests.tar.gz" ] ] },
+                            { "Fn::Join": [ "", [ "aws --region eu-west-1 s3 cp s3://content-api-sanity-tests-dist/content-api-sanity-tests/", { "Ref": "Stage" }, "/sanity-tests/", "sanity-tests.tar.gz /home/content-api/sanity-tests.tar.gz" ] ] },
                             "tar -xvf sanity-tests.tar.gz",
                             "unzip sanity-tests-1.0.zip",
                             "mv sanity-tests-1.0 sanity-tests",
                             "rm sanity-tests.tar.gz",
                             "rm sanity-tests-1.0.zip",
                             "mv sanity-tests.service /etc/systemd/system/",
-                            "chown -R content-api /home/content-api /etc/gu",
-                            "chgrp -R content-api /home/content-api /etc/gu",
-                            "cat > /etc/gu/content-api-sanity-tests.conf <<EOF",
-                            { "Fn::Join": [ "", [ "include ", "\"", "application", "\"" ] ] },
-                            { "Fn::Join": [ "", [ "play.crypto.secret=\"", { "Ref": "playCryptoSecret" },"\"" ] ] },
-                            "content-api-sanity-tests {",
-                            { "Fn::Join": [ "", [ "host=\"", { "Ref": "host" },"\"" ] ] },
-                            { "Fn::Join": [ "", [ "host-public-secure=\"", { "Ref": "hostPublicSecure" },"\"" ] ] },
-                            { "Fn::Join": [ "", [ "write-preview-host=\"", { "Ref": "writePreviewHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "preview-host=\"", { "Ref": "previewHost" },"\"" ] ] },
-                            { "Fn::Join": [ "", [ "preview-username=\"", { "Ref": "previewUsername" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "preview-password=\"", { "Ref": "previewPassword" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "api-key=\"", { "Ref": "apiKey" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "write-host=\"", { "Ref": "writeHost" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "pager-duty-service-key=\"", { "Ref": "pagerDutyServiceKey" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "pager-duty-service-key-low-priority=\"", { "Ref": "pagerDutyServiceKeyLowPriority" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "cloudwatch-namespace=\"", { "Ref": "cloudwatchNamespace" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "cloudwatch-test-runs-metric=\"", { "Ref": "cloudwatchTestRunsMetric" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "cloudwatch-successful-tests-metric=\"", { "Ref": "cloudwatchSuccessfulTestsMetric" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "cloudwatch-failed-tests-metric=\"", { "Ref": "cloudwatchFailedTestsMetric" },"\""  ] ] },
-                            { "Fn::Join": [ "", [ "facebook-instant-articles-host=\"", { "Ref": "facebookInstantArticlesHost" },"\""  ] ] },
+                            "chown -R content-api:content-api /home/content-api /etc/gu",
 
-                            "}",
-                            "play.ws.compressionEnabled=true",
-                            "play.ws.ahc.maxConnectionLifetime = 1 minute",
-                            "EOF",
                             "systemctl start sanity-tests"
                         ] ]
                     }
