@@ -42,7 +42,7 @@ trait HttpRequestSupport extends ScalaFutures with Matchers with Assertions {
 
   def assumeNotInsideEventually(statuses:Int*)(response: WSResponse): Unit = {
     // workaround until https://github.com/scalatest/scalatest/pull/807 is merged
-    statuses.foreach(s => if (response.status != s) throw new TestPendingException)
+    statuses.foreach(s => if (response.status == s) throw new TestPendingException)
   }
 
 }
