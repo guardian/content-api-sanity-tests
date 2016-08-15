@@ -18,6 +18,7 @@ content-api-sanity-tests {
     pager-duty-service-key-low-priority="pager-duty-low-priority-service-key" # Set as 'invalid' if testing locally
     composer-host="http://composer-host/"
     facebook-instant-articles-host="http://facebook-ia-host/"
+    apple-news-host="http://apple-news-host/"
 
     # PROD only. In other environments, these keys can be omitted.
     # If any key is omitted, nothing will be reported to CloudWatch.
