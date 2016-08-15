@@ -18,4 +18,5 @@ object Config {
   val pagerDutyServiceKey=sanityConfig.getString("pager-duty-service-key")
   val pagerDutyServiceKeyLowPriority=sanityConfig.getString("pager-duty-service-key-low-priority")
   val facebookInstantArticlesHost = sanityConfig.getString("facebook-instant-articles-host")
+  val appleNewsHost = sanityConfig.getString("apple-news-host")
 }
