@@ -7,7 +7,7 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WS
 import play.api.Play.current
 
-class FacebookInstantArticlesIsPublishingTest(context: Context) extends SanityTestBase(context) {
+class AppleNewsIsPublishingTest(context: Context) extends SanityTestBase(context) {
 
   "Apple News" should "have published something in the last 30 minutes (60 minutes on weekends or between 00:00 - 08:30)" in {
     val httpRequest = WS.url(s"${Config.appleNewsHost}healthcheck/publication").withRequestTimeout(10000.millis).get()
