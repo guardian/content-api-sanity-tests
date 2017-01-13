@@ -1,0 +1,18 @@
+stacks:
+- content-api-sanity-tests
+regions:
+- eu-west-1
+deployments:
+  sanity-tests:
+    type: autoscaling
+    parameters:
+      bucket: content-api-sanity-tests-dist
+  sanity-tests-ami-update:
+    type: ami-cloudformation-parameter
+    parameters:
+      amiTags:
+        Recipe: ubuntu-wily-java8
+        AmigoStage: PROD
+      cloudFormationStackName: content-api-sanity-tests
+      prependStackToCloudFormationStackName: false
+      appendStageToCloudFormationStackName: true
