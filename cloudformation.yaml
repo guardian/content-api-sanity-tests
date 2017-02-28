@@ -61,6 +61,20 @@ Resources:
           - arn:aws:s3::*:content-api-sanity-tests-dist/*
       Roles:
       - !Ref Role
+  ElasticSearchSnapshotsS3Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: ElasticSearchSnapshotsS3Policy
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:GetObject
+          - s3:ListBucket
+          Resource:
+          - arn:aws:s3::*:content-api-es-snapshots/*
+      Roles:
+      - !Ref Role
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
