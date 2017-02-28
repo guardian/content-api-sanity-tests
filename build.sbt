@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
   "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1",
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.2"
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.2",
+  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.97"
 )
 
 parallelExecution in ThisBuild := false
