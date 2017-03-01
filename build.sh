@@ -30,8 +30,8 @@ else
     exit 1
 fi
 cd downloads/ && tar -zcvf ../packages/sanity-tests/sanity-tests.tar.gz * && cd ..
-cp ../app/deploy/deploy.json .
-zip -rv artifacts.zip packages/ deploy.json
+cp ../app/deploy/riff-raff.yaml .
+zip -rv artifacts.zip packages/ riff-raff.yaml
 
 [ -d downloads ] && rm -rf downloads
 [ -d packages ] && rm -rf packages

@@ -16,3 +16,5 @@ deployments:
       cloudFormationStackName: content-api-sanity-tests
       prependStackToCloudFormationStackName: false
       appendStageToCloudFormationStackName: true
+      cloudFormationStackByTags: false
+    dependencies: [sanity-tests]
