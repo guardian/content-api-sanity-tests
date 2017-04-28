@@ -12,7 +12,7 @@ mkdir target
 cd target
 
 mkdir downloads
-mkdir -p packages/sanity-tests
+mkdir -p sanity-tests
 
 # sanity-tests
 if [ -z "$JDK_HOME" ]; then
@@ -29,11 +29,9 @@ else
     echo 'Failed to build Sanity Tests'
     exit 1
 fi
-cd downloads/ && tar -zcvf ../packages/sanity-tests/sanity-tests.tar.gz * && cd ..
+cd downloads/ && tar -zcvf ../sanity-tests/sanity-tests.tar.gz * && cd ..
 cp ../app/deploy/riff-raff.yaml .
-zip -rv artifacts.zip packages/ riff-raff.yaml
 
 [ -d downloads ] && rm -rf downloads
-[ -d packages ] && rm -rf packages
 
-echo "##teamcity[publishArtifacts '$(pwd)/artifacts.zip => .']"
+echo "##teamcity[publishArtifacts '$(pwd) => .']"
