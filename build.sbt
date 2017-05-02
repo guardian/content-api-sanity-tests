@@ -10,6 +10,8 @@ routesGenerator := StaticRoutesGenerator
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
+val AwsVersion = "1.11.97"
+
 libraryDependencies ++= Seq(
   "org.quartz-scheduler" % "quartz" % "2.1.6",
   "org.scalatest" %% "scalatest" % "2.2.6",
@@ -19,8 +21,8 @@ libraryDependencies ++= Seq(
   "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
   "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1",
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.2",
-  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.97"
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % AwsVersion,
+  "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
 
 parallelExecution in ThisBuild := false
