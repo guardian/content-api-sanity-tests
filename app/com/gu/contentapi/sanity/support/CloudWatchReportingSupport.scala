@@ -37,7 +37,7 @@ trait CloudWatchReporter {
 object CloudWatchReporter {
 
   def apply(config: Configuration): CloudWatchReporter = {
-    def cfg(key: String) = config.getString(s"content-api-sanity-tests.cloudwatch-$key")
+    def cfg(key: String) = config.getOptional[String](s"content-api-sanity-tests.cloudwatch-$key")
     val reporter = for {
       namespace <- cfg("namespace")
       testRunsMetric <- cfg("test-runs-metric")

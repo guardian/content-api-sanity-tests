@@ -4,9 +4,9 @@ version := "1.0"
 
 scalaVersion := "2.11.11"
 
-scalacOptions ++= Seq("-feature")
+scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
-routesGenerator := StaticRoutesGenerator
+routesGenerator := InjectedRoutesGenerator
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -27,7 +27,5 @@ libraryDependencies ++= Seq(
 )
 
 parallelExecution in ThisBuild := false
-
-javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
