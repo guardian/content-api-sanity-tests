@@ -4,7 +4,7 @@ import play.api.ApplicationLoader.Context
 import play.api.{ BuiltInComponentsFromContext, NoHttpFiltersComponents }
 import play.api.inject.DefaultApplicationLifecycle
 import play.api.routing.Router
-import controllers.AssetsComponents
+import controllers.HealthcheckController
 import router.Routes
 
 class AppComponents(context: Context)
@@ -13,7 +13,8 @@ class AppComponents(context: Context)
 
   val cloudWatchReporter = CloudWatchReporter(configuration)
 
-  val app: Application = new Application(controllerComponents, new DefaultApplicationLifecycle(), cloudWatchReporter)
+  val app: Application = new Application(new DefaultApplicationLifecycle(), cloudWatchReporter)
+  val ht: HealthcheckController = new HealthcheckController(controllerComponents)
 
-  val router: Router = new Routes()
+  val router: Router = new Routes(httpErrorHandler, ht)
 }

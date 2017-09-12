@@ -6,9 +6,9 @@ scalaVersion := "2.11.11"
 
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
-routesGenerator := InjectedRoutesGenerator
-
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala, PlayAkkaHttpServer)
+  .disablePlugins(PlayNettyServer)
 
 val AwsVersion = "1.11.193"
 
@@ -26,6 +26,6 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
 
-parallelExecution in ThisBuild := false
+routesGenerator := InjectedRoutesGenerator
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))

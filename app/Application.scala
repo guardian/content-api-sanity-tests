@@ -9,10 +9,9 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 class Application(
-  override val controllerComponents: ControllerComponents,
   lifecycle: ApplicationLifecycle,
   cloudWatchReporter: CloudWatchReporter
-) extends BaseController {
+) {
 
   lifecycle.addStopHook { () =>
     Logger.info("Application shutdown...")
