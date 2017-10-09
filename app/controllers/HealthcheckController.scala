@@ -1,8 +1,10 @@
 package controllers
 
-import play.api.mvc.{Action, BaseController, ControllerComponents}
+import play.api.mvc.Action
+import play.api.mvc.legacy.Controller
 
-class HealthcheckController(override val controllerComponents: ControllerComponents) extends BaseController {
+class HealthcheckController extends Controller {
+
   def report = Action {
     Ok("heartbeat")
   }
