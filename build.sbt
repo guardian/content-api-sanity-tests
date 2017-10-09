@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
   "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
   "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.1",
-  "com.typesafe.play" %% "play-json" % "2.6.3",
+  "com.typesafe.play" %% "play-json" % "2.6.6",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AwsVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
