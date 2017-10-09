@@ -5,7 +5,7 @@ version := "1.0"
 scalaVersion := "2.11.11"
 
 scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
-javaOptions ++= collection.JavaConverters.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
+javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, PlayAkkaHttpServer)
