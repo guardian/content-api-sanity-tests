@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 SBT_OPTIONS="-Xmx1G \
-    -XX:MaxPermSize=250m \
     -XX:+UseCompressedOops \
     -Dsbt.log.noformat=true \
     -Dbuild.number=$BUILD_NUMBER \
