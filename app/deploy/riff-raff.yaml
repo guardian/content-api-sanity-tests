@@ -11,7 +11,7 @@ deployments:
     type: ami-cloudformation-parameter
     parameters:
       amiTags:
-        Recipe: ubuntu-wily-java8
+        Recipe: ubuntu-xenial-java8
         AmigoStage: PROD
       cloudFormationStackName: content-api-sanity-tests
       prependStackToCloudFormationStackName: false
