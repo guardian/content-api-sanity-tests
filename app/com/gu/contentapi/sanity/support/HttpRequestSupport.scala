@@ -29,6 +29,11 @@ trait HttpRequestSupport extends ScalaFutures with Matchers with Assertions {
   val wsConfig = AhcWSClientConfigFactory.forConfig(configuration.underlying, environment.classLoader)
   val wsClient: WSClient = AhcWSClient(wsConfig)
 
+  def onComplete = {
+    wsClient.close()
+    materializer.shutdown()
+  }
+
   def request(uri: String): WSRequest = wsClient.url(uri).withRequestTimeout(10000.millis)
 
   def requestHost(path: String) =
