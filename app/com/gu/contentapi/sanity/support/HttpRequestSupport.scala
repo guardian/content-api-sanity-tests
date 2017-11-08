@@ -31,7 +31,7 @@ trait HttpRequestSupport extends ScalaFutures with Matchers with Assertions {
 
   def onComplete = {
     wsClient.close()
-    materializer.shutdown()
+    // materializer.shutdown()
   }
 
   def request(uri: String): WSRequest = wsClient.url(uri).withRequestTimeout(10000.millis)

@@ -12,6 +12,14 @@ abstract class SanityTestBase(context: Context)
 
   val testFailureHandler = context.testFailureHandler
   val cloudWatchReporter = context.cloudWatchReporter
+
+  override def withFixture(test: NoArgTest) = {
+    try {
+      super.withFixture(test)
+    } finally {
+      onComplete
+    }
+  }
 }
 
 
