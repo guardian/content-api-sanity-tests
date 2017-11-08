@@ -8,17 +8,13 @@ abstract class SanityTestBase(context: Context)
   extends FlatSpec with Matchers with OptionValues
   with Eventually with Retries with ScalaFutures with IntegrationPatience
   with TestFailureHandlingSupport with CloudWatchReportingSupport
-  with HttpRequestSupport with XmlFileSupport {
+  with HttpRequestSupport with XmlFileSupport with BeforeAndAfter {
 
   val testFailureHandler = context.testFailureHandler
   val cloudWatchReporter = context.cloudWatchReporter
 
-  override def withFixture(test: NoArgTest) = {
-    try {
-      super.withFixture(test)
-    } finally {
-      onComplete
-    }
+  after {
+    onComplete
   }
 }
 
