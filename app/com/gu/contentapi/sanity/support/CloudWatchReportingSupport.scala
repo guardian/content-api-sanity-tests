@@ -5,12 +5,12 @@ import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.{Region, Regions}
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchAsyncClientBuilder}
 import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest, PutMetricDataResult}
-import org.scalatest.{Failed, Outcome, Succeeded, Suite}
+import org.scalatest.{Failed, Outcome, Succeeded, TestSuite}
 import play.api.{Configuration, Logger}
 
 import scala.util.Try
 
-trait CloudWatchReportingSupport extends Suite {
+trait CloudWatchReportingSupport extends TestSuite {
 
   def cloudWatchReporter: CloudWatchReporter
 
