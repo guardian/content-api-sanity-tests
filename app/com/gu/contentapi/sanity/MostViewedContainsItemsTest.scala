@@ -13,7 +13,7 @@ class MostViewedContainsItemsTest(context: Context) extends SanityTestBase(conte
       assume(result.status == 200, "Service is down")
       val json = Json.parse(result.body)
       // most viewed length should be > 10 so try and access 11th element in list.
-      (json \ "response" \ "mostViewed")(10).asOpt[String] should not be(None)
+      (json \ "response" \ "mostViewed")(10).toOption should not be(None)
     }
   }
 

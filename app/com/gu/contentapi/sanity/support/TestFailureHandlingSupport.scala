@@ -11,7 +11,7 @@ import play.api.libs.json.{JsValue, Json}
  *  - counting test failures
  *  - sending PagerDuty alerts
  */
-trait TestFailureHandlingSupport extends TestSuite {
+trait TestFailureHandlingSupport extends Suite {
 
   def testFailureHandler: TestFailureHandler
 

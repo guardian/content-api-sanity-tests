@@ -4,29 +4,29 @@ version := "1.0"
 
 scalaVersion := "2.11.11"
 
-scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
-javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
+scalacOptions ++= Seq("-feature")
 
-lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, PlayAkkaHttpServer)
-  .disablePlugins(PlayNettyServer)
+routesGenerator := StaticRoutesGenerator
 
-val AwsVersion = "1.11.193"
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
+
+val AwsVersion = "1.11.97"
 
 libraryDependencies ++= Seq(
-  "org.quartz-scheduler" % "quartz" % "2.3.0",
-  "org.scalatest" %% "scalatest" % "3.0.4",
-  "org.seleniumhq.selenium" % "selenium-java" % "3.5.3",
-  "joda-time" % "joda-time" % "2.9.9",
+  "org.quartz-scheduler" % "quartz" % "2.1.6",
+  "org.scalatest" %% "scalatest" % "2.2.6",
+  "org.seleniumhq.selenium" % "selenium-java" % "2.41.0",
+  "joda-time" % "joda-time" % "2.7",
   ws,
   "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
   "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.1",
-  "com.typesafe.play" %% "play-json" % "2.6.6",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AwsVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
 
-routesGenerator := InjectedRoutesGenerator
+parallelExecution in ThisBuild := false
+
+javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
