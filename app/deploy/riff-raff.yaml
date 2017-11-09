@@ -7,7 +7,6 @@ deployments:
     type: autoscaling
     parameters:
       bucket: content-api-sanity-tests-dist
-    dependencies: [sanity-tests-ami-update]
   sanity-tests-ami-update:
     type: ami-cloudformation-parameter
     parameters:
@@ -18,3 +17,4 @@ deployments:
       prependStackToCloudFormationStackName: false
       appendStageToCloudFormationStackName: true
       cloudFormationStackByTags: false
+    dependencies: [sanity-tests]

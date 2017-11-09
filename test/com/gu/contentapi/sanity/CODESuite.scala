@@ -1,16 +1,14 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.{FakeAppSupport, DoNothingTestFailureHandler}
-import org.scalatest.{TestSuite, Suites}
+import org.scalatest.Suites
 
 /**
  * Nested suite of all the tests that should be run in the CODE environment
  */
 class CODESuite extends Suites(
   CODESuite.CodeOnlySuites ++
-  MetaSuites.suitableForBothProdAndCode(context = Context.Testing): _*) 
-  with TestSuite
-  with FakeAppSupport
+  MetaSuites.suitableForBothProdAndCode(context = Context.Testing): _*) with FakeAppSupport
 
 object CODESuite {
 

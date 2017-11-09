@@ -5,12 +5,12 @@ import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.{Region, Regions}
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchAsyncClientBuilder}
 import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest, PutMetricDataResult}
-import org.scalatest.{Failed, Outcome, Succeeded, TestSuite}
+import org.scalatest.{Failed, Outcome, Succeeded, Suite}
 import play.api.{Configuration, Logger}
 
 import scala.util.Try
 
-trait CloudWatchReportingSupport extends TestSuite {
+trait CloudWatchReportingSupport extends Suite {
 
   def cloudWatchReporter: CloudWatchReporter
 
@@ -37,7 +37,7 @@ trait CloudWatchReporter {
 object CloudWatchReporter {
 
   def apply(config: Configuration): CloudWatchReporter = {
-    def cfg(key: String) = config.getOptional[String](s"content-api-sanity-tests.cloudwatch-$key")
+    def cfg(key: String) = config.getString(s"content-api-sanity-tests.cloudwatch-$key")
     val reporter = for {
       namespace <- cfg("namespace")
       testRunsMetric <- cfg("test-runs-metric")
