@@ -2,8 +2,9 @@ package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import play.api.libs.json.{JsArray, JsValue, Json}
+import play.api.libs.ws.WSClient
 
-class ShowBlocksTest(context: Context) extends SanityTestBase(context) {
+class ShowBlocksTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "The newest Flex items in the search results" should "include blocks if show-blocks=all" in {
 

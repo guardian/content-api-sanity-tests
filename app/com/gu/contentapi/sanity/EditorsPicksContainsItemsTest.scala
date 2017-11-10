@@ -3,9 +3,10 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.ProdOnly
 import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
 
 @ProdOnly
-class EditorsPicksContainsItemsTest(context: Context) extends SanityTestBase(context) {
+class EditorsPicksContainsItemsTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "Editors picks for /uk" should "not be empty" in {
     val httpRequest = requestHost("/uk?show-editors-picks=true").get()

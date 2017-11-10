@@ -3,9 +3,10 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.ProdOnly
 import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
 
 @ProdOnly
-class MostViewedContainsItemsTest(context: Context) extends SanityTestBase(context) {
+class MostViewedContainsItemsTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "Most Viewed" should "contain more than 10 items" in {
     val httpRequest = requestHost("/uk?show-most-viewed=true").get()

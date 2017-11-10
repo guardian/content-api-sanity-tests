@@ -3,9 +3,10 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.tags.ProdOnly
 import com.amazonaws.services.s3.AmazonS3Client
 import java.time.LocalDate
+import play.api.libs.ws.WSClient
 
 @ProdOnly
-class ElasticSearchSnapshotTest(context: Context) extends SanityTestBase(context) {
+class ElasticSearchSnapshotTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   val s3Client: AmazonS3Client = new AmazonS3Client()
 

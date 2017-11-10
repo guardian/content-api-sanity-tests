@@ -1,8 +1,9 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
+import play.api.libs.ws.WSClient
 
-class CriticalTagsTest(context: Context) extends SanityTestBase(context) {
+class CriticalTagsTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "Tags critical for publication (including Kindle)" should "exist" in {
     val criticalTags = Seq(

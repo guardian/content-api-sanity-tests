@@ -3,9 +3,10 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.ProdOnly
 import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
 
 @ProdOnly
-class SearchContainsLargeNumberOfResults(context: Context) extends SanityTestBase(context) {
+class SearchContainsLargeNumberOfResults(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "The Content API" should "return a large total of results on the /search endpoint" in {
     val httpRequest = requestHost("search").get()

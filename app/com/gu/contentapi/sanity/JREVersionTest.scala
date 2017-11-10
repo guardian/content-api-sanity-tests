@@ -3,9 +3,10 @@ package com.gu.contentapi.sanity
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
 import org.scalatest.time.{Span, Seconds}
+import play.api.libs.ws.WSClient
 
 @ProdOnly
-class JREVersionTest(context: Context) extends SanityTestBase(context) {
+class JREVersionTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   {
     "The Content API" should "be using the latest JRE" taggedAs LowPriorityTest in {
