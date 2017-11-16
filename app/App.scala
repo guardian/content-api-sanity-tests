@@ -28,7 +28,7 @@ class App(
 
   def runFrequentTests(cloudWatchReporter: CloudWatchReporter): Unit = {
     println(s"=== Starting frequent tests at ${new DateTime()} ===")
-    val context = Context(testFailureHandler = FrequentScheduledTestFailureHandler, cloudWatchReporter = cloudWatchReporter)
+    val context = Context(testFailureHandler = new FrequentScheduledTestFailureHandler(wsClient), cloudWatchReporter = cloudWatchReporter)
     val suites = MetaSuites.prodFrequent(context, wsClient)
     suites.foreach(_.execute())
     println(s"=== Frequent tests finished at ${new DateTime()} ===")
@@ -37,7 +37,7 @@ class App(
 
   def runInfrequentTests(cloudWatchReporter: CloudWatchReporter): Unit = {
     println(s"=== Starting infrequent tests at ${new DateTime()} ===")
-    val context = Context(testFailureHandler = InfrequentScheduledTestsFailureHandler, cloudWatchReporter = cloudWatchReporter)
+    val context = Context(testFailureHandler = new InfrequentScheduledTestsFailureHandler(wsClient), cloudWatchReporter = cloudWatchReporter)
     val suites = MetaSuites.prodInfrequent(context, wsClient)
     suites.foreach(_.execute())
     println(s"=== Infrequent tests finished at ${new DateTime()} ===")

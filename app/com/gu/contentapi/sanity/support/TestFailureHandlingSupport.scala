@@ -5,6 +5,7 @@ import org.joda.time.{DateTime, Minutes}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest._
 import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.WSClient
 
 /**
  * Contains all the test failure handling logic:
@@ -32,7 +33,7 @@ trait TestFailureHandler {
 
 }
 
-abstract class PagerDutyAlertingTestFailureHandler
+abstract class PagerDutyAlertingTestFailureHandler(override val wsClient: WSClient)
   extends TestFailureHandler with HttpRequestSupport with Matchers with ScalaFutures with IntegrationPatience with OptionValues {
   import PagerDutyAlertingTestFailureHandler._
 
@@ -104,7 +105,7 @@ object PagerDutyAlertingTestFailureHandler {
  * Note that this handler holds state about failure counts that needs to be shared across multiple suites
  * and even across multiple runs of the scheduler.
  */
-object FrequentScheduledTestFailureHandler extends PagerDutyAlertingTestFailureHandler {
+class FrequentScheduledTestFailureHandler(wsClient: WSClient) extends PagerDutyAlertingTestFailureHandler(wsClient) {
 
   /**
    * How long to wait between failed tests before resetting the incident counter
@@ -154,7 +155,7 @@ object FrequentScheduledTestFailureHandler extends PagerDutyAlertingTestFailureH
 /**
  * Handler that sends a PagerDuty alert immediately
  */
-object InfrequentScheduledTestsFailureHandler extends PagerDutyAlertingTestFailureHandler {
+class InfrequentScheduledTestsFailureHandler(wsClient: WSClient) extends PagerDutyAlertingTestFailureHandler(wsClient) {
 
   override def handleTestFailure(testName: String, exception: Throwable, tags: Set[String]): Unit = {
     Console.err.println(Console.RED + "Test failure: " + exception.getMessage + Console.RESET)
