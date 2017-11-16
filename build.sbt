@@ -6,9 +6,11 @@ scalaVersion := "2.11.11"
 
 scalacOptions ++= Seq("-feature")
 
-routesGenerator := StaticRoutesGenerator
+routesGenerator := InjectedRoutesGenerator
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala, PlayAkkaHttpServer)
+  .disablePlugins(PlayNettyServer)
 
 val AwsVersion = "1.11.227"
 
@@ -24,8 +26,6 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AwsVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
-
-parallelExecution in ThisBuild := false
 
 javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
 
