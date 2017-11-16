@@ -32,7 +32,7 @@ class CanaryContentSanityTest(context: Context, wsClient: WSClient) extends Sani
   "Touching the canary content" should "update the timestamp" taggedAs Retryable in {
     val postSuccessResponseCode = 202
     val httpRequest = request(Config.writeHost + "canary/content")
-      .withHeaders("Content-Type" -> "application/json")
+      .withHttpHeaders("Content-Type" -> "application/json")
       .post("")
     
     whenReady(httpRequest) { result =>
