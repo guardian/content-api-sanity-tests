@@ -21,6 +21,7 @@ class App(
     appLifecycle.addStopHook { () =>
       Logger.info("Application shutdown...")
       QuartzScheduler.stop()
+      wsClient.close()
       Future.successful(())
     }
   }
