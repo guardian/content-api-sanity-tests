@@ -10,11 +10,10 @@ import router.Routes
 
 class AppComponents(context: Context)
   extends BuiltInComponentsFromContext(context)
-  with NoHttpFiltersComponents {
-
+  with NoHttpFiltersComponents { 
+    
   Controller.init(controllerComponents)
-
-  implicit val _materializer = materializer
+  
   val wsClient = AhcWSClient()
 
   val app = new App(new DefaultApplicationLifecycle(), CloudWatchReporter(configuration), wsClient)
