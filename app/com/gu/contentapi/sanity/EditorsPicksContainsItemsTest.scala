@@ -13,7 +13,7 @@ class EditorsPicksContainsItemsTest(context: Context, wsClient: WSClient) extend
     whenReady(httpRequest) { result =>
       assume(result.status == 200, "Service is down")
       val json = Json.parse(result.body)
-      (json \ "response" \ "editorsPicks")(0).asOpt[String] should not be(None)
+      ((json \ "response" \ "editorsPicks")(0) \ "id").asOpt[String] should not be(None)
     }
   }
 
