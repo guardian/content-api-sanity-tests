@@ -16,8 +16,6 @@ class AppComponents(context: Context)
     
   Controller.init(controllerComponents)
 
-  override lazy val materializer = ActorMaterializer()(actorSystem)
- 
   val app = new App(new DefaultApplicationLifecycle(), CloudWatchReporter(configuration), wsClient)
   val router: Router = new Routes(httpErrorHandler, new HealthcheckController())
   
