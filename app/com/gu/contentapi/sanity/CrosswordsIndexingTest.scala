@@ -4,9 +4,10 @@ import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
 import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.WSClient
 
 @ProdOnly
-class CrosswordsIndexingTest(context: Context) extends SanityTestBase(context) {
+class CrosswordsIndexingTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "A new Crossword" should "be indexed every day" taggedAs LowPriorityTest in {
     val now = DateTime.now

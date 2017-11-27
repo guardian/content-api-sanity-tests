@@ -1,8 +1,9 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
+import play.api.libs.ws.WSClient
 
-class ContentApiSanityTest(context: Context) extends SanityTestBase(context) {
+class ContentApiSanityTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "Content api" should "serve gzipped" in {
     // GZip Compression is enabled in application.conf

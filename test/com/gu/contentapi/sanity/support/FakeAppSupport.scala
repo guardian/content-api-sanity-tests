@@ -1,19 +1,13 @@
 package com.gu.contentapi.sanity.support
 
-import org.scalatest.{TestData, Suite}
-import org.scalatestplus.play.{OneAppPerTest, OneAppPerSuite}
-import play.api.GlobalSettings
-import play.api.test.FakeApplication
+import org.scalatest.{TestData, TestSuite}
+import org.scalatestplus.play.FakeApplicationFactory
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.libs.ws.ahc.AhcWSClient
 
-trait FakeAppSupport extends OneAppPerSuite { self: Suite =>
+trait FakeAppSupport extends GuiceOneAppPerSuite with FakeApplicationFactory { self: TestSuite =>
 
-  override implicit lazy val app = new FakeApplication(
-
-    // override Global so that we don't start the Quartz scheduler
-    withGlobal = Some(new GlobalSettings {}),
-
-    // don't trip up on the Guardian self-signed certificate in CODE
-    additionalConfiguration = Map("ws.acceptAnyCertificate" -> true))
-
+  override implicit lazy val app = fakeApplication()
+  
 }
 

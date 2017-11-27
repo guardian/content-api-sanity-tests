@@ -2,6 +2,7 @@ package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
+import play.api.libs.ws.WSClient
 
 import scala.util.{Success, Failure}
 import javax.net.ssl._
@@ -12,7 +13,7 @@ import sun.security.x509.X509CertImpl
 import scala.util.Try
 
 @ProdOnly
-class SSLExpiryTest(context: Context) extends SanityTestBase(context) {
+class SSLExpiryTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "SSL Certificates" should "be more than 30 days from expiry" taggedAs LowPriorityTest in {
     val hosts = Seq(

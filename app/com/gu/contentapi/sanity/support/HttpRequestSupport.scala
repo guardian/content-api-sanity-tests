@@ -4,13 +4,15 @@ import com.gu.contentapi.sanity.Config
 import org.scalatest.exceptions.TestPendingException
 import org.scalatest.{Assertions, Matchers}
 import org.scalatest.concurrent.ScalaFutures
-import play.api.libs.ws.{WSResponse, WSAuthScheme, WS, WSRequest}
+import play.api.libs.ws.{WSClient, WSResponse, WSAuthScheme, WSRequest}
 import play.api.Play.current
 import scala.concurrent.duration._
 
 trait HttpRequestSupport extends ScalaFutures with Matchers with Assertions {
 
-  def request(uri: String): WSRequest = WS.url(uri).withRequestTimeout(10000.millis)
+  def wsClient: WSClient
+
+  def request(uri: String): WSRequest = wsClient.url(uri).withRequestTimeout(10000.millis)
 
   def requestHost(path: String) =
     // make sure query string is included

@@ -2,8 +2,9 @@ package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
 import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.WSClient
 
-class NewestItemFieldsTest(context: Context) extends SanityTestBase(context) {
+class NewestItemFieldsTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "The newest items" should "include mandatory fields" in {
     val mandatoryItemFields = Seq[String](

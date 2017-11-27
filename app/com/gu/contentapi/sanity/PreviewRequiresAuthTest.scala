@@ -1,8 +1,9 @@
 package com.gu.contentapi.sanity
 
 import org.scalatest.time.{Seconds, Span}
+import play.api.libs.ws.WSClient
 
-class PreviewRequiresAuthTest(context: Context) extends SanityTestBase(context) {
+class PreviewRequiresAuthTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "GETting preview content" should "require authentication" in {
     //Sometimes this throws a java.io.IOException, with message: Remotely Closed, so using Eventually to retry

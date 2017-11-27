@@ -3,6 +3,8 @@ play.ws.compressionEnabled=true
 # Don't pool WS client connections for more than a minute
 play.ws.ahc.maxConnectionLifetime = 1 minute
 
+play.application.loader = AppLoader
+
 # these are our own config values defined by the app
 # rename this to application.conf with real values
 content-api-sanity-tests {
