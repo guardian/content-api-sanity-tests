@@ -11,7 +11,7 @@ class PreviewRequiresAuthTest(context: Context, wsClient: WSClient) extends Sani
       val httpRequest = request(Config.previewHost).get()
       whenReady(httpRequest) { result =>
         assumeNotInsideEventually(503, 504)(result)
-        result.status should be(401)
+        result.status should (be(401) or be(403))
 
       }
     }
