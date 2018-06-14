@@ -26,6 +26,8 @@ Resources:
   Role:
     Type: AWS::IAM::Role
     Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
@@ -138,7 +140,6 @@ Resources:
             
             adduser --disabled-password content-api
             
-            aws --region eu-west-1 s3 cp s3://content-api-dist/authorized_keys /home/ubuntu/.ssh/authorized_keys
             cd /home/content-api
             
             mkdir logs
