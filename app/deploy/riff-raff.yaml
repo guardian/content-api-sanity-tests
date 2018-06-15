@@ -10,10 +10,9 @@ deployments:
     dependencies: [sanity-tests-ami-update]
   sanity-tests-ami-update:
     type: ami-cloudformation-parameter
+    app: sanity-tests
     parameters:
       amiTags:
-        Recipe: ubuntu-wily-java8
+        Recipe: ubuntu-xenial-java8
         AmigoStage: PROD
-      cloudFormationStackName: content-api-sanity-tests
-      prependStackToCloudFormationStackName: false
-      cloudFormationStackByTags: false
+      amiEncrypted: true
