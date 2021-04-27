@@ -77,6 +77,30 @@ Resources:
           - arn:aws:s3::*:content-api-es-snapshots/*
       Roles:
       - !Ref Role
+  DescribeInstancesPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: ec2:DescribeInstances
+            Effect: Allow
+            Resource: '*'
+      PolicyName: ec2-describe-instances
+      Roles:
+        - !Ref Role
+  Ec2DescribeAutoScalingGroupsPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: ec2-describe-autoscaling-groups
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - autoscaling:DescribeAutoScalingGroups
+              - autoscaling:DescribeAutoScalingInstances
+            Resource: "*"
+      Roles:
+        - Ref Role
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -131,6 +155,7 @@ Resources:
       AssociatePublicIpAddress: true
       SecurityGroups: 
       - !Ref SecurityGroup
+      - !Ref WazuhSecurityGroup
       InstanceType: t3.micro
       IamInstanceProfile: !Ref InstanceProfile
       UserData:
@@ -194,6 +219,17 @@ Resources:
         FromPort: '22'
         ToPort: '22'
         CidrIp: 77.91.248.0/21
+  WazuhSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow outbound traffic from wazuh agent to manager
+      VpcId:
+        !Ref VPC
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 1514
+          ToPort: 1515
+          CidrIp: 0.0.0.0/0
   NotEnoughSuccessfulTestsAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
