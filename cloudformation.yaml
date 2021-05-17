@@ -100,7 +100,7 @@ Resources:
               - autoscaling:DescribeAutoScalingInstances
             Resource: "*"
       Roles:
-        - Ref Role
+        - !Ref Role
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
