@@ -2,4 +2,4 @@
 !.gitignore
 *.conf
 *.log
-target
+target!.github
