@@ -6,7 +6,7 @@ deployments:
   sanity-tests:
     type: autoscaling
     parameters:
-      bucket: content-api-sanity-tests-dist
+      bucketSsmLookup: true
     dependencies: [sanity-tests-ami-update]
   sanity-tests-ami-update:
     type: ami-cloudformation-parameter
