@@ -13,7 +13,7 @@ class App(
   wsClient: WSClient) {
 
   def start = {
-    Logger.info("Application has started")
+    Logger.info("Application has started [PMR]")
     QuartzScheduler.start()
     QuartzScheduler schedule("Frequent Tests", runFrequentTests(cloudWatchReporter)) every (30 seconds)
     QuartzScheduler schedule("Infrequent Tests", runInfrequentTests(cloudWatchReporter)) at "0 0 9 ? * MON-FRI *"
