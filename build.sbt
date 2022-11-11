@@ -12,10 +12,10 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala, PlayAkkaHttpServer)
   .disablePlugins(PlayNettyServer)
 
-val AwsVersion = "1.11.227"
+val AwsVersion = "1.12.261"
 
 libraryDependencies ++= Seq(
-  "org.quartz-scheduler" % "quartz" % "2.3.0",
+  "org.quartz-scheduler" % "quartz" % "2.3.2",
   "org.scalatest" %% "scalatest" % "3.0.4",
   "org.seleniumhq.selenium" % "selenium-java" % "3.5.3",
   "joda-time" % "joda-time" % "2.9.9",
