@@ -15,9 +15,9 @@ lazy val root = (project in file("."))
 val AwsVersion = "1.11.227"
 
 libraryDependencies ++= Seq(
-  "org.quartz-scheduler" % "quartz" % "2.3.0",
+  "org.quartz-scheduler" % "quartz" % "2.3.1",
   "org.scalatest" %% "scalatest" % "3.0.4",
-  "org.seleniumhq.selenium" % "selenium-java" % "3.5.3",
+  "org.seleniumhq.selenium" % "selenium-java" % "3.6.0",
   "joda-time" % "joda-time" % "2.9.9",
   ws,
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.1",
