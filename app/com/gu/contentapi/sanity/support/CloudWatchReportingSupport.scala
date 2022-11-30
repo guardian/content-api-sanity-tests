@@ -1,15 +1,16 @@
 package com.gu.contentapi.sanity.support
 
-import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
-import com.amazonaws.handlers.AsyncHandler
-import com.amazonaws.regions.{Region, Regions}
-import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchAsyncClientBuilder}
-import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest, PutMetricDataResult}
 import org.scalatest.{Failed, Outcome, Succeeded, TestSuite}
 import org.slf4j.LoggerFactory
 import play.api.{Configuration, Logger}
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest, PutMetricDataResponse}
+import software.amazon.awssdk.services.cloudwatch.{CloudWatchAsyncClient, CloudWatchClient, CloudWatchClientBuilder}
 
-import scala.util.Try
+import java.util.concurrent.CompletableFuture
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.compat.java8.FutureConverters
+import scala.util.{Failure, Success, Try}
 
 trait CloudWatchReportingSupport extends TestSuite {
 
@@ -63,36 +64,40 @@ class RealCloudWatchReporter(namespace: String,
                              successfulTestsMetric: String,
                              failedTestsMetric: String) extends CloudWatchReporter {
 
-  private val region = Region.getRegion(Regions.EU_WEST_1)
   private val logger = LoggerFactory.getLogger(getClass)
 
-  lazy val cloudwatch = {
-    AmazonCloudWatchAsyncClientBuilder.standard()
-      .withEndpointConfiguration(new EndpointConfiguration(region.getServiceEndpoint(AmazonCloudWatch.ENDPOINT_PREFIX), Regions.EU_WEST_1.getName))
-      .build
+  lazy val cloudwatch = CloudWatchAsyncClient.builder().region(Region.EU_WEST_1).build()
+
+  private def loggingAsyncHandler[A](input:Try[A]) = input match {
+    case Success(_)=>
+      logger.info("CloudWatch PutMetricData request - success")
+    case Failure(exception)=>
+      logger.warn(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
   }
 
-  object LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult] {
-
-    def onError(exception: Exception) {
-      logger.warn(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
-    }
-    def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult) {
-      logger.info("CloudWatch PutMetricDataRequest - success")
-    }
+  /**
+   * Convenience method to keep the old behaviour.
+   * Takes a function which returns a Java style future, and wraps this into a Scala future with some basic
+   * success/failure logging on it.
+   * @param f function to run. This must return some kind of CompletableFuture
+   */
+  private def loggedAsyncCall[T](f: ()=>CompletableFuture[T]) = {
+    FutureConverters.toScala(f()).onComplete(loggingAsyncHandler)
   }
 
   private def put(metricName: String, value: Double): Unit = {
-    val metric = new MetricDatum()
-      .withValue(value)
-      .withMetricName(metricName)
+    val metric = MetricDatum.builder()
+      .value(value)
+      .metricName(metricName)
+      .build()
 
-    val request = new PutMetricDataRequest()
-      .withNamespace(namespace)
-      .withMetricData(metric)
+    val request = PutMetricDataRequest.builder()
+      .namespace(namespace)
+      .metricData(metric)
+      .build()
 
-    Try(cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)).recover { case error =>
-      logger.warn(s"Failed to send metric data: ${error.getMessage}", error)
+    loggedAsyncCall { ()=>
+      cloudwatch.putMetricData(request)
     }
   }
 
