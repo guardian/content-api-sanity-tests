@@ -8,10 +8,14 @@ import {AccessScope} from "@guardian/cdk/lib/constants";
 import fs from "fs";
 import {GuVpc} from "@guardian/cdk/lib/constructs/ec2";
 import {useArmInstance} from "./constants";
+import {Policies} from "./policies";
 
 export class SanityTests extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
+
+    const urgentAlarmTopicArn = aws_ssm.StringParameter.fromStringParameterName(this, "urgent-alarm-arn", "/account/content-api-common/alarms/urgent-alarm-topic");
+    const nonUrgentAlarmTopicArn = aws_ssm.StringParameter.fromStringParameterName(this, "non-urgent-alarm-arn", "/account/content-api-common/alarms/non-urgent-alarm-topic");
 
     const vpcId = aws_ssm.StringParameter.valueForStringParameter(this, this.getVpcIdPath());
     const vpc = Vpc.fromVpcAttributes(this, "vpc", {
@@ -42,6 +46,9 @@ export class SanityTests extends GuStack {
         cidrRanges: [Peer.ipv4("10.0.0.0/8")],
       },
       app: "sanity-tests",
+      roleConfiguration: {
+        additionalPolicies: Policies(this),
+      },
       applicationPort: 9000,
       certificateProps: {
         domainName: this.stage=="CODE" ? "sanity-tests.capi.code.dev-gutools.co.uk" : "sanity-tests.capi.gutools.co.uk",
@@ -49,7 +56,9 @@ export class SanityTests extends GuStack {
       },
       instanceType: InstanceType.of(useArmInstance ? InstanceClass.T4G : InstanceClass.T3, InstanceSize.MICRO),
       monitoringConfiguration: {
-        noMonitoring: true,
+        snsTopicName: urgentAlarmTopicArn.stringValue,
+        http5xxAlarm: false,
+        unhealthyInstancesAlarm: true,
       },
       privateSubnets: deploymentSubnets,
       publicSubnets: deploymentSubnets,
