@@ -1,4 +1,6 @@
 import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader.Systemd
+enablePlugins(JavaServerAppPackaging, SystemdPlugin)
+
 name := "sanity-tests"
 
 version := "1.0"
