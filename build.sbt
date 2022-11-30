@@ -2,7 +2,7 @@ name := "sanity-tests"
 
 version := "1.0"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.13.10"
 
 scalacOptions ++= Seq("-feature")
 
@@ -15,12 +15,12 @@ lazy val root = (project in file("."))
 val AwsVersion = "1.11.227"
 
 libraryDependencies ++= Seq(
-  "org.quartz-scheduler" % "quartz" % "2.3.0",
-  "org.scalatest" %% "scalatest" % "3.0.4",
+  "org.quartz-scheduler" % "quartz" % "2.3.2",
+  "org.scalatest" %% "scalatest" % "3.2.14",
   "org.seleniumhq.selenium" % "selenium-java" % "3.5.3",
   "joda-time" % "joda-time" % "2.9.9",
   ws,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.1",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AwsVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
