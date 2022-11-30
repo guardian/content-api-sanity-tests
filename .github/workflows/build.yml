@@ -1,4 +1,4 @@
-name: Build and upload crier
+name: Build and upload
 
 on: [push]
 
