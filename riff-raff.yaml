@@ -6,7 +6,6 @@ deployments:
   sanity-tests:
     type: autoscaling
     parameters:
-      bucketSsmKey: /account/services/artifact.bucket.sanity-tests
       bucketSsmLookup: true
     dependencies: [sanity-tests-ami-update]
   sanity-tests-ami-update:

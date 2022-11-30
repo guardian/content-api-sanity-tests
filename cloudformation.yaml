@@ -166,23 +166,13 @@ Resources:
             adduser --disabled-password content-api
             
             cd /home/content-api
-            
-            mkdir logs
-            mkdir -p /etc/gu
-            mkdir -p /var/run/ports
-            
-            aws --region eu-west-1 s3 cp s3://content-api-config/content-api-sanity-tests/${Stage}/sanity-tests/content-api-sanity-tests.conf /etc/gu/content-api-sanity-tests.conf
-            aws --region eu-west-1 s3 cp s3://content-api-sanity-tests-dist/content-api-sanity-tests/${Stage}/sanity-tests/sanity-tests.tar.gz /home/content-api/sanity-tests.tar.gz
-            
-            tar -xvf sanity-tests.tar.gz
-            unzip sanity-tests-1.0.zip
-            mv sanity-tests-1.0 sanity-tests
-            
-            rm sanity-tests.tar.gz
-            rm sanity-tests-1.0.zip
-            
-            mv sanity-tests.service /etc/systemd/system/
-            chown -R content-api:content-api /home/content-api /etc/gu
+          
+            aws --region eu-west-1 s3 cp s3://content-api-dist/content-api-sanity-tests/${Stage}/sanity-tests/sanity-tests_1.0_all.deb /home/content-api/sanity-tests_1.0_all.deb
+            dpkg -i /home/content-api/sanity-tests_1.0_all.deb
+            aws --region eu-west-1 s3 cp s3://content-api-config/content-api-sanity-tests/${Stage}/sanity-tests/content-api-sanity-tests.conf /usr/share/sanity-tests/conf/content-api-sanity-tests.conf
+            ln -s /usr/share/sanity-tests /home/content-api/sanity-tests
+            echo JAVA_OPTS=\"-Dpidfile.path=/var/run/sanity-tests/sanity-tests.pid -Dconfig.file=/usr/share/sanity-tests/conf/content-api-sanity-tests.conf -Dplay.http.secret.key=kkMQbRpa1ttyM0oXwlyPwd5ODNeFMv63h452itOGzWulEUipJjMfm73\" >> /etc/default/sanity-tests
+            mkdir logs                     
             
             systemctl start sanity-tests
 

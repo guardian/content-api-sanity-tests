@@ -6,6 +6,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest._
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSClient
+import org.scalatest.matchers.should.Matchers
 
 /**
  * Contains all the test failure handling logic:
