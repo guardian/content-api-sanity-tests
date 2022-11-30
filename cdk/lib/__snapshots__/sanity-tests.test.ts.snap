@@ -675,6 +675,26 @@ systemctl start sanity-tests",
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
+    "NotEnoughSuccessfulTestsAlarm3133035A": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Ref": "nonurgentalarmarnParameter",
+          },
+        ],
+        "AlarmDescription": "Fewer than 100 tests in 5 minutes (we expect to run at least 14 tests every 30 seconds)",
+        "AlarmName": "content-api-sanity-tests-TEST-alarm-not-enough-successful-tests",
+        "ComparisonOperator": "LessThanThreshold",
+        "EvaluationPeriods": 5,
+        "MetricName": "SuccessfulTests",
+        "Namespace": "content-api-sanity-tests",
+        "Period": 120,
+        "Statistic": "Sum",
+        "Threshold": 100,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "ParameterStoreReadSanitytests38FB0A69": {
       "Properties": {
         "PolicyDocument": {
