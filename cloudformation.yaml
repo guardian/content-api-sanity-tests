@@ -20,7 +20,7 @@ Parameters:
     Default: content-api-sanity-tests
   AMI:
     Description: 'AMI ID'
-    Type: String
+    Type: AWS::EC2::Image::Id
     Default: ami-b0be07c3
 Resources:
   Role:
@@ -47,6 +47,13 @@ Resources:
           Action:
           - cloudwatch:PutMetricData
           Resource: "*"
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            - logs:DescribeLogStreams
+          Resource: arn:aws:logs:*:*:*
       Roles:
       - !Ref Role
   DownloadStuffFromS3Policy:
@@ -175,6 +182,7 @@ Resources:
             mkdir logs                     
             
             systemctl start sanity-tests
+            /opt/cloudwatch-logs/configure-logs application content-api-sanity-tests ${Stage} sanity-tests /home/content-api/logs/sanity-tests.log
 
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
