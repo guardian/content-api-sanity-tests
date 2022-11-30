@@ -18,6 +18,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+
+      - run: yarn install --frozen-lockfile
+        name: Prepare for CDK infrastructure build
+        working-directory: cdk
+      - run: yarn test
+        name: Test CDK infrastructure integrity
+        working-directory: cdk
+      - run: yarn synth
+        name: Build infrastructure definition from CDK
+        working-directory: cdk
+
       - name: Setup JDK
         uses: actions/setup-java@v3
         with:
@@ -44,6 +59,9 @@ jobs:
           projectName: Content Platforms::content-api-sanity-tests
           buildNumberOffset: 453
           contentDirectories: |
+            cloudformation:
+              - cdk/cdk.out/SanityTests-CODE.template.json
+              - cdk/cdk.out/SanityTests-PROD.template.json
             sanity-tests:
               - target/sanity-tests_1.0_all.deb
 
