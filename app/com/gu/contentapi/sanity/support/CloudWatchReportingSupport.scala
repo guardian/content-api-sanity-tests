@@ -6,6 +6,7 @@ import com.amazonaws.regions.{Region, Regions}
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchAsyncClientBuilder}
 import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest, PutMetricDataResult}
 import org.scalatest.{Failed, Outcome, Succeeded, TestSuite}
+import org.slf4j.LoggerFactory
 import play.api.{Configuration, Logger}
 
 import scala.util.Try
@@ -35,6 +36,7 @@ trait CloudWatchReporter {
 }
 
 object CloudWatchReporter {
+  private val logger = LoggerFactory.getLogger(getClass)
 
   def apply(config: Configuration): CloudWatchReporter = {
     def cfg(key: String) = config.getOptional[String](s"content-api-sanity-tests.cloudwatch-$key")
@@ -44,12 +46,12 @@ object CloudWatchReporter {
       successfulTestsMetric <- cfg("successful-tests-metric")
       failedTestsMetric <- cfg("failed-tests-metric")
     } yield {
-      Logger.info(s"Will report metrics to CloudWatch. namespace=$namespace, metrics=($testRunsMetric, $successfulTestsMetric, $failedTestsMetric)")
+      logger.info(s"Will report metrics to CloudWatch. namespace=$namespace, metrics=($testRunsMetric, $successfulTestsMetric, $failedTestsMetric)")
       new RealCloudWatchReporter(namespace, testRunsMetric, successfulTestsMetric, failedTestsMetric)
     }
 
     reporter getOrElse {
-      Logger.info("Will not report any metrics to CloudWatch")
+      logger.info("Will not report any metrics to CloudWatch")
       DoNothingCloudWatchReporter
     }
   }
@@ -62,6 +64,7 @@ class RealCloudWatchReporter(namespace: String,
                              failedTestsMetric: String) extends CloudWatchReporter {
 
   private val region = Region.getRegion(Regions.EU_WEST_1)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   lazy val cloudwatch = {
     AmazonCloudWatchAsyncClientBuilder.standard()
@@ -72,10 +75,10 @@ class RealCloudWatchReporter(namespace: String,
   object LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult] {
 
     def onError(exception: Exception) {
-      Logger.warn(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
+      logger.warn(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
     }
     def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult) {
-      Logger.info("CloudWatch PutMetricDataRequest - success")
+      logger.info("CloudWatch PutMetricDataRequest - success")
     }
   }
 
@@ -89,7 +92,7 @@ class RealCloudWatchReporter(namespace: String,
       .withMetricData(metric)
 
     Try(cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)).recover { case error =>
-      Logger.warn(s"Failed to send metric data: ${error.getMessage}", error)
+      logger.warn(s"Failed to send metric data: ${error.getMessage}", error)
     }
   }
 

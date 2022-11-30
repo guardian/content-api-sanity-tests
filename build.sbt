@@ -25,6 +25,10 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
 
+dependencyOverrides ++= Seq(
+  "org.scala-lang.modules" %% "scala-xml" % "2.1.0"  //this version is wanted by scalatest, which has more use for it in this project than play.
+)
+
 javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
