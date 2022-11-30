@@ -21,7 +21,6 @@ libraryDependencies ++= Seq(
   "org.quartz-scheduler" % "quartz" % "2.3.2",
   "org.scalatest" %% "scalatest" % "3.2.14",
   "org.seleniumhq.selenium" % "selenium-java" % "3.5.3",
-  "joda-time" % "joda-time" % "2.9.9",
   ws,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AwsVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
