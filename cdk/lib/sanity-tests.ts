@@ -11,6 +11,7 @@ import {cloudwatchMetricNamespace, useArmInstance} from "./constants";
 import {Policies} from "./policies";
 import {Alarm, ComparisonOperator, Metric, Statistic} from "aws-cdk-lib/aws-cloudwatch";
 import {SnsAction} from "aws-cdk-lib/aws-cloudwatch-actions";
+import {Topic} from "aws-cdk-lib/aws-sns";
 
 export class SanityTests extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
@@ -79,14 +80,15 @@ export class SanityTests extends GuStack {
       evaluationPeriods: 5,
       comparisonOperator: ComparisonOperator.LESS_THAN_THRESHOLD,
       metric: new Metric({
-        period: Duration.seconds(100),
+        period: Duration.minutes(2),  //the CDK is quite prescriptive about the allowed durations
         metricName: "SuccessfulTests",
         namespace: cloudwatchMetricNamespace,
         statistic: Statistic.SUM,
       }),
       threshold: 100
     });
-    alarm.addAlarmAction(new SnsAction(nonUrgentAlarmTopicArn));
+    const alarmTopic = Topic.fromTopicArn(this, "AlarmTopic", nonUrgentAlarmTopicArn.stringValue);
+    alarm.addAlarmAction(new SnsAction(alarmTopic));
   }
 
   getAccountPath(elementName: string) {
