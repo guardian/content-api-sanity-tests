@@ -11,6 +11,7 @@ export function Policies(scope:GuStack) {
                     resources: [
                         "arn:aws:s3::*:content-api-sanity-tests-dist/*",
                         "arn:aws:s3::*:content-api-es-snapshots/*",
+                        `arn:aws:s3::*:content-api-config/content-api-sanity-tests/${scope.stage}/sanity-tests/*`
                     ],
                     actions: ["s3:GetObject", "s3:ListBucket"]
                 })
