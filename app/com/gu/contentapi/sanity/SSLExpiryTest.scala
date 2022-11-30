@@ -1,15 +1,15 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
-import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
+import com.gu.contentapi.sanity.tags.{LowPriorityTest, ProdOnly}
 import play.api.libs.ws.WSClient
 
-import scala.util.{Success, Failure}
+import scala.util.{Failure, Success}
 import javax.net.ssl._
 import java.net.URL
-import org.joda.time.{Days, DateTime}
 import sun.security.x509.X509CertImpl
 
+import java.time.{Duration, LocalDateTime}
 import scala.util.Try
 
 @ProdOnly
@@ -50,8 +50,8 @@ class SSLExpiryTest(context: Context, wsClient: WSClient) extends SanityTestBase
           certs.headOption.foreach { cert =>
             cert shouldBe a[X509CertImpl]
             val x = cert.asInstanceOf[X509CertImpl]
-            val expiry = x.getNotAfter.getTime
-            val daysleft = Days.daysBetween(new DateTime(), new DateTime(expiry.toLong)).getDays
+            val expiry = x.getNotAfter.toInstant
+            val daysleft = Duration.between(LocalDateTime.now(), expiry).toDays
             if (daysleft < 30) {
               fail("Cert for %s expires in %d days".format(host, daysleft))
             }
