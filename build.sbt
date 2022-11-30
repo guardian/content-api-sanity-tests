@@ -1,3 +1,4 @@
+import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader.Systemd
 name := "sanity-tests"
 
 version := "1.0"
@@ -32,3 +33,10 @@ dependencyOverrides ++= Seq(
 javaOptions ++= collection.JavaConversions.propertiesAsScalaMap(System.getProperties).map{ case (key,value) => "-D" + key + "=" +value }.toSeq
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
+
+Universal / packageName := normalizedName.value
+maintainer := "Guardian Content Platforms <content-platforms.dev@theguardian.com>"
+
+Debian / serverLoading := Some(Systemd)
+Debian / daemonUser := "content-api"
+Debian / daemonGroup := "content-api"

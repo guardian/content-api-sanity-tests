@@ -3,7 +3,7 @@ name: Build and upload crier
 on: [push]
 
 jobs:
-  crier:
+  sanity-tests:
     runs-on: ubuntu-latest
 
     # The first two permissions are needed to interact with GitHub's OIDC Token endpoint.
@@ -36,7 +36,14 @@ jobs:
         env:
           SBT_JUNIT_OUTPUT: ./junit-tests
         run: |
-          sbt riffRaffUpload
+          sbt debian:packageBin
+
+      - uses: guardian/actions-riff-raff@v2
+        with:
+          configPath: riff-raff.yaml
+          contentDirectories: |
+            sanity-tests:
+              - target/sanity-tests_1.0_all.deb
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
