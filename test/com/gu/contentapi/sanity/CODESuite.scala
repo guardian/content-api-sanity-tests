@@ -1,6 +1,5 @@
 package com.gu.contentapi.sanity
 
-import com.gu.contentapi.sanity.support.{FakeAppSupport, DoNothingTestFailureHandler}
 import org.scalatest.{TestSuite, Suites} 
 import play.api.libs.ws.WSClient
 

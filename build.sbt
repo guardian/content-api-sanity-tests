@@ -23,7 +23,6 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "3.5.3",
   "joda-time" % "joda-time" % "2.9.9",
   ws,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % AwsVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsVersion
 )
