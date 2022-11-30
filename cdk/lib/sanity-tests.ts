@@ -1,14 +1,16 @@
 import type {GuStackProps} from "@guardian/cdk/lib/constructs/core";
 import {GuLoggingStreamNameParameter, GuParameter, GuStack} from "@guardian/cdk/lib/constructs/core";
 import type {App} from "aws-cdk-lib";
-import {aws_ssm, Stack} from "aws-cdk-lib";
+import {aws_ssm, Duration, Stack} from "aws-cdk-lib";
 import {GuEc2App} from "@guardian/cdk";
 import {InstanceClass, InstanceSize, InstanceType, Peer, Vpc} from "aws-cdk-lib/aws-ec2";
 import {AccessScope} from "@guardian/cdk/lib/constants";
 import fs from "fs";
 import {GuVpc} from "@guardian/cdk/lib/constructs/ec2";
-import {useArmInstance} from "./constants";
+import {cloudwatchMetricNamespace, useArmInstance} from "./constants";
 import {Policies} from "./policies";
+import {Alarm, ComparisonOperator, Metric, Statistic} from "aws-cdk-lib/aws-cloudwatch";
+import {SnsAction} from "aws-cdk-lib/aws-cloudwatch-actions";
 
 export class SanityTests extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
@@ -40,7 +42,7 @@ export class SanityTests extends GuStack {
         .replace(/\$\{LoggingKinesisStream}/g, GuLoggingStreamNameParameter.getInstance(this).valueAsString)
         .replace(/\$\{AWS::Region}/g, Stack.of(this).region);
 
-    const guApp = new GuEc2App(this, {
+    new GuEc2App(this, {
       access: {
         scope: AccessScope.INTERNAL,
         cidrRanges: [Peer.ipv4("10.0.0.0/8")],
@@ -69,6 +71,22 @@ export class SanityTests extends GuStack {
       userData: userData,
       vpc,
     });
+
+    const alarm = new Alarm(this, "NotEnoughSuccessfulTestsAlarm", {
+      actionsEnabled: true,
+      alarmDescription: 'Fewer than 100 tests in 5 minutes (we expect to run at least 14 tests every 30 seconds)',
+      alarmName: `content-api-sanity-tests-${this.stage}-alarm-not-enough-successful-tests`,
+      evaluationPeriods: 5,
+      comparisonOperator: ComparisonOperator.LESS_THAN_THRESHOLD,
+      metric: new Metric({
+        period: Duration.seconds(100),
+        metricName: "SuccessfulTests",
+        namespace: cloudwatchMetricNamespace,
+        statistic: Statistic.SUM,
+      }),
+      threshold: 100
+    });
+    alarm.addAlarmAction(new SnsAction(nonUrgentAlarmTopicArn));
   }
 
   getAccountPath(elementName: string) {
