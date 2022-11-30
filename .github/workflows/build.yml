@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: 16.x
           cache: 'yarn'
+          cache-dependency-path: cdk/yarn.lock
 
       - run: yarn install --frozen-lockfile
         name: Prepare for CDK infrastructure build
