@@ -41,6 +41,8 @@ jobs:
       - uses: guardian/actions-riff-raff@v2
         with:
           configPath: riff-raff.yaml
+          projectName: Content Platforms::content-api-sanity-tests
+          buildNumberOffset: 453
           contentDirectories: |
             sanity-tests:
               - target/sanity-tests_1.0_all.deb
