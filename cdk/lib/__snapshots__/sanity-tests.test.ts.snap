@@ -8,6 +8,7 @@ exports[`The SanityTests stack matches the snapshot 1`] = `
       "GuLoggingStreamNameParameter",
       "GuPolicy",
       "GuPolicy",
+      "GuPolicy",
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
@@ -26,6 +27,7 @@ exports[`The SanityTests stack matches the snapshot 1`] = `
       "GuHttpsApplicationListener",
       "GuSecurityGroup",
       "GuUnhealthyInstancesAlarm",
+      "GuSecurityGroup",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -175,6 +177,12 @@ exports[`The SanityTests stack matches the snapshot 1`] = `
               "GroupId",
             ],
           },
+          {
+            "Fn::GetAtt": [
+              "OutgoingSGSanitytests2BE95D05",
+              "GroupId",
+            ],
+          },
         ],
         "UserData": {
           "Fn::Base64": "#!/bin/bash -ev
@@ -237,6 +245,27 @@ systemctl start sanity-tests",
       },
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Retain",
+    },
+    "CloudwatchPolicyFEF3FFD1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cloudwatch:PutMetricData",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CloudwatchPolicyFEF3FFD1",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleSanitytests32F32A70",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "DescribeEC2PolicyFF5F9295": {
       "Properties": {
@@ -678,11 +707,6 @@ systemctl start sanity-tests",
     "NotEnoughSuccessfulTestsAlarm3133035A": {
       "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": [
-          {
-            "Ref": "nonurgentalarmarnParameter",
-          },
-        ],
         "AlarmDescription": "Fewer than 100 tests in 5 minutes (we expect to run at least 14 tests every 30 seconds)",
         "AlarmName": "content-api-sanity-tests-TEST-alarm-not-enough-successful-tests",
         "ComparisonOperator": "LessThanThreshold",
@@ -694,6 +718,44 @@ systemctl start sanity-tests",
         "Threshold": 100,
       },
       "Type": "AWS::CloudWatch::Alarm",
+    },
+    "OutgoingSGSanitytests2BE95D05": {
+      "Properties": {
+        "GroupDescription": "SanityTests/OutgoingSGSanitytests",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "sanity-tests",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/content-api-sanity-tests",
+          },
+          {
+            "Key": "Stack",
+            "Value": "content-api-sanity-tests",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": {
+          "Ref": "SsmParameterValueaccountvpcPRODliveidC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
     },
     "ParameterStoreReadSanitytests38FB0A69": {
       "Properties": {

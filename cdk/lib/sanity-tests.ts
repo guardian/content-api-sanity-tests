@@ -3,10 +3,10 @@ import {GuLoggingStreamNameParameter, GuParameter, GuStack} from "@guardian/cdk/
 import type {App} from "aws-cdk-lib";
 import {aws_ssm, Duration, Stack} from "aws-cdk-lib";
 import {GuEc2App} from "@guardian/cdk";
-import {InstanceClass, InstanceSize, InstanceType, Peer, Vpc} from "aws-cdk-lib/aws-ec2";
+import {InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc} from "aws-cdk-lib/aws-ec2";
 import {AccessScope} from "@guardian/cdk/lib/constants";
 import fs from "fs";
-import {GuVpc} from "@guardian/cdk/lib/constructs/ec2";
+import {GuSecurityGroup, GuVpc} from "@guardian/cdk/lib/constructs/ec2";
 import {cloudwatchMetricNamespace, useArmInstance} from "./constants";
 import {Policies} from "./policies";
 import {Alarm, ComparisonOperator, Metric, Statistic} from "aws-cdk-lib/aws-cloudwatch";
@@ -43,7 +43,7 @@ export class SanityTests extends GuStack {
         .replace(/\$\{LoggingKinesisStream}/g, GuLoggingStreamNameParameter.getInstance(this).valueAsString)
         .replace(/\$\{AWS::Region}/g, Stack.of(this).region);
 
-    new GuEc2App(this, {
+    const app = new GuEc2App(this, {
       access: {
         scope: AccessScope.INTERNAL,
         cidrRanges: [Peer.ipv4("10.0.0.0/8")],
@@ -73,6 +73,19 @@ export class SanityTests extends GuStack {
       vpc,
     });
 
+    const allowingOutgoingSG = new GuSecurityGroup(this, "OutgoingSG", {
+      egresses: [
+        {
+          range: Peer.anyIpv4(),
+          port: Port.tcp(80),
+          description: "Allow outgoing HTTP"
+        }
+      ],
+      vpc,
+      app: "sanity-tests"
+    })
+    app.autoScalingGroup.addSecurityGroup(allowingOutgoingSG);
+
     const alarm = new Alarm(this, "NotEnoughSuccessfulTestsAlarm", {
       actionsEnabled: true,
       alarmDescription: 'Fewer than 100 tests in 5 minutes (we expect to run at least 14 tests every 30 seconds)',
@@ -88,7 +101,7 @@ export class SanityTests extends GuStack {
       threshold: 100
     });
     const alarmTopic = Topic.fromTopicArn(this, "AlarmTopic", nonUrgentAlarmTopicArn.stringValue);
-    alarm.addAlarmAction(new SnsAction(alarmTopic));
+    if(this.stage=="PROD") alarm.addAlarmAction(new SnsAction(alarmTopic));
   }
 
   getAccountPath(elementName: string) {
