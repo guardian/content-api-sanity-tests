@@ -17,6 +17,19 @@ export function Policies(scope:GuStack) {
                 })
             ]
         }),
+        new GuPolicy(scope, "CloudwatchPolicy", {
+            statements: [
+                new PolicyStatement({
+                    effect: Effect.ALLOW,
+                    resources: [
+                        "*"
+                    ],
+                    actions: [
+                        "cloudwatch:PutMetricData"
+                    ]
+                })
+            ]
+        }),
         new GuPolicy(scope, "EC2Access", {
             statements: [
                 new PolicyStatement({
