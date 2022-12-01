@@ -18,6 +18,6 @@ deployments:
       amiParameter: AMISanitytests
       amiEncrypted: true
       amiTags:
-        Recipe: ubuntu-bionic-capi
+        Recipe: ubuntu-focal-capi-x86-jdk11
         AmigoStage: PROD
         BuiltBy: amigo
