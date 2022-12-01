@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-
-    <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
-
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%date [%thread] %-5level %logger{20} %msg%n%xException{30}</pattern>
-        </encoder>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
-    <appender name="KINESIS" class="com.gu.logback.appender.kinesis.KinesisAppender">
-        <bufferSize>1000</bufferSize>
-        <threadCount>20</threadCount>
-        <region>eu-west-1</region>
-        <maxRetries>3</maxRetries>
-        <shutdownTimeout>30</shutdownTimeout>
-        <streamName>{logging-stream}</streamName>
-        <encoding>UTF-8</encoding>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%date [%thread] %-5level %logger{20} %msg%n%xException{30}</pattern>
-        </layout>
+    <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
     </appender>
 
     <logger name="com.gu.contentapi.sanity" level="INFO"/>
 
     <root level="WARN">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="KINESIS"/>
     </root>
 
 </configuration>

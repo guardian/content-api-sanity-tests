@@ -49,6 +49,9 @@ export class SanityTests extends GuStack {
         cidrRanges: [Peer.ipv4("10.0.0.0/8")],
       },
       app: "sanity-tests",
+      applicationLogging: {
+        enabled: true,
+      },
       roleConfiguration: {
         additionalPolicies: Policies(this),
       },
