@@ -7,12 +7,17 @@ deployments:
     type: autoscaling
     parameters:
       bucketSsmLookup: true
-    dependencies: [sanity-tests-ami-update]
-  sanity-tests-ami-update:
-    type: ami-cloudformation-parameter
+    dependencies: [cloudformation]
+  cloudformation:
+    type: cloud-formation
     app: sanity-tests
     parameters:
+      templateStagePaths:
+        CODE: SanityTests-CODE.template.json
+        PROD: SanityTests-PROD.template.json
+      amiParameter: AMISanitytests
+      amiEncrypted: true
       amiTags:
         Recipe: ubuntu-bionic-capi
         AmigoStage: PROD
-      amiEncrypted: true
+        BuiltBy: amigo
