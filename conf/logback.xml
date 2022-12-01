@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%m</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="KINESIS" class="com.gu.logback.appender.kinesis.KinesisAppender">
+        <bufferSize>1000</bufferSize>
+        <threadCount>20</threadCount>
+        <region>eu-west-1</region>
+        <maxRetries>3</maxRetries>
+        <shutdownTimeout>30</shutdownTimeout>
+        <streamName>{logging-stream}</streamName>
+        <encoding>UTF-8</encoding>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!--<pattern>%date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX"} |{app}|{stage}| [%level] from %logger in %thread - %message%n%xException</pattern>-->
+            <pattern>%m</pattern>
+        </layout>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="KINESIS"/>
+    </root>
+
+</configuration>

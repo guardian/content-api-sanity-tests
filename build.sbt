@@ -22,7 +22,8 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.14",
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
-  "software.amazon.awssdk" % "cloudwatch" % AwsVersion
+  "software.amazon.awssdk" % "cloudwatch" % AwsVersion,
+  "com.gu" % "kinesis-logback-appender" % "2.1.1"
 )
 
 dependencyOverrides ++= Seq(
