@@ -127,6 +127,11 @@ exports[`The SanityTests stack matches the snapshot 1`] = `
             "PropagateAtLaunch": true,
             "Value": "TEST",
           },
+          {
+            "Key": "SystemdUnit",
+            "PropagateAtLaunch": true,
+            "Value": "sanity-tests.service",
+          },
         ],
         "TargetGroupARNs": [
           {
