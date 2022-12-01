@@ -9,7 +9,7 @@ import javax.net.ssl._
 import java.net.URL
 import sun.security.x509.X509CertImpl
 
-import java.time.{Duration, LocalDateTime}
+import java.time.{Duration, LocalDateTime, ZonedDateTime}
 import scala.util.Try
 
 @ProdOnly
@@ -51,7 +51,7 @@ class SSLExpiryTest(context: Context, wsClient: WSClient) extends SanityTestBase
             cert shouldBe a[X509CertImpl]
             val x = cert.asInstanceOf[X509CertImpl]
             val expiry = x.getNotAfter.toInstant
-            val daysleft = Duration.between(LocalDateTime.now(), expiry).toDays
+            val daysleft = Duration.between(ZonedDateTime.now(), expiry).toDays
             if (daysleft < 30) {
               fail("Cert for %s expires in %d days".format(host, daysleft))
             }
