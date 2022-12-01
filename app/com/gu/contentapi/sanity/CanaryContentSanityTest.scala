@@ -5,7 +5,7 @@ import org.scalatest.tagobjects.Retryable
 import org.scalatest.time.{Seconds, Span}
 import play.api.libs.ws.WSClient
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 /**
  * Performs a (nearly) end-to-end test by:
@@ -14,11 +14,11 @@ import java.time.LocalDateTime
  */
 class CanaryContentSanityTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
-  private def retrieveCanaryLastModifiedTimestamp(): Option[LocalDateTime] = {
+  private def retrieveCanaryLastModifiedTimestamp(): Option[ZonedDateTime] = {
     val httpRequest = requestHost("/canary?show-fields=lastModified").get()
     whenReady(httpRequest) { result =>
       val stringValue = (result.json \ "response" \ "content" \ "fields" \ "lastModified").asOpt[String]
-      stringValue.map(LocalDateTime.parse)
+      stringValue.map(ZonedDateTime.parse)
     }
   }
 
@@ -41,7 +41,7 @@ class CanaryContentSanityTest(context: Context, wsClient: WSClient) extends Sani
         result.status should equal(postSuccessResponseCode)
       }
 
-      val thirtySecondsAgo = LocalDateTime.now.minusSeconds(30)
+      val thirtySecondsAgo = ZonedDateTime.now.minusSeconds(30)
       eventually(timeout(Span(30, Seconds))) {
         val lastModified = retrieveCanaryLastModifiedTimestamp()
         withClue(s"Canary content did not show a lastModified >= $thirtySecondsAgo. lastModified field was $lastModified") {

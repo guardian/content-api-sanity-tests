@@ -9,7 +9,7 @@ import javax.net.ssl._
 import java.net.URL
 import sun.security.x509.X509CertImpl
 
-import java.time.{Duration, LocalDateTime, ZonedDateTime}
+import java.time.{Duration, ZonedDateTime}
 import scala.util.Try
 
 @ProdOnly

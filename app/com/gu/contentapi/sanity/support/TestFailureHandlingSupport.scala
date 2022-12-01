@@ -7,7 +7,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSClient
 import org.scalatest.matchers.should.Matchers
 
-import java.time.{Duration, Instant, LocalDateTime, ZoneOffset}
+import java.time.{Duration,ZonedDateTime}
 
 /**
  * Contains all the test failure handling logic:
@@ -41,13 +41,13 @@ abstract class PagerDutyAlertingTestFailureHandler(override val wsClient: WSClie
 
   protected def latestIncidentKey(): String = {
     incidentKeyDateTime match {
-      case Some(keyTimeStamp) if Duration.between(keyTimeStamp, LocalDateTime.now()).toMinutes < 30 =>
+      case Some(keyTimeStamp) if Duration.between(keyTimeStamp, ZonedDateTime.now()).toMinutes < 30 =>
         //re-use key if is less than 30 minutes since previous incident
         val key = keyTimeStamp
         key.toString
       case _ =>
         // generate new key at first and after 30 minutes
-        val key = LocalDateTime.now
+        val key = ZonedDateTime.now
         incidentKeyDateTime = Some(key)
         key.toString
     }
@@ -98,7 +98,7 @@ abstract class PagerDutyAlertingTestFailureHandler(override val wsClient: WSClie
  * and even across multiple runs of the scheduler.
  */
 object PagerDutyAlertingTestFailureHandler {
-  private var incidentKeyDateTime: Option[LocalDateTime] = None
+  private var incidentKeyDateTime: Option[ZonedDateTime] = None
 }
 
 /**
@@ -119,13 +119,13 @@ class FrequentScheduledTestFailureHandler(wsClient: WSClient) extends PagerDutyA
    */
   private val PagerDutyThreshold = 3
 
-  private var lastIncidentDateTime: Option[LocalDateTime] = None
+  private var lastIncidentDateTime: Option[ZonedDateTime] = None
   private var incidentCount = 0
 
   override def handleTestFailure(testName: String, exception: Throwable, tags: Set[String]): Unit = {
     Console.err.println(Console.RED + "Test failure: " + exception.getMessage + Console.RESET)
     // increment the incident count only if there is an existing recent incident or it is the first incident {
-    if (lastIncidentDateTime.isEmpty || (Duration.between(lastIncidentDateTime.get, LocalDateTime.now()).toMinutes < RecentIncidentWindowMinutes)) {
+    if (lastIncidentDateTime.isEmpty || (Duration.between(lastIncidentDateTime.get, ZonedDateTime.now()).toMinutes < RecentIncidentWindowMinutes)) {
       //increment counter
       incrementIncidentCount()
       if (incidentCount == PagerDutyThreshold) {
@@ -142,7 +142,7 @@ class FrequentScheduledTestFailureHandler(wsClient: WSClient) extends PagerDutyA
 
   private def incrementIncidentCount() = {
     incidentCount += 1
-    lastIncidentDateTime = Some(LocalDateTime.now)
+    lastIncidentDateTime = Some(ZonedDateTime.now)
     println(s"Incident count: $incidentCount")
   }
   private def resetToOne(): Unit ={
