@@ -96,7 +96,7 @@ export class SanityTests extends GuStack {
       evaluationPeriods: 5,
       comparisonOperator: ComparisonOperator.LESS_THAN_THRESHOLD,
       metric: new Metric({
-        period: Duration.minutes(2),  //the CDK is quite prescriptive about the allowed durations
+        period: Duration.minutes(5),  //the CDK is quite prescriptive about the allowed durations
         metricName: "SuccessfulTests",
         namespace: cloudwatchMetricNamespace,
         statistic: Statistic.SUM,
