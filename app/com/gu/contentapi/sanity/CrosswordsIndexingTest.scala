@@ -1,18 +1,19 @@
 package com.gu.contentapi.sanity
 
 import com.gu.contentapi.sanity.support.TestFailureHandler
-import com.gu.contentapi.sanity.tags.{ProdOnly, LowPriorityTest}
-import org.joda.time.DateTime
+import com.gu.contentapi.sanity.tags.{LowPriorityTest, ProdOnly}
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSClient
+
+import java.time.LocalDateTime
 
 @ProdOnly
 class CrosswordsIndexingTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   "A new Crossword" should "be indexed every day" taggedAs LowPriorityTest in {
-    val now = DateTime.now
+    val now = LocalDateTime.now
 
-    val isAfterChristmas = now.getMonthOfYear == 12 && (now.getDayOfMonth == 26 || now.getDayOfMonth == 27)
+    val isAfterChristmas = now.getMonthValue == 12 && (now.getDayOfMonth == 26 || now.getDayOfMonth == 27)
     val twentyFiveHoursAgo = now.minusHours(25)
     assume(!isAfterChristmas, "Cancelling as Crosswords are not always published over the Christmas period")
 
@@ -26,7 +27,7 @@ class CrosswordsIndexingTest(context: Context, wsClient: WSClient) extends Sanit
       }
       newestItemOpt foreach { newestItem =>
         val newestItemDateString = (newestItem \ "webPublicationDate").asOpt[String]
-        val newestItemDate = DateTime.parse(newestItemDateString.value)
+        val newestItemDate = LocalDateTime.parse(newestItemDateString.value)
         withClue(s"Latest indexed crossword was at $newestItemDate which is more than 25 hours ago ($twentyFiveHoursAgo)") {
           newestItemDate.isAfter(twentyFiveHoursAgo) should be(true)
         }
