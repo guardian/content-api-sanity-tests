@@ -22,11 +22,13 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.14",
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
-  "software.amazon.awssdk" % "cloudwatch" % AwsVersion
+  "software.amazon.awssdk" % "cloudwatch" % AwsVersion,
+  "net.logstash.logback" % "logstash-logback-encoder" % "7.2"
 )
 
 dependencyOverrides ++= Seq(
-  "org.scala-lang.modules" %% "scala-xml" % "2.1.0"  //this version is wanted by scalatest, which has more use for it in this project than play.
+  "org.scala-lang.modules" %% "scala-xml" % "2.1.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.1"
 )
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))

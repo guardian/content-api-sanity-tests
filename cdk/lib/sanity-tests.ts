@@ -40,7 +40,7 @@ export class SanityTests extends GuStack {
     const userData = userDataRaw
         .replace(/\$\{Stage}/g, this.stage)
         .replace(/\$\{Stack}/g, this.stack)
-        .replace(/\$\{LoggingKinesisStream}/g, GuLoggingStreamNameParameter.getInstance(this).valueAsString)
+        .replace(/\$\{LoggingStreamName}/g, GuLoggingStreamNameParameter.getInstance(this).valueAsString)
         .replace(/\$\{AWS::Region}/g, Stack.of(this).region);
 
     const app = new GuEc2App(this, {
@@ -49,6 +49,9 @@ export class SanityTests extends GuStack {
         cidrRanges: [Peer.ipv4("10.0.0.0/8")],
       },
       app: "sanity-tests",
+      applicationLogging: {
+        enabled: true,
+      },
       roleConfiguration: {
         additionalPolicies: Policies(this),
       },
