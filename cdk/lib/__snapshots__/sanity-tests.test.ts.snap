@@ -165,7 +165,7 @@ exports[`The SanityTests stack matches the snapshot 1`] = `
         "ImageId": {
           "Ref": "AMISanitytests",
         },
-        "InstanceType": "t3.micro",
+        "InstanceType": "t4g.micro",
         "MetadataOptions": {
           "HttpTokens": "required",
         },
