@@ -7,7 +7,7 @@ version := "1.0"
 
 scalaVersion := "2.13.10"
 
-scalacOptions ++= Seq("-feature")
+scalacOptions ++= Seq("-feature", "-release:11")
 
 routesGenerator := InjectedRoutesGenerator
 
