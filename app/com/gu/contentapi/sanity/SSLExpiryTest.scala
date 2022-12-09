@@ -51,7 +51,7 @@ class SSLExpiryTest(context: Context, wsClient: WSClient) extends SanityTestBase
             cert shouldBe a[X509CertImpl]
             val x = cert.asInstanceOf[X509CertImpl]
             val expiry = x.getNotAfter.toInstant
-            val daysleft = Duration.between(ZonedDateTime.now(), expiry).toDays
+            val daysleft = Duration.between(ZonedDateTime.now().toInstant, expiry).toDays
             if (daysleft < 30) {
               fail("Cert for %s expires in %d days".format(host, daysleft))
             }
