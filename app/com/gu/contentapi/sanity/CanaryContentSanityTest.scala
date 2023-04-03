@@ -15,7 +15,9 @@ import java.time.ZonedDateTime
 class CanaryContentSanityTest(context: Context, wsClient: WSClient) extends SanityTestBase(context, wsClient) {
 
   private def retrieveCanaryLastModifiedTimestamp(): Option[ZonedDateTime] = {
-    val httpRequest = requestHost("/canary?show-fields=lastModified").get()
+    // since channels became possible - canary content is now hidden from the world by default and
+    // only accessible from the /channel/canary path :)
+    val httpRequest = requestHost("/channel/canary?show-fields=lastModified").get()
     whenReady(httpRequest) { result =>
       val stringValue = (result.json \ "response" \ "content" \ "fields" \ "lastModified").asOpt[String]
       stringValue.map(ZonedDateTime.parse)
