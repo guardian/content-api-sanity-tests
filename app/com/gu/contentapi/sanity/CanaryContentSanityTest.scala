@@ -19,7 +19,7 @@ class CanaryContentSanityTest(context: Context, wsClient: WSClient) extends Sani
     // only accessible from the /channel/canary path :)
     val httpRequest = requestHost("/channel/canary?show-fields=lastModified").get()
     whenReady(httpRequest) { result =>
-      val stringValue = (result.json \ "response" \ "content" \ "fields" \ "lastModified").asOpt[String]
+      val stringValue = (result.json \ "response" \ "results" \ 0 \ "fields" \ "lastModified").asOpt[String]
       stringValue.map(ZonedDateTime.parse)
     }
   }
