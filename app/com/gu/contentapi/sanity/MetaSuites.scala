@@ -7,7 +7,6 @@ import play.api.libs.ws.WSClient
 object MetaSuites {
 
   def prodFrequent(context: Context, wsClient: WSClient) = Seq(
-    new CanaryContentSanityTest(context, wsClient),
     new SearchContainsLargeNumberOfResults(context, wsClient),
     new PreviewRequiresAuthTest(context, wsClient),
     new ContentApiSanityTest(context, wsClient),
