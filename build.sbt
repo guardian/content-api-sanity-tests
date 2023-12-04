@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
   "software.amazon.awssdk" % "cloudwatch" % AwsVersion,
-  "net.logstash.logback" % "logstash-logback-encoder" % "7.2"
+  "net.logstash.logback" % "logstash-logback-encoder" % "7.3"
 )
 
 dependencyOverrides ++= Seq(
