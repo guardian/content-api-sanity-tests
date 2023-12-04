@@ -28,7 +28,10 @@ libraryDependencies ++= Seq(
 
 dependencyOverrides ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "2.1.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.1"
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.1",
+  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "ch.qos.logback" % "logback-core" % "1.4.14",
+
 )
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
