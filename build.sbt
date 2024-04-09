@@ -33,6 +33,12 @@ dependencyOverrides ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.4.14",
   "ch.qos.logback" % "logback-core" % "1.4.14",
   "com.typesafe.akka" % "akka-http-core_2.13" % "10.5.3", //fix snyk high vuln
+  "com.typesafe.akka" % "akka-actor_2.13" % "2.8.5",
+  "com.typesafe.akka" % "akka-stream_2.13" % "2.8.5",
+  "com.typesafe.akka" % "akka-actor-typed_2.13" % "2.8.5",
+  "com.typesafe.akka" % "akka-slf4j_2.13" % "2.8.5",
+  "com.typesafe.akka" % "akka-protobuf-v3_2.13" % "2.8.5",
+  "com.typesafe.akka" % "akka-serialization-jackson_2.13" % "2.8.5",
 )
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
