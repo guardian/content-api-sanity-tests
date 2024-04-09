@@ -5,17 +5,17 @@ name := "sanity-tests"
 
 version := "1.0"
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.13"
 
 scalacOptions ++= Seq("-feature", "-release:11")
 
 routesGenerator := InjectedRoutesGenerator
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, PlayAkkaHttpServer)
+  .enablePlugins(PlayScala)
   .disablePlugins(PlayNettyServer)
 
-val AwsVersion = "2.21.10"
+val AwsVersion = "2.21.46"
 
 libraryDependencies ++= Seq(
   "org.quartz-scheduler" % "quartz" % "2.3.2",
@@ -23,7 +23,8 @@ libraryDependencies ++= Seq(
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
   "software.amazon.awssdk" % "cloudwatch" % AwsVersion,
-  "net.logstash.logback" % "logstash-logback-encoder" % "7.3"
+  "net.logstash.logback" % "logstash-logback-encoder" % "7.3",
+  "joda-time" % "joda-time" % "2.12.7", //to fix "object joda is not a member.." error that appeared after dependency override akka-http-core_2.13
 )
 
 dependencyOverrides ++= Seq(
@@ -31,7 +32,6 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.1",
   "ch.qos.logback" % "logback-classic" % "1.4.14",
   "ch.qos.logback" % "logback-core" % "1.4.14",
-
 )
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))

@@ -1,4 +1,4 @@
-import akka.stream.ActorMaterializer
+import org.apache.pekko.stream.ActorMaterializer
 import com.gu.contentapi.sanity.support.CloudWatchReporter
 import play.api.ApplicationLoader.Context
 import play.api.{ BuiltInComponentsFromContext, NoHttpFiltersComponents }

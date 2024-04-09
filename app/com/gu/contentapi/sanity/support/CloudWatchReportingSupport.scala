@@ -9,7 +9,8 @@ import software.amazon.awssdk.services.cloudwatch.{CloudWatchAsyncClient, CloudW
 
 import java.util.concurrent.CompletableFuture
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.compat.java8.FutureConverters
+import scala.jdk.FutureConverters
+import scala.jdk.FutureConverters._
 import scala.util.{Failure, Success, Try}
 
 trait CloudWatchReportingSupport extends TestSuite {
@@ -82,7 +83,7 @@ class RealCloudWatchReporter(namespace: String,
    * @param f function to run. This must return some kind of CompletableFuture
    */
   private def loggedAsyncCall[T](f: ()=>CompletableFuture[T]) = {
-    FutureConverters.toScala(f()).onComplete(loggingAsyncHandler)
+    f().asScala.onComplete(loggingAsyncHandler)
   }
 
   private def put(metricName: String, value: Double): Unit = {
