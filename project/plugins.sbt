@@ -6,6 +6,6 @@ resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releas
 
 // Use the Play sbt plugin for Play projects
 addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.2")
-addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.9")
+addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.16")
 
 addDependencyTreePlugin
