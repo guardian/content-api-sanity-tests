@@ -19,7 +19,7 @@ val AwsVersion = "2.27.20"
 
 libraryDependencies ++= Seq(
   "org.quartz-scheduler" % "quartz" % "2.3.2",
-  "org.scalatest" %% "scalatest" % "3.2.14",
+  "org.scalatest" %% "scalatest" % "3.2.19",
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
   "software.amazon.awssdk" % "cloudwatch" % AwsVersion,
