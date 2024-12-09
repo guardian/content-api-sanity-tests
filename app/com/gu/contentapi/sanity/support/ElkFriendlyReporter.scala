@@ -45,7 +45,8 @@ class ElkFriendlyReporter extends Reporter {
       case TestSucceeded(ordinal, suiteName, suiteId, suiteClassName, testName, testText, recordedEvents, duration, formatter, location, rerunner, payload, threadName, timeStamp)=>
         MDC.put("threadName", threadName)
         MDC.put("suiteName", suiteName)
-        MDC.put("class", suiteClassName.getOrElse("(not provided)"))
+        MDC.put("status", "success")
+        MDC.put("logger_name", suiteClassName.getOrElse("(not provided)"))
         MDC.put("testName", testName)
         MDC.put("testText", testText)
         MDC.put("location", renderLocationMaybe(location))
@@ -53,7 +54,8 @@ class ElkFriendlyReporter extends Reporter {
       case TestFailed(ordinal, message, suiteName, suiteId, suiteClassName, testName, testText, recordedEvents, analysis, throwable, duration, formatter, location, rerunner, payload, threadName, timeStamp)=>
         MDC.put("threadName", threadName)
         MDC.put("suiteName", suiteName)
-        MDC.put("class", suiteClassName.getOrElse("(not provided)"))
+        MDC.put("status", "Failed")
+        MDC.put("logger_name", suiteClassName.getOrElse("(not provided)"))
         MDC.put("testName", testName)
         MDC.put("testText", testText)
         MDC.put("failureMessage", message)
@@ -64,7 +66,22 @@ class ElkFriendlyReporter extends Reporter {
         })
         logger.warn(s"'$testName' failed in ${duration.map(_.toString).getOrElse("(not provided)")}ms: $message")
       case TestIgnored(ordinal, suiteName, suiteId, suiteClassName, testName, testText, formatter, location, payload, threadName, timeStamp)=>
+        MDC.put("threadName", threadName)
+        MDC.put("suiteName", suiteName)
+        MDC.put("status", "ignored")
+        MDC.put("logger_name", suiteClassName.getOrElse("(not provided)"))
+        MDC.put("testName", testName)
+        MDC.put("testText", testText)
+        MDC.put("location", renderLocationMaybe(location))
+        logger.info(s"'$testName' was ignored")
       case TestStarting(ordinal, suiteName, suiteId, suiteClassName, testName, testText, formatter, location, rerunner, payload, threadName, timeStamp)=>
+        MDC.put("threadName", threadName)
+        MDC.put("suiteName", suiteName)
+        MDC.put("logger_name", suiteClassName.getOrElse("(not provided)"))
+        MDC.put("testName", testName)
+        MDC.put("testText", testText)
+        MDC.put("location", renderLocationMaybe(location))
+        logger.debug(s"'$testName' starting")
       case _=>
         //there are loads of other events we don't need to concern ourselves with right now
     }
