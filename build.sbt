@@ -34,7 +34,7 @@ dependencyOverrides ++= Seq(
   "ch.qos.logback" % "logback-core" % "1.4.14",
 )
 
-testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
+testOptions ++= Seq("-u", "target/junit-test-reports", "-C", "com.gu.contentapi.sanity.support.ElkFriendlyReporter").map(Tests.Argument(_))
 
 Universal / packageName := normalizedName.value
 maintainer := "Guardian Content Platforms <content-platforms.dev@theguardian.com>"
