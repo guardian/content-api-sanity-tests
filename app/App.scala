@@ -1,7 +1,8 @@
 import com.gu.contentapi.sanity._
-import com.gu.contentapi.sanity.support.{CloudWatchReporter, FrequentScheduledTestFailureHandler, InfrequentScheduledTestsFailureHandler}
+import com.gu.contentapi.sanity.support.{CloudWatchReporter, ElkFriendlyReporter, FrequentScheduledTestFailureHandler, InfrequentScheduledTestsFailureHandler}
 import com.gu.contentapi.sanity.utils.QuartzScheduler
 import org.joda.time.DateTime
+import org.scalatest.Args
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
@@ -16,7 +17,8 @@ class App(
   cloudWatchReporter: CloudWatchReporter,
   wsClient: WSClient) {
 
-  val logger = LoggerFactory.getLogger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
+  private val reporter = new ElkFriendlyReporter()
 
   def start = {
     logger.info("Application has started")
@@ -36,7 +38,7 @@ class App(
     logger.info(s"=== Starting frequent tests at ${new DateTime()} ===")
     val context = Context(testFailureHandler = new FrequentScheduledTestFailureHandler(wsClient), cloudWatchReporter = cloudWatchReporter)
     val suites = MetaSuites.prodFrequent(context, wsClient)
-    suites.foreach(_.execute())
+    suites.foreach(_.run(None, Args(reporter)))
     logger.info(s"=== Frequent tests finished at ${new DateTime()} ===")
     cloudWatchReporter.reportTestRunComplete()
   }
@@ -45,7 +47,7 @@ class App(
     logger.info(s"=== Starting infrequent tests at ${new DateTime()} ===")
     val context = Context(testFailureHandler = new InfrequentScheduledTestsFailureHandler(wsClient), cloudWatchReporter = cloudWatchReporter)
     val suites = MetaSuites.prodInfrequent(context, wsClient)
-    suites.foreach(_.execute())
+    suites.foreach(_.run(None, Args(reporter)))
     logger.info(s"=== Infrequent tests finished at ${new DateTime()} ===")
     cloudWatchReporter.reportTestRunComplete()
   }
