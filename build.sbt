@@ -5,7 +5,7 @@ name := "sanity-tests"
 
 version := "1.0"
 
-scalaVersion := "2.13.13"
+scalaVersion := "2.13.14"
 
 scalacOptions ++= Seq("-feature", "-release:11")
 
@@ -19,11 +19,11 @@ val AwsVersion = "2.27.20"
 
 libraryDependencies ++= Seq(
   "org.quartz-scheduler" % "quartz" % "2.3.2",
-  "org.scalatest" %% "scalatest" % "3.2.14",
+  "org.scalatest" %% "scalatest" % "3.2.19",
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
   "software.amazon.awssdk" % "cloudwatch" % AwsVersion,
-  "net.logstash.logback" % "logstash-logback-encoder" % "7.3",
+  "net.logstash.logback" % "logstash-logback-encoder" % "7.4",
   "joda-time" % "joda-time" % "2.12.7", //to fix "object joda is not a member.." error that appeared after dependency override akka-http-core_2.13
 )
 
