@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
   "software.amazon.awssdk" % "cloudwatch" % AwsVersion,
-  "net.logstash.logback" % "logstash-logback-encoder" % "7.4",
+  "net.logstash.logback" % "logstash-logback-encoder" % "8.0",
   "joda-time" % "joda-time" % "2.13.0", //to fix "object joda is not a member.." error that appeared after dependency override akka-http-core_2.13
 )
 
