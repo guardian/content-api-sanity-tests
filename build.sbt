@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
 dependencyOverrides ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "2.1.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.17.2",
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "ch.qos.logback" % "logback-classic" % "1.5.12",
   "ch.qos.logback" % "logback-core" % "1.4.14",
 )
 
