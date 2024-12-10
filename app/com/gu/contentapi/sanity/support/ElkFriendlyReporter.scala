@@ -34,7 +34,7 @@ class ElkFriendlyReporter extends Reporter {
 
   override def apply(event: Event): Unit = withIsolatedContext {
     event match {
-      case AlertProvided(ordinal, message, nameInfo, throwable, formatter, location, payload, threadName, timeStamp) =>
+      case AlertProvided(_, message, nameInfo, throwable, _, location, _, threadName, _) =>
         MDC.put("threadName", threadName)
         nameInfo.foreach(names=>{
           MDC.put("suite", names.suiteName)
@@ -42,7 +42,7 @@ class ElkFriendlyReporter extends Reporter {
         })
         MDC.put("location", renderLocationMaybe(location))
         logger.error(message, throwable)
-      case TestSucceeded(ordinal, suiteName, suiteId, suiteClassName, testName, testText, recordedEvents, duration, formatter, location, rerunner, payload, threadName, timeStamp)=>
+      case TestSucceeded(_, suiteName, _, suiteClassName, testName, testText, _, duration, _, location, _, _, threadName, _)=>
         MDC.put("threadName", threadName)
         MDC.put("suiteName", suiteName)
         MDC.put("status", "success")
@@ -51,7 +51,7 @@ class ElkFriendlyReporter extends Reporter {
         MDC.put("testText", testText)
         MDC.put("location", renderLocationMaybe(location))
         logger.info(s"'$testName' succeeded in ${duration.map(_.toString).getOrElse("(not provided)")}ms")
-      case TestFailed(ordinal, message, suiteName, suiteId, suiteClassName, testName, testText, recordedEvents, analysis, throwable, duration, formatter, location, rerunner, payload, threadName, timeStamp)=>
+      case TestFailed(_, message, suiteName, _, suiteClassName, testName, testText, _, analysis, throwable, duration, _, location, _, _, threadName, _)=>
         MDC.put("threadName", threadName)
         MDC.put("suiteName", suiteName)
         MDC.put("status", "Failed")
@@ -65,7 +65,7 @@ class ElkFriendlyReporter extends Reporter {
           logger.info(a)
         })
         logger.warn(s"'$testName' failed in ${duration.map(_.toString).getOrElse("(not provided)")}ms: $message")
-      case TestIgnored(ordinal, suiteName, suiteId, suiteClassName, testName, testText, formatter, location, payload, threadName, timeStamp)=>
+      case TestIgnored(_, suiteName, _, suiteClassName, testName, testText, _, location, _, threadName, _)=>
         MDC.put("threadName", threadName)
         MDC.put("suiteName", suiteName)
         MDC.put("status", "ignored")
@@ -74,7 +74,7 @@ class ElkFriendlyReporter extends Reporter {
         MDC.put("testText", testText)
         MDC.put("location", renderLocationMaybe(location))
         logger.info(s"'$testName' was ignored")
-      case TestStarting(ordinal, suiteName, suiteId, suiteClassName, testName, testText, formatter, location, rerunner, payload, threadName, timeStamp)=>
+      case TestStarting(_, suiteName, _, suiteClassName, testName, testText, _, location, _, _, threadName, _)=>
         MDC.put("threadName", threadName)
         MDC.put("suiteName", suiteName)
         MDC.put("logger_name", suiteClassName.getOrElse("(not provided)"))
