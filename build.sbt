@@ -18,7 +18,7 @@ lazy val root = (project in file("."))
 val AwsVersion = "2.27.24"
 
 libraryDependencies ++= Seq(
-  "org.quartz-scheduler" % "quartz" % "2.5.0",
+  "org.quartz-scheduler" % "quartz" % "2.5.2",
   "org.scalatest" %% "scalatest" % "3.2.19",
   ws,
   "software.amazon.awssdk" % "s3" % AwsVersion,
