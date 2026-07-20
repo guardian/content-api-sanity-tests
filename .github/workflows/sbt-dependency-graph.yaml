@@ -1,20 +1,31 @@
-name: Update Dependency Graph for SBT
+name: Update Dependency Graph for sbt
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+      - sbt-dependency-graph-02e3de0448c54abe
+  workflow_dispatch: 
+permissions:
+  contents: read
 jobs:
   dependency-graph:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
         id: checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: guardian/setup-scala@v1
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Install Java
+        id: java
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5.5.0
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install sbt
+        id: sbt
+        uses: sbt/setup-sbt@66fb4376e81982c7d92a4074170846fff88e2e30 # v1.5.0
       - name: Submit dependencies
         id: submit
-        uses: scalacenter/sbt-dependency-submission@7ebd561e5280336d3d5b445a59013810ff79325e # v3.0.1
+        uses: scalacenter/sbt-dependency-submission@d84eef4c09e633bcf5f113bcad7fd5e9af1baee9 # v3.2.3
       - name: Log snapshot for user validation
         id: validate
         run: cat ${{ steps.submit.outputs.snapshot-json-path }} | jq
