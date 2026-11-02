@@ -16,6 +16,7 @@ lazy val root = (project in file("."))
   .disablePlugins(PlayNettyServer)
 
 val AwsVersion = "2.55.11"
+val JacksonVersion = "2.18.11"
 
 libraryDependencies ++= Seq(
   "org.quartz-scheduler" % "quartz" % "2.5.0",
@@ -29,7 +30,14 @@ libraryDependencies ++= Seq(
 
 dependencyOverrides ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "2.3.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.17.3",
+  "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion,
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % JacksonVersion,
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % JacksonVersion,
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
+  "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % JacksonVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion,
   "ch.qos.logback" % "logback-classic" % "1.5.12",
   "ch.qos.logback" % "logback-core" % "1.5.12",
 )
