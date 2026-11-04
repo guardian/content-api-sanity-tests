@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
 )
 
 dependencyOverrides ++= Seq(
-  "org.scala-lang.modules" %% "scala-xml" % "2.3.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
+  "org.scala-lang.modules" %% "scala-xml" % "2.5.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
   "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion,
