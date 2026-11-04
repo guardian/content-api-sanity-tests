@@ -9,3 +9,6 @@ addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.10")
 addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.10.4")
 
 addDependencyTreePlugin
+
+// sbt-web brings in Jackson separately from the application's dependency graph.
+dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-core" % "2.18.11"
