@@ -5,6 +5,7 @@ import {aws_ssm, Duration, Stack} from "aws-cdk-lib";
 import {GuEc2App} from "@guardian/cdk";
 import {InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc} from "aws-cdk-lib/aws-ec2";
 import {AccessScope} from "@guardian/cdk/lib/constants";
+import {GuCname} from "@guardian/cdk/lib/constructs/dns";
 import fs from "fs";
 import {GuSecurityGroup, GuVpc} from "@guardian/cdk/lib/constructs/ec2";
 import {cloudwatchMetricNamespace, useArmInstance} from "./constants";
@@ -16,6 +17,9 @@ import {Topic} from "aws-cdk-lib/aws-sns";
 export class SanityTests extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
+    const domainName = this.stage === "CODE"
+      ? "sanity-tests.capi.code.dev-gutools.co.uk"
+      : "sanity-tests.capi.gutools.co.uk";
 
     const urgentAlarmTopicArn = aws_ssm.StringParameter.fromStringParameterName(this, "urgent-alarm-arn", "/account/content-api-common/alarms/urgent-alarm-topic");
     const nonUrgentAlarmTopicArn = aws_ssm.StringParameter.fromStringParameterName(this, "non-urgent-alarm-arn", "/account/content-api-common/alarms/non-urgent-alarm-topic");
@@ -33,8 +37,6 @@ export class SanityTests extends GuStack {
       type: "List<String>"
     });
     const deploymentSubnets = GuVpc.subnets(this, subnetsList.valueAsList);
-
-    const hostedZone = aws_ssm.StringParameter.valueForStringParameter(this, `/account/services/capi.gutools/${this.stage}/hostedzoneid`);
 
     const userDataRaw = fs.readFileSync("./instance-startup.sh").toString('utf-8');
     const userData = userDataRaw
@@ -57,8 +59,7 @@ export class SanityTests extends GuStack {
       },
       applicationPort: 9000,
       certificateProps: {
-        domainName: this.stage=="CODE" ? "sanity-tests.capi.code.dev-gutools.co.uk" : "sanity-tests.capi.gutools.co.uk",
-        hostedZoneId: hostedZone,
+        domainName,
       },
       instanceType: InstanceType.of(useArmInstance ? InstanceClass.T4G : InstanceClass.T3, InstanceSize.MICRO),
       monitoringConfiguration: {
@@ -74,6 +75,13 @@ export class SanityTests extends GuStack {
       },
       userData: userData,
       vpc,
+    });
+
+    new GuCname(this, "DnsRecord", {
+      app: "sanity-tests",
+      domainName,
+      resourceRecord: `dualstack.${app.loadBalancer.loadBalancerDnsName}`,
+      ttl: Duration.seconds(300),
     });
 
     const allowingOutgoingSG = new GuSecurityGroup(this, "OutgoingSG", {
