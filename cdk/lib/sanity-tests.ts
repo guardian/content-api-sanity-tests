@@ -80,7 +80,7 @@ export class SanityTests extends GuStack {
     new GuCname(this, "DnsRecord", {
       app: "sanity-tests",
       domainName,
-      resourceRecord: `dualstack.${app.loadBalancer.loadBalancerDnsName}`,
+      resourceRecord: `dualstack.${app.loadBalancer.loadBalancerDnsName}.`,
       ttl: Duration.seconds(300),
     });
 
