@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .disablePlugins(PlayNettyServer)
 
-val AwsVersion = "2.55.11"
+val AwsVersion = "2.55.16"
 val JacksonVersion = "2.18.11"
 
 libraryDependencies ++= Seq(
