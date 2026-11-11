@@ -27,6 +27,7 @@ exports[`The SanityTests stack matches the snapshot 1`] = `
       "GuHttpsApplicationListener",
       "GuSecurityGroup",
       "GuUnhealthyInstancesAlarm",
+      "GuCname",
       "GuSecurityGroup",
     ],
     "gu:cdk:version": "TEST",
@@ -55,10 +56,6 @@ exports[`The SanityTests stack matches the snapshot 1`] = `
     "LoggingStreamName": {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
-      "Type": "AWS::SSM::Parameter::Value<String>",
-    },
-    "SsmParameterValueaccountservicescapigutoolsTESThostedzoneidC96584B6F00A464EAD1953AFF4B05118Parameter": {
-      "Default": "/account/services/capi.gutools/TEST/hostedzoneid",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "SsmParameterValueaccountvpcPRODliveidC96584B6F00A464EAD1953AFF4B05118Parameter": {
@@ -215,14 +212,6 @@ systemctl start sanity-tests",
       "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "sanity-tests.capi.gutools.co.uk",
-        "DomainValidationOptions": [
-          {
-            "DomainName": "sanity-tests.capi.gutools.co.uk",
-            "HostedZoneId": {
-              "Ref": "SsmParameterValueaccountservicescapigutoolsTESThostedzoneidC96584B6F00A464EAD1953AFF4B05118Parameter",
-            },
-          },
-        ],
         "Tags": [
           {
             "Key": "App",
@@ -300,6 +289,32 @@ systemctl start sanity-tests",
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "DnsRecord": {
+      "Properties": {
+        "Name": "sanity-tests.capi.gutools.co.uk",
+        "RecordType": "CNAME",
+        "ResourceRecords": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "dualstack.",
+                {
+                  "Fn::GetAtt": [
+                    "LoadBalancerSanitytestsDAE5C376",
+                    "DNSName",
+                  ],
+                },
+                ".",
+              ],
+            ],
+          },
+        ],
+        "Stage": "TEST",
+        "TTL": 300,
+      },
+      "Type": "Guardian::DNS::RecordSet",
     },
     "EC2Access19C43F79": {
       "Properties": {
