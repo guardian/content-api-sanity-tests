@@ -16,7 +16,7 @@ lazy val root = (project in file("."))
   .disablePlugins(PlayNettyServer)
 
 val AwsVersion = "2.55.11"
-val JacksonVersion = "2.18.11"
+val JacksonVersion = "2.18.12"
 
 libraryDependencies ++= Seq(
   "org.quartz-scheduler" % "quartz" % "2.5.0",
