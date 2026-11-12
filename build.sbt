@@ -39,8 +39,8 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
   "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % JacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion,
-  "ch.qos.logback" % "logback-classic" % "1.5.12",
-  "ch.qos.logback" % "logback-core" % "1.5.12",
+  "ch.qos.logback" % "logback-classic" % "1.5.34",
+  "ch.qos.logback" % "logback-core" % "1.5.34",
 )
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
