@@ -48,6 +48,13 @@ testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
 
 excludeDependencies += ExclusionRule("org.lz4", "lz4-java")
 
+// Sanity suites use WSClient, not browser helpers. Keep play-test itself.
+excludeDependencies ++= Seq(
+  ExclusionRule(organization = "io.fluentlenium"),
+  ExclusionRule(organization = "org.seleniumhq.selenium"),
+  ExclusionRule("org.scalatestplus", "selenium-4-12_2.13")
+)
+
 Universal / packageName := normalizedName.value
 maintainer := "Guardian Content Platforms <content-platforms.dev@theguardian.com>"
 
