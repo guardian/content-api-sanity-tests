@@ -29,6 +29,8 @@ libraryDependencies ++= Seq(
 )
 
 dependencyOverrides ++= Seq(
+  "at.yawk.lz4" % "lz4-java" % "1.11.4",
+  "com.google.guava" % "guava" % "33.7.2-jre",
   "org.scala-lang.modules" %% "scala-xml" % "2.3.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
   "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion,
@@ -38,11 +40,20 @@ dependencyOverrides ++= Seq(
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
   "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % JacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion,
-  "ch.qos.logback" % "logback-classic" % "1.5.12",
-  "ch.qos.logback" % "logback-core" % "1.5.12",
+  "ch.qos.logback" % "logback-classic" % "1.5.34",
+  "ch.qos.logback" % "logback-core" % "1.5.34",
 )
 
 testOptions ++= Seq("-u", "target/junit-test-reports").map(Tests.Argument(_))
+
+excludeDependencies += ExclusionRule("org.lz4", "lz4-java")
+
+// Sanity suites use WSClient, not browser helpers. Keep play-test itself.
+excludeDependencies ++= Seq(
+  ExclusionRule(organization = "io.fluentlenium"),
+  ExclusionRule(organization = "org.seleniumhq.selenium"),
+  ExclusionRule("org.scalatestplus", "selenium-4-12_2.13")
+)
 
 Universal / packageName := normalizedName.value
 maintainer := "Guardian Content Platforms <content-platforms.dev@theguardian.com>"
