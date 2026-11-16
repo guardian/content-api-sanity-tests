@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
 dependencyOverrides ++= Seq(
   "at.yawk.lz4" % "lz4-java" % "1.11.4",
   "com.google.guava" % "guava" % "33.7.2-jre",
-  "org.scala-lang.modules" %% "scala-xml" % "2.3.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
+  "org.scala-lang.modules" %% "scala-xml" % "2.5.0",  //this version is wanted by scalatest, which has more use for it in this project than play.
   "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion,
